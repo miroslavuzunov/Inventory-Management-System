@@ -1,2 +1,2 @@
 # Inventory-Management-System
-OOP - Course project
+Java OOP - Course project

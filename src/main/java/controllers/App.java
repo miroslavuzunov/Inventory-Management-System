@@ -1,9 +1,10 @@
-package org.sample;
+package controllers;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -17,9 +18,11 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("primary"));
+        scene = new Scene(loadFXML("/view/primary"));
         stage.setScene(scene);
-        stage.setResizable(true);
+        stage.setResizable(false);
+        stage.setTitle("IMS - office edition");
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/IMS(i).png")));
         stage.show();
     }
 

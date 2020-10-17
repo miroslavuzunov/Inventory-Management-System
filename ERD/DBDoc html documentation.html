@@ -1,0 +1,459 @@
+<html><head>
+<title>Data dictionary: try</title>
+<style>
+    td,th {
+      text-align:center;
+      vertical-align:middle;
+    }
+    table {
+      border-collapse: collapse;
+    }
+    caption, th, td {
+      padding: .2em .8em;
+      border: 1px solid #fff;
+    }
+    caption {
+      background: #dbb768;
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+    th {
+      font-weight: bold;
+      background: #f3ce7d;
+    }
+    td {
+      background: #ffea97;
+    }
+    </style>
+    </head>
+    <body>
+<img src='try.png'>
+<table><caption>Table: person_info - </caption><tr><td colspan="7">Attributes</td></tr>
+        <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Not Null</th>
+        <th>PK</th>
+        <th>FK</th>
+        <th>Default</th>
+        <th>Comment</th>
+        </tr><tr><td>id</td><td>INT</td><td>Yes</td><td>Yes</td><td>No</td><td></td><td></td></tr><tr><td>first_name</td><td>VARCHAR(100)</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr><tr><td>last_name</td><td>VARCHAR(100)</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr><tr><td>egn</td><td>CHAR(10)</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr><tr><td>email</td><td>VARCHAR(100)</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr><tr><td>address_id</td><td>INT</td><td>Yes</td><td>No</td><td>Yes</td><td></td><td></td></tr></table></br><table><caption>Index: PRIMARY</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>PRIMARY</td><td>['`id`']</td><td>PRIMARY</td><td></td></tr></table></br><table><caption>Index: email_UNIQUE</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>email_UNIQUE</td><td>['`email`']</td><td>UNIQUE</td><td></td></tr></table></br><table><caption>Index: fk_person_info_address_idx</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>fk_person_info_address_idx</td><td>['`address_id`']</td><td>INDEX</td><td></td></tr></table></br><table><caption>Index: egn_UNIQUE</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>egn_UNIQUE</td><td>['`egn`']</td><td>UNIQUE</td><td></td></tr></table></br></table></br><table><caption>Table: address - </caption><tr><td colspan="7">Attributes</td></tr>
+        <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Not Null</th>
+        <th>PK</th>
+        <th>FK</th>
+        <th>Default</th>
+        <th>Comment</th>
+        </tr><tr><td>id</td><td>INT</td><td>Yes</td><td>Yes</td><td>No</td><td></td><td></td></tr><tr><td>country_id</td><td>INT</td><td>Yes</td><td>No</td><td>Yes</td><td></td><td></td></tr><tr><td>city_id</td><td>INT</td><td>Yes</td><td>No</td><td>Yes</td><td></td><td></td></tr><tr><td>street</td><td>VARCHAR(100)</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr><tr><td>details</td><td>VARCHAR(200)</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr></table></br><table><caption>Index: PRIMARY</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>PRIMARY</td><td>['`id`']</td><td>PRIMARY</td><td></td></tr></table></br><table><caption>Index: fk_address_city1_idx</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>fk_address_city1_idx</td><td>['`city_id`']</td><td>INDEX</td><td></td></tr></table></br><table><caption>Index: fk_address_country1_idx</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>fk_address_country1_idx</td><td>['`country_id`']</td><td>INDEX</td><td></td></tr></table></br></table></br><table><caption>Table: city - </caption><tr><td colspan="7">Attributes</td></tr>
+        <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Not Null</th>
+        <th>PK</th>
+        <th>FK</th>
+        <th>Default</th>
+        <th>Comment</th>
+        </tr><tr><td>id</td><td>INT</td><td>Yes</td><td>Yes</td><td>No</td><td></td><td></td></tr><tr><td>name</td><td>VARCHAR(50)</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr><tr><td>region</td><td>VARCHAR(50)</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr></table></br><table><caption>Index: PRIMARY</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>PRIMARY</td><td>['`id`']</td><td>PRIMARY</td><td></td></tr></table></br><table><caption>Index: name_UNIQUE</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>name_UNIQUE</td><td>['`name`']</td><td>UNIQUE</td><td></td></tr></table></br><table><caption>Index: region_UNIQUE</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>region_UNIQUE</td><td>['`region`']</td><td>UNIQUE</td><td></td></tr></table></br></table></br><table><caption>Table: country - </caption><tr><td colspan="7">Attributes</td></tr>
+        <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Not Null</th>
+        <th>PK</th>
+        <th>FK</th>
+        <th>Default</th>
+        <th>Comment</th>
+        </tr><tr><td>id</td><td>INT</td><td>Yes</td><td>Yes</td><td>No</td><td></td><td></td></tr><tr><td>name</td><td>VARCHAR(100)</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr></table></br><table><caption>Index: PRIMARY</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>PRIMARY</td><td>['`id`']</td><td>PRIMARY</td><td></td></tr></table></br><table><caption>Index: name_UNIQUE</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>name_UNIQUE</td><td>['`name`']</td><td>UNIQUE</td><td></td></tr></table></br></table></br><table><caption>Table: user - </caption><tr><td colspan="7">Attributes</td></tr>
+        <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Not Null</th>
+        <th>PK</th>
+        <th>FK</th>
+        <th>Default</th>
+        <th>Comment</th>
+        </tr><tr><td>id</td><td>INT</td><td>Yes</td><td>Yes</td><td>No</td><td></td><td></td></tr><tr><td>nickname</td><td>VARCHAR(100)</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr><tr><td>password</td><td>CHAR(32)</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr><tr><td>created_on</td><td>DATE</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr><tr><td>role</td><td>ENUM('ADMIN', 'MRT', 'CLIENT')</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr><tr><td>person_info_id</td><td>INT</td><td>Yes</td><td>No</td><td>Yes</td><td></td><td></td></tr></table></br><table><caption>Index: PRIMARY</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>PRIMARY</td><td>['`id`']</td><td>PRIMARY</td><td></td></tr></table></br><table><caption>Index: nickname_UNIQUE</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>nickname_UNIQUE</td><td>['`nickname`']</td><td>UNIQUE</td><td></td></tr></table></br><table><caption>Index: fk_user_info_person_info1_idx</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>fk_user_info_person_info1_idx</td><td>['`person_info_id`']</td><td>INDEX</td><td></td></tr></table></br></table></br><table><caption>Table: product_details - </caption><tr><td colspan="7">Attributes</td></tr>
+        <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Not Null</th>
+        <th>PK</th>
+        <th>FK</th>
+        <th>Default</th>
+        <th>Comment</th>
+        </tr><tr><td>id</td><td>INT</td><td>Yes</td><td>Yes</td><td>No</td><td></td><td></td></tr><tr><td>brand_model</td><td>VARCHAR(200)</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr><tr><td>price</td><td>DECIMAL(6,2)</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr><tr><td>description</td><td>VARCHAR(200)</td><td>Yes</td><td>No</td><td>No</td><td>'Nothing out of the ordinary'</td><td></td></tr><tr><td>product_type</td><td>ENUM('LTTA', 'TA')</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr><tr><td>product_group_id</td><td>INT</td><td>Yes</td><td>No</td><td>Yes</td><td></td><td></td></tr><tr><td>deprication_dg_id</td><td>INT</td><td>Yes</td><td>No</td><td>Yes</td><td></td><td></td></tr><tr><td>scrapping_criteria_id</td><td>INT</td><td>Yes</td><td>No</td><td>Yes</td><td></td><td></td></tr></table></br><table><caption>Index: PRIMARY</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>PRIMARY</td><td>['`id`']</td><td>PRIMARY</td><td></td></tr></table></br><table><caption>Index: brand_model_UNIQUE</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>brand_model_UNIQUE</td><td>['`brand_model`']</td><td>UNIQUE</td><td></td></tr></table></br><table><caption>Index: fk_product_product_group1_idx</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>fk_product_product_group1_idx</td><td>['`product_group_id`']</td><td>INDEX</td><td></td></tr></table></br><table><caption>Index: fk_product_deprication_dg1_idx</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>fk_product_deprication_dg1_idx</td><td>['`deprication_dg_id`']</td><td>INDEX</td><td></td></tr></table></br><table><caption>Index: fk_product_scrapping_criteria1_idx</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>fk_product_scrapping_criteria1_idx</td><td>['`scrapping_criteria_id`']</td><td>INDEX</td><td></td></tr></table></br></table></br><table><caption>Table: product_group - </caption><tr><td colspan="7">Attributes</td></tr>
+        <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Not Null</th>
+        <th>PK</th>
+        <th>FK</th>
+        <th>Default</th>
+        <th>Comment</th>
+        </tr><tr><td>id</td><td>INT</td><td>Yes</td><td>Yes</td><td>No</td><td></td><td></td></tr><tr><td>group</td><td>VARCHAR(100)</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr></table></br><table><caption>Index: PRIMARY</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>PRIMARY</td><td>['`id`']</td><td>PRIMARY</td><td></td></tr></table></br><table><caption>Index: group_UNIQUE</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>group_UNIQUE</td><td>['`group`']</td><td>UNIQUE</td><td></td></tr></table></br></table></br><table><caption>Table: depreciation_dg - </caption><tr><td colspan="7">Attributes</td></tr>
+        <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Not Null</th>
+        <th>PK</th>
+        <th>FK</th>
+        <th>Default</th>
+        <th>Comment</th>
+        </tr><tr><td>id</td><td>INT</td><td>Yes</td><td>Yes</td><td>No</td><td></td><td></td></tr><tr><td>category</td><td>CHAR(1)</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr><tr><td>percentage</td><td>DECIMAL(4,2)</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr></table></br><table><caption>Index: PRIMARY</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>PRIMARY</td><td>['`id`']</td><td>PRIMARY</td><td></td></tr></table></br><table><caption>Index: category_UNIQUE</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>category_UNIQUE</td><td>['`category`']</td><td>UNIQUE</td><td></td></tr></table></br><table><caption>Index: percentage_UNIQUE</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>percentage_UNIQUE</td><td>['`percentage`']</td><td>UNIQUE</td><td></td></tr></table></br></table></br><table><caption>Table: scrapping_criteria - </caption><tr><td colspan="7">Attributes</td></tr>
+        <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Not Null</th>
+        <th>PK</th>
+        <th>FK</th>
+        <th>Default</th>
+        <th>Comment</th>
+        </tr><tr><td>id</td><td>INT</td><td>Yes</td><td>Yes</td><td>No</td><td></td><td></td></tr><tr><td>criteria</td><td>VARCHAR(45)</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr></table></br><table><caption>Index: PRIMARY</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>PRIMARY</td><td>['`id`']</td><td>PRIMARY</td><td></td></tr></table></br></table></br><table><caption>Table: scrapped_products - </caption><tr><td colspan="7">Attributes</td></tr>
+        <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Not Null</th>
+        <th>PK</th>
+        <th>FK</th>
+        <th>Default</th>
+        <th>Comment</th>
+        </tr><tr><td>id</td><td>INT</td><td>Yes</td><td>Yes</td><td>No</td><td></td><td></td></tr><tr><td>stockroom_id</td><td>INT</td><td>Yes</td><td>No</td><td>Yes</td><td></td><td></td></tr><tr><td>product_id</td><td>INT</td><td>Yes</td><td>No</td><td>Yes</td><td></td><td></td></tr><tr><td>scrapped_date</td><td>DATE</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr></table></br><table><caption>Index: PRIMARY</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>PRIMARY</td><td>['`id`']</td><td>PRIMARY</td><td></td></tr></table></br><table><caption>Index: fk_scrapped_products_stockroom1_idx</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>fk_scrapped_products_stockroom1_idx</td><td>['`stockroom_id`']</td><td>INDEX</td><td></td></tr></table></br><table><caption>Index: fk_scrapped_products_product1_idx</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>fk_scrapped_products_product1_idx</td><td>['`product_id`']</td><td>INDEX</td><td></td></tr></table></br></table></br><table><caption>Table: product_client - </caption><tr><td colspan="7">Attributes</td></tr>
+        <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Not Null</th>
+        <th>PK</th>
+        <th>FK</th>
+        <th>Default</th>
+        <th>Comment</th>
+        </tr><tr><td>id</td><td>INT</td><td>Yes</td><td>Yes</td><td>No</td><td></td><td></td></tr><tr><td>product_id</td><td>INT</td><td>Yes</td><td>No</td><td>Yes</td><td></td><td></td></tr><tr><td>mrt_id</td><td>INT</td><td>Yes</td><td>No</td><td>Yes</td><td></td><td></td></tr><tr><td>client_id</td><td>INT</td><td>Yes</td><td>No</td><td>Yes</td><td></td><td></td></tr><tr><td>created_on</td><td>DATE</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr></table></br><table><caption>Index: PRIMARY</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>PRIMARY</td><td>['`id`']</td><td>PRIMARY</td><td></td></tr></table></br><table><caption>Index: fk_product_by_inv_num_product1_idx</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>fk_product_by_inv_num_product1_idx</td><td>['`product_id`']</td><td>INDEX</td><td></td></tr></table></br><table><caption>Index: fk_product_client_user1_idx</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>fk_product_client_user1_idx</td><td>['`mrt_id`']</td><td>INDEX</td><td></td></tr></table></br><table><caption>Index: fk_product_client_user2_idx</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>fk_product_client_user2_idx</td><td>['`client_id`']</td><td>INDEX</td><td></td></tr></table></br></table></br><table><caption>Table: stockroom - </caption><tr><td colspan="7">Attributes</td></tr>
+        <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Not Null</th>
+        <th>PK</th>
+        <th>FK</th>
+        <th>Default</th>
+        <th>Comment</th>
+        </tr><tr><td>id</td><td>INT</td><td>Yes</td><td>Yes</td><td>No</td><td></td><td></td></tr><tr><td>user_id</td><td>INT</td><td>Yes</td><td>No</td><td>Yes</td><td></td><td></td></tr><tr><td>address_id</td><td>INT</td><td>Yes</td><td>No</td><td>Yes</td><td></td><td></td></tr></table></br><table><caption>Index: PRIMARY</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>PRIMARY</td><td>['`id`']</td><td>PRIMARY</td><td></td></tr></table></br><table><caption>Index: fk_stockroom_user_info1_idx</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>fk_stockroom_user_info1_idx</td><td>['`user_id`']</td><td>INDEX</td><td></td></tr></table></br><table><caption>Index: fk_stockroom_address1_idx</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>fk_stockroom_address1_idx</td><td>['`address_id`']</td><td>INDEX</td><td></td></tr></table></br></table></br><table><caption>Table: product - </caption><tr><td colspan="7">Attributes</td></tr>
+        <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Not Null</th>
+        <th>PK</th>
+        <th>FK</th>
+        <th>Default</th>
+        <th>Comment</th>
+        </tr><tr><td>id</td><td>INT</td><td>Yes</td><td>Yes</td><td>No</td><td></td><td></td></tr><tr><td>inv_num</td><td>VARCHAR(30)</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr><tr><td>received_date</td><td>DATE</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr><tr><td>available</td><td>TINYINT</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr><tr><td>product_details_id</td><td>INT</td><td>Yes</td><td>No</td><td>Yes</td><td></td><td></td></tr><tr><td>stockroom_id</td><td>INT</td><td>Yes</td><td>No</td><td>Yes</td><td></td><td></td></tr></table></br><table><caption>Index: PRIMARY</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>PRIMARY</td><td>['`id`']</td><td>PRIMARY</td><td></td></tr></table></br><table><caption>Index: inv_num_UNIQUE</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>inv_num_UNIQUE</td><td>['`inv_num`']</td><td>UNIQUE</td><td></td></tr></table></br><table><caption>Index: fk_product_product_details1_idx</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>fk_product_product_details1_idx</td><td>['`product_details_id`']</td><td>INDEX</td><td></td></tr></table></br><table><caption>Index: fk_product_stockroom1_idx</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>fk_product_stockroom1_idx</td><td>['`stockroom_id`']</td><td>INDEX</td><td></td></tr></table></br></table></br><table><caption>Table: phone_number - </caption><tr><td colspan="7">Attributes</td></tr>
+        <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Not Null</th>
+        <th>PK</th>
+        <th>FK</th>
+        <th>Default</th>
+        <th>Comment</th>
+        </tr><tr><td>id</td><td>INT</td><td>Yes</td><td>Yes</td><td>No</td><td></td><td></td></tr><tr><td>phone_type</td><td>ENUM('PERSONAL', 'OFFICE')</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr><tr><td>number</td><td>VARCHAR(20)</td><td>Yes</td><td>No</td><td>No</td><td></td><td></td></tr><tr><td>user_id</td><td>INT</td><td>Yes</td><td>No</td><td>Yes</td><td></td><td></td></tr></table></br><table><caption>Index: PRIMARY</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>PRIMARY</td><td>['`id`']</td><td>PRIMARY</td><td></td></tr></table></br><table><caption>Index: number_UNIQUE</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>number_UNIQUE</td><td>['`number`']</td><td>UNIQUE</td><td></td></tr></table></br><table><caption>Index: fk_phone_number_user1_idx</caption><tr><td colspan="4">Attributes</td></tr>
+                <tr>
+                <th>Name</th>
+                <th>Columns</th>
+                <th>Type</th>
+                <th>Description</th>
+                </tr>
+                <tr><td>fk_phone_number_user1_idx</td><td>['`user_id`']</td><td>INDEX</td><td></td></tr></table></br></table></br>
+</body></html>

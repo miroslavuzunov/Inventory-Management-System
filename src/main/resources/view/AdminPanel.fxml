@@ -93,7 +93,7 @@
             </Button>
             <Pane prefHeight="238.0" prefWidth="232.0">
                <children>
-                  <Label layoutX="11.0" layoutY="202.0" text="Status: Admin" textFill="WHITE">
+                  <Label layoutX="14.0" layoutY="201.0" text="Status: Admin" textFill="WHITE">
                      <font>
                         <Font size="18.0" />
                      </font>

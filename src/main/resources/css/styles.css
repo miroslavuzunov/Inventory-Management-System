@@ -1,58 +1,23 @@
-
-.parent{
-    -fx-background-image: url("./images/canva-MAC1Og_g8EI.jpg");
-    -fx-background-position: center;
-    -fx-background-size: stretch;
+.menu-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
 }
 
-.left-side{
+.menu-btn:hover {
+    -fx-background-color: #3d526d;
+    -fx-text-fill: rgba(255, 255, 255, 1);
+}
+
+.left-side {
     -fx-background-color: #334153;
-    -fx-opacity: 0.1;
-    -fx-background-image: url("./images/office-space.png");
-    -fx-background-size: 100%;
-    -fx-background-position: center;
-    -fx-background-repeat: no-repeat;
 }
 
-.login-btn{
-
+.exit-btn {
     -fx-background-color: transparent;
-    -fx-background-radius: 5px;
-    -fx-text-fill: #fff;
-    -fx-border-width: 1px;
-    -fx-border-style: solid;
-    -fx-border-color: #fff;
-    -fx-border-radius: 5px;
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
 }
 
-.login-btn:hover{
-    -fx-background-color: #fff;
-    -fx-text-fill: #637792;
-}
-
-.field{
-    -fx-text-fill: #fff;
-    -fx-prompt-text-fill: rgba(255, 255, 255, 0.3 );
-}
-
-.register-btn{
+.exit-btn:hover {
     -fx-background-color: transparent;
-    -fx-text-fill: rgba(255, 255, 255, 0.3 );
-    -fx-underline: true;
-}
-
-.register-btn:hover{
-    -fx-text-fill: rgba(255, 255, 255, 1 );
-}
-
-.homepage-btn{
-    -fx-text-fill: transparent;
-    -fx-background-image: url("./images/leftArrow.png");
-    -fx-background-position: center;
-    -fx-background-size: contain;
-    -fx-background-repeat: no-repeat;
-}
-
-.homepage-btn:hover{
-    -fx-background-color: #637792;
+    -fx-text-fill: rgba(255, 255, 255, 1);
 }

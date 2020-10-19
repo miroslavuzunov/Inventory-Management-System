@@ -23,13 +23,40 @@ public class AdminController {
     private AnchorPane mainPane;
 
     @FXML
+    private VBox clientManipPane;
+
+    @FXML
+    private Button regCardBtn;
+
+    @FXML
+    private Button addProductBtn;
+
+    @FXML
+    private Button removeProductBtn;
+
+    @FXML
+    private Button checkClientProductsBtn;
+
+    @FXML
     private VBox genRefPane;
 
     @FXML
-    private Button regMrtBtn;
+    private Button allProductsBtn;
+
+    @FXML
+    private Button checkStatusBtn;
+
+    @FXML
+    private Button productsByCategoryBtn;
+
+    @FXML
+    private Button scrappedProductsBtn;
 
     @FXML
     private VBox leftPane;
+
+    @FXML
+    private Button regMrtBtn;
 
     @FXML
     private Button genRefBtn;
@@ -41,7 +68,10 @@ public class AdminController {
     private Button regProductBtn;
 
     @FXML
-    private Button clientBtn;
+    private Button clientManipBtn;
+
+    @FXML
+    private Button notificationBtn;
 
     @FXML
     private Label todaysDate;
@@ -61,6 +91,11 @@ public class AdminController {
            fadeMain.toFront();
            genRefPane.toFront();
         }
+       else if(event.getSource()==clientManipBtn){
+           mainPane.setDisable(true);
+           fadeMain.toFront();
+           clientManipPane.toFront();
+       }
     }
 
     public void backToLeftHome(ActionEvent event) {

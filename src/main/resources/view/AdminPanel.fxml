@@ -12,13 +12,13 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #ccc;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controllers.PrimaryController">
+            fx:controller="controllers.AdminController">
    <children>
       <VBox layoutY="-7.0" prefHeight="607.0" prefWidth="232.0" styleClass="left-side" stylesheets="@../css/styles.css">
          <children>
             <Pane prefHeight="66.0" prefWidth="232.0">
                <children>
-                  <Button layoutX="-19.0" layoutY="1.0" mnemonicParsing="false" onAction="#switchToSecondary" prefHeight="30.0" prefWidth="67.0" styleClass="exit-btn" stylesheets="@../css/styles.css" text="EXIT" underline="true">
+                  <Button layoutX="-19.0" layoutY="1.0" mnemonicParsing="false" onAction="#exit" prefHeight="30.0" prefWidth="67.0" styleClass="exit-btn" stylesheets="@../css/styles.css" text="EXIT" underline="true">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor></Button>

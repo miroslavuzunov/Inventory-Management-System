@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AdminController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ims.controllers.AdminController">
    <children>
       <Pane fx:id="fadeMain" layoutX="232.0" opacity="0.65" prefHeight="600.0" prefWidth="669.0" style="-fx-background-color: #000;" />
       <AnchorPane fx:id="mainPane" layoutX="232.0" maxHeight="-Infinity" prefHeight="600.0" prefWidth="669.0" style="-fx-background-color: #fff;">
@@ -266,7 +266,7 @@
                   <Insets bottom="15.0" left="10.0" right="10.0" top="15.0" />
                </VBox.margin>
             </Button>
-            <Pane prefHeight="187.0" prefWidth="232.0">
+            <Pane prefHeight="215.0" prefWidth="232.0">
                <children>
                   <Button layoutX="2.0" layoutY="30.0" mnemonicParsing="false" onAction="#exit" prefHeight="38.0" prefWidth="76.0" styleClass="exit-btn" stylesheets="@../css/styles.css" text="EXIT" underline="true">
                      <cursor>

@@ -1,18 +1,14 @@
-package controllers;
+package ims.controllers;
 
 import java.io.IOException;
 
+import ims.App;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.effect.BlendMode;
-import javafx.scene.effect.Effect;
-import javafx.scene.effect.GaussianBlur;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
+
 
 public class AdminController {
 
@@ -85,17 +81,16 @@ public class AdminController {
     }
 
     @FXML
-    private void handleClicks(ActionEvent event){
-       if(event.getSource()==genRefBtn){
-           mainPane.setDisable(true);
-           fadeMain.toFront();
-           genRefPane.toFront();
+    private void handleClicks(ActionEvent event) {
+        if (event.getSource() == genRefBtn) {
+            mainPane.setDisable(true);
+            fadeMain.toFront();
+            genRefPane.toFront();
+        } else if (event.getSource() == clientManipBtn) {
+            mainPane.setDisable(true);
+            fadeMain.toFront();
+            clientManipPane.toFront();
         }
-       else if(event.getSource()==clientManipBtn){
-           mainPane.setDisable(true);
-           fadeMain.toFront();
-           clientManipPane.toFront();
-       }
     }
 
     public void backToLeftHome(ActionEvent event) {
@@ -103,4 +98,5 @@ public class AdminController {
         mainPane.toFront();
         leftPane.toFront();
     }
+
 }

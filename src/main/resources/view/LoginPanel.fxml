@@ -10,14 +10,14 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" prefHeight="600.0" prefWidth="900.0" spacing="20.0" style="-fx-background-color: #3d526d;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.LoginController">
+<VBox alignment="CENTER" prefHeight="600.0" prefWidth="900.0" spacing="20.0" style="-fx-background-color: #3d526d;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ims.controllers.LoginController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
    <children>
-      <ImageView fitHeight="82.0" fitWidth="174.0" onMouseClicked="#openGit" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="82.0" fitWidth="174.0"  pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../images/IMS%20LOGO(white).png" />
+            <Image url="/images/IMS LOGO(white).png" />
          </image>
          <cursor>
             <Cursor fx:constant="HAND" />
@@ -42,7 +42,7 @@
             <Font size="15.0" />
          </font>
       </PasswordField>
-      <Button mnemonicParsing="false" onAction="#login" prefHeight="37.0" prefWidth="262.0" styleClass="login-btn" stylesheets="@../css/styles.css" text="Login">
+      <Button mnemonicParsing="false" onAction="#login" prefHeight="37.0" prefWidth="261.0" styleClass="login-btn" stylesheets="@../css/styles.css" text="Login">
          <font>
             <Font size="15.0" />
          </font>

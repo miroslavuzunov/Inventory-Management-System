@@ -1,16 +1,20 @@
-package controllers;
+package ims;
 
+import ims.entities.City;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 
 import java.io.IOException;
 
 /**
- * JavaFX App
+ * JavaFX ims.App
  */
 public class App extends Application {
 
@@ -26,7 +30,7 @@ public class App extends Application {
         stage.show();
     }
 
-    static void setRoot(String fxml) throws IOException {
+    public static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
     }
 
@@ -36,7 +40,8 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
-        launch();
+          launch();
+
     }
 
 }

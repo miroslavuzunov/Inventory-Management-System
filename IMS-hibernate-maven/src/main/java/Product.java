@@ -39,11 +39,11 @@ public class Product implements Serializable {
     @OneToMany(mappedBy = "product_client")
     private List<Product> productProductClientList; // Somewhere to store them maybe?
 
-    public Product() {
-        inventoryNumber = "";
-        receivedDate = "";
-        available = 0;
-    }
+//    public Product() {
+//        inventoryNumber = "";
+//        receivedDate = "";
+//        available = 0;
+//    }
 
     public Product(String inventoryNumber, String receivedDate, Integer available) {
         setInventoryNumber(inventoryNumber);
@@ -85,7 +85,7 @@ public class Product implements Serializable {
     public void setReceivedDate(String receivedDate) {
         if (receivedDate == null || receivedDate.trim().isEmpty()) {
             receivedDate = "Product received date";
-            throw new IllegalArgumentException(String.format(receivedDate, NULL_OR_EMPTY_EXCEPTION_MESSAGE));
+            throw new IllegalArgumentException(String.format(NULL_OR_EMPTY_EXCEPTION_MESSAGE, receivedDate));
         }
         /*
             Regex explanation:
@@ -103,7 +103,7 @@ public class Product implements Serializable {
         String pattern = "/2[0-1][0-9]{2}-(0[0-9]|1[0-2])-([0-2]{1}[0-9]{1}|3[0-1])/";
         String createdOnFormatted = receivedDate.trim(); // remove the whitespaces
         if (!(pattern.matches(createdOnFormatted))) {
-            throw new IllegalArgumentException(String.format(receivedDate, INVALID_DATE_PATTERN_MESSAGE_EXCEPTION));
+            throw new IllegalArgumentException(String.format(INVALID_DATE_PATTERN_MESSAGE_EXCEPTION, receivedDate));
         }
         this.receivedDate = receivedDate;
     }

@@ -24,16 +24,14 @@ public class City implements Serializable {
     @OneToMany(mappedBy = "city")
     private List<Country> cityList; // Somewhere to store them maybe?
 
+//    public City() {
+//        name = "";
+//        region = "";
+//    }
 
-    public City(int id, String name, String region) {
-        setId(id);
+    public City(String name, String region) {
         setName(name);
         setRegion(region);
-    }
-
-    public City() {
-        name = "";
-        region = "";
     }
 
     public int getId() {
@@ -41,9 +39,9 @@ public class City implements Serializable {
     }
 
     // For the identity type when we want to add the id explicitly for test.
-    public void setId(int id) {
-        this.id = id;
-    }
+//    public void setId(int id) {
+//        this.id = id;
+//    }
 
     public String getName() {
         return this.name;
@@ -52,7 +50,7 @@ public class City implements Serializable {
     public void setName(String name) {
         if (name == null || name.trim().isEmpty()) {
             name = "City name";
-            throw new IllegalArgumentException(String.format(name, NULL_OR_EMPTY_EXCEPTION_MESSAGE));
+            throw new IllegalArgumentException(String.format(NULL_OR_EMPTY_EXCEPTION_MESSAGE, name));
         }
         if (name.length() > 50) {
             throw new IllegalArgumentException(INVALID_LENGTH_GREATER_THAN_50_EXCEPTION_MESSAGE);
@@ -70,7 +68,7 @@ public class City implements Serializable {
     public void setRegion(String region) {
         if (region == null || region.trim().isEmpty()) {
             region = "City region";
-            throw new IllegalArgumentException(String.format(region, NULL_OR_EMPTY_EXCEPTION_MESSAGE));
+            throw new IllegalArgumentException(String.format(NULL_OR_EMPTY_EXCEPTION_MESSAGE, region));
         }
         if (region.length() > 50) {
             throw new IllegalArgumentException(INVALID_LENGTH_GREATER_THAN_50_EXCEPTION_MESSAGE);

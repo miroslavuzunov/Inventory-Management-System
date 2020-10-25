@@ -25,10 +25,10 @@ public class PhoneNumber implements Serializable {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public PhoneNumber() {
-        phoneType = "";
-        number = "";
-    }
+//    public PhoneNumber() {
+//        phoneType = "";
+//        number = "";
+//    }
 
     public PhoneNumber(String phoneType, String number) {
        setPhoneType(phoneType);
@@ -47,7 +47,7 @@ public class PhoneNumber implements Serializable {
     public void setPhoneType(String phoneType) {
         if (phoneType == null || phoneType.trim().isEmpty()) {
             phoneType = "Phone number phone type";
-            throw new IllegalArgumentException(String.format(phoneType, NULL_OR_EMPTY_EXCEPTION_MESSAGE));
+            throw new IllegalArgumentException(String.format(NULL_OR_EMPTY_EXCEPTION_MESSAGE, phoneType));
         }
         if (phoneType.length() > 8) {
             throw new IllegalArgumentException(INVALID_LENGTH_GREATER_THAN_8_EXCEPTION_MESSAGE);
@@ -56,7 +56,7 @@ public class PhoneNumber implements Serializable {
             throw new IllegalArgumentException(INVALID_LENGTH_LOWER_THAN_6_EXCEPTION_MESSAGE);
         }
         if (!(phoneType.equals("PERSONAL") || phoneType.equals("OFFICE"))) {
-            throw new IllegalArgumentException(String.format(phoneType, INVALID_ROLE_EXCEPTION_MESSAGE));
+            throw new IllegalArgumentException(String.format(INVALID_ROLE_EXCEPTION_MESSAGE, phoneType));
         }
         this.phoneType = phoneType;
     }

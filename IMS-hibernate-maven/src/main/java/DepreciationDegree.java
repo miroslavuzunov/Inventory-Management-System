@@ -25,10 +25,10 @@ public class DepreciationDegree implements Serializable {
     private List<DepreciationDegree> depreciationDegreeList; // Somewhere to store them maybe?
 
 
-    public DepreciationDegree() {
-        category = ' ';
-        percentage = 0.0f;
-    }
+//    public DepreciationDegree() {
+//        category = ' ';
+//        percentage = 0.0f;
+//    }
 
     public DepreciationDegree(char category, Float percentage) {
         setCategory(category);
@@ -49,7 +49,7 @@ public class DepreciationDegree implements Serializable {
 
         if (categoryToString == null || categoryToString.trim().isEmpty()) {
             String categoryString = "Depreciation degree category ";
-            throw new IllegalArgumentException(String.format(categoryString, NULL_OR_EMPTY_EXCEPTION_MESSAGE));
+            throw new IllegalArgumentException(String.format(NULL_OR_EMPTY_EXCEPTION_MESSAGE, categoryString));
         }
         if (categoryToString.length() != 1) {
             throw new IllegalArgumentException(INVALID_DIFFERENT_THAN_1_EXCEPTION_MESSAGE);
@@ -68,7 +68,7 @@ public class DepreciationDegree implements Serializable {
 
         if (percentageToString == null || percentageToString.trim().isEmpty()) {
             String percentageString = "Depreciation degree percentage ";
-            throw new IllegalArgumentException(String.format(percentageString, NULL_OR_EMPTY_EXCEPTION_MESSAGE));
+            throw new IllegalArgumentException(String.format(NULL_OR_EMPTY_EXCEPTION_MESSAGE, percentageString));
         }
         if (percentageToString.length() > 3) {
             throw new IllegalArgumentException(INVALID_LENGTH_GREATER_THAN_3_EXCEPTION_MESSAGE);

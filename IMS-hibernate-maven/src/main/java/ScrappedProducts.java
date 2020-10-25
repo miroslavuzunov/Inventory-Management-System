@@ -27,9 +27,9 @@ public class ScrappedProducts implements Serializable {
     @Column(name = "scrapped_date", nullable = false)
     private String scrappedDate;
 
-    public ScrappedProducts() {
-        scrappedDate = "";
-    }
+//    public ScrappedProducts() {
+//        scrappedDate = "";
+//    }
 
     public ScrappedProducts(String scrappedDate) {
         setScrappedDate(scrappedDate);
@@ -46,7 +46,7 @@ public class ScrappedProducts implements Serializable {
     public void setScrappedDate(String scrappedDate) {
         if (scrappedDate == null || scrappedDate.trim().isEmpty()) {
             scrappedDate = "User created on";
-            throw new IllegalArgumentException(String.format(scrappedDate, NULL_OR_EMPTY_EXCEPTION_MESSAGE));
+            throw new IllegalArgumentException(String.format(NULL_OR_EMPTY_EXCEPTION_MESSAGE, scrappedDate));
         }
         /*
             Regex explanation:
@@ -64,7 +64,7 @@ public class ScrappedProducts implements Serializable {
         String pattern = "/2[0-1][0-9]{2}-(0[0-9]|1[0-2])-([0-2]{1}[0-9]{1}|3[0-1])/";
         String createdOnFormatted = scrappedDate.trim(); // remove the whitespaces
         if (!(pattern.matches(createdOnFormatted))) {
-            throw new IllegalArgumentException(String.format(scrappedDate, INVALID_DATE_PATTERN_MESSAGE_EXCEPTION));
+            throw new IllegalArgumentException(String.format(INVALID_DATE_PATTERN_MESSAGE_EXCEPTION, scrappedDate));
         }
         this.scrappedDate = scrappedDate;
     }

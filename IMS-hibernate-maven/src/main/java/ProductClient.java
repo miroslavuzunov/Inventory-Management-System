@@ -31,9 +31,9 @@ public class ProductClient implements Serializable {
     @Column(name = "created_on", nullable = false)
     private String createdOn;
 
-    public ProductClient() {
-        createdOn = "";
-    }
+//    public ProductClient() {
+//        createdOn = "";
+//    }
 
     public ProductClient(String createdOn) {
         setCreatedOn(createdOn);
@@ -50,7 +50,7 @@ public class ProductClient implements Serializable {
     public void setCreatedOn(String createdOn) {
         if (createdOn == null || createdOn.trim().isEmpty()) {
             createdOn = "User created on";
-            throw new IllegalArgumentException(String.format(createdOn, NULL_OR_EMPTY_EXCEPTION_MESSAGE));
+            throw new IllegalArgumentException(String.format(NULL_OR_EMPTY_EXCEPTION_MESSAGE, createdOn));
         }
         /*
             Regex explanation:
@@ -68,7 +68,7 @@ public class ProductClient implements Serializable {
         String pattern = "/2[0-1][0-9]{2}-(0[0-9]|1[0-2])-([0-2]{1}[0-9]{1}|3[0-1])/";
         String createdOnFormatted = createdOn.trim(); // remove the whitespaces
         if (!(pattern.matches(createdOnFormatted))) {
-            throw new IllegalArgumentException(String.format(createdOn, INVALID_DATE_PATTERN_MESSAGE_EXCEPTION));
+            throw new IllegalArgumentException(String.format(INVALID_DATE_PATTERN_MESSAGE_EXCEPTION, createdOn));
         }
         this.createdOn = createdOn;
     }

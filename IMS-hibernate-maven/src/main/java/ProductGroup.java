@@ -22,9 +22,9 @@ public class ProductGroup implements Serializable {
     private List<ProductGroup> productGroupList; // Somewhere to store them maybe?
 
 
-    public ProductGroup() {
-        group = "";
-    }
+//    public ProductGroup() {
+//        group = "";
+//    }
 
     public ProductGroup(String group) {
         setGroup(group);
@@ -41,7 +41,7 @@ public class ProductGroup implements Serializable {
     public void setGroup(String group) {
         if (group == null || group.trim().isEmpty()) {
             group = "Product group group";
-            throw new IllegalArgumentException(String.format(group, NULL_OR_EMPTY_EXCEPTION_MESSAGE));
+            throw new IllegalArgumentException(String.format(NULL_OR_EMPTY_EXCEPTION_MESSAGE, group));
         }
         if (group.length() > 100) {
             throw new IllegalArgumentException(INVALID_LENGTH_GREATER_THAN_100_EXCEPTION_MESSAGE);

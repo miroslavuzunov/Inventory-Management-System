@@ -21,9 +21,9 @@ public class Country implements Serializable {
     @OneToMany(mappedBy = "country")
     private List<Country> countryList; // Somewhere to store them maybe?
 
-    public Country() {
-        name = "";
-    }
+//    public Country() {
+//        name = "";
+//    }
 
     public Country(String name) {
         setName(name);
@@ -40,7 +40,7 @@ public class Country implements Serializable {
     public void setName(String name) {
         if (name == null || name.trim().isEmpty()) {
             name = "Country name";
-            throw new IllegalArgumentException(String.format(name, NULL_OR_EMPTY_EXCEPTION_MESSAGE));
+            throw new IllegalArgumentException(String.format(NULL_OR_EMPTY_EXCEPTION_MESSAGE, name));
         }
         if (name.length() > 100) {
             throw new IllegalArgumentException(INVALID_LENGTH_GREATER_THAN_100_EXCEPTION_MESSAGE);

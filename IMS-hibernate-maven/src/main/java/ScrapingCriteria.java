@@ -21,9 +21,9 @@ public class ScrapingCriteria implements Serializable {
     @OneToMany(mappedBy = "product_details")
     private List<ScrapingCriteria> scrapingCriteriaList; // Somewhere to store them maybe?
 
-    public ScrapingCriteria() {
-        criteria = "";
-    }
+//    public ScrapingCriteria() {
+//        criteria = "";
+//    }
 
     public ScrapingCriteria(String criteria) {
         setCriteria(criteria);
@@ -40,7 +40,7 @@ public class ScrapingCriteria implements Serializable {
     public void setCriteria(String criteria) {
         if (criteria == null || criteria.trim().isEmpty()) {
             String criteriaString = "Scrapping criteria criteria ";
-            throw new IllegalArgumentException(String.format(criteriaString, NULL_OR_EMPTY_EXCEPTION_MESSAGE));
+            throw new IllegalArgumentException(String.format(NULL_OR_EMPTY_EXCEPTION_MESSAGE, criteriaString));
         }
         if (criteria.length() > 45) {
             throw new IllegalArgumentException(INVALID_LENGTH_GREATER_THAN_45_EXCEPTION_MESSAGE);

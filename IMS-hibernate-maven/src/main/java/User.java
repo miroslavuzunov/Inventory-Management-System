@@ -70,7 +70,7 @@ public class User implements Serializable {
     public void setNickname(String nickname) {
         if (nickname == null || nickname.trim().isEmpty()) {
             nickname = "User nickname";
-            throw new IllegalArgumentException(String.format(nickname, NULL_OR_EMPTY_EXCEPTION_MESSAGE));
+            throw new IllegalArgumentException(String.format(NULL_OR_EMPTY_EXCEPTION_MESSAGE, nickname));
         }
         if (nickname.length() > 100) {
             throw new IllegalArgumentException(INVALID_LENGTH_GREATER_THAN_100_EXCEPTION_MESSAGE);
@@ -88,7 +88,7 @@ public class User implements Serializable {
     public void setPassword(String password) {
         if (password == null || password.trim().isEmpty()) {
             password = "User password";
-            throw new IllegalArgumentException(String.format(password, NULL_OR_EMPTY_EXCEPTION_MESSAGE));
+            throw new IllegalArgumentException(String.format(NULL_OR_EMPTY_EXCEPTION_MESSAGE, password));
         }
         if (password.length() > 32) {
             throw new IllegalArgumentException(INVALID_LENGTH_32_EXCEPTION_MESSAGE);
@@ -109,7 +109,7 @@ public class User implements Serializable {
          */
         String pattern = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=])(?=\\S+$).{8,}$";
         if (!(password.matches(pattern))) {
-            throw new IllegalArgumentException(String.format(password, INVALID_PASSWORD_REQUIREMENTS_EXCEPTION_MESSAGE));
+            throw new IllegalArgumentException(String.format(INVALID_PASSWORD_REQUIREMENTS_EXCEPTION_MESSAGE, password));
         }
         this.password = password;
     }
@@ -121,7 +121,7 @@ public class User implements Serializable {
     public void setCreatedOn(String createdOn) {
         if (createdOn == null || createdOn.trim().isEmpty()) {
             createdOn = "User created on";
-            throw new IllegalArgumentException(String.format(createdOn, NULL_OR_EMPTY_EXCEPTION_MESSAGE));
+            throw new IllegalArgumentException(String.format(NULL_OR_EMPTY_EXCEPTION_MESSAGE, createdOn));
         }
         /*
             Regex explanation:
@@ -139,7 +139,7 @@ public class User implements Serializable {
         String pattern = "/2[0-1][0-9]{2}-(0[0-9]|1[0-2])-([0-2]{1}[0-9]{1}|3[0-1])/";
         String createdOnFormatted = createdOn.trim(); // remove the whitespaces
         if (!(pattern.matches(createdOnFormatted))) {
-            throw new IllegalArgumentException(String.format(createdOn, INVALID_DATE_PATTERN_MESSAGE_EXCEPTION));
+            throw new IllegalArgumentException(String.format(INVALID_DATE_PATTERN_MESSAGE_EXCEPTION, createdOn));
         }
         this.createdOn = createdOn;
     }
@@ -149,14 +149,13 @@ public class User implements Serializable {
     }
 
     public void setRole(String role) {
-        //TODO: Validate that it is one of the 3 roles
         if (role == null || role.trim().isEmpty()) {
             role = "User role";
-            throw new IllegalArgumentException(String.format(role, NULL_OR_EMPTY_EXCEPTION_MESSAGE));
+            throw new IllegalArgumentException(String.format(NULL_OR_EMPTY_EXCEPTION_MESSAGE, role));
         }
 
         if (!(role.equals("ADMIN") || role.equals("MRT") || role.equals("CLIENT"))) {
-            throw new IllegalArgumentException(String.format(role, INVALID_ROLE_EXCEPTION_MESSAGE));
+            throw new IllegalArgumentException(String.format(INVALID_ROLE_EXCEPTION_MESSAGE, role));
         }
             this.role = role;
     }

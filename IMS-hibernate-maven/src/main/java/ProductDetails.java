@@ -42,12 +42,12 @@ public class ProductDetails implements Serializable {
     @OneToMany(mappedBy = "product")
     private List<ProductDetails> productDetailsList; // Somewhere to store them maybe?
 
-    public ProductDetails() {
-        brandModel = "";
-        price = 0.0f;
-        description = "";
-        productType = "";
-    }
+//    public ProductDetails() {
+//        brandModel = "";
+//        price = 0.0f;
+//        description = "";
+//        productType = "";
+//    }
 
     public ProductDetails(String brandModel, Float price, String description, String productType) {
         setBrandModel(brandModel);
@@ -86,8 +86,8 @@ public class ProductDetails implements Serializable {
         String priceToString = price.toString();
 
         if (priceToString == null || priceToString.trim().isEmpty()) {
-            String percentageString = "Product details price";
-            throw new IllegalArgumentException(String.format(NULL_OR_EMPTY_EXCEPTION_MESSAGE, percentageString));
+            priceToString = "Product details price";
+            throw new IllegalArgumentException(String.format(NULL_OR_EMPTY_EXCEPTION_MESSAGE, priceToString));
         }
         if (priceToString.length() > 3) {
             throw new IllegalArgumentException(INVALID_LENGTH_GREATER_THAN_3_EXCEPTION_MESSAGE);

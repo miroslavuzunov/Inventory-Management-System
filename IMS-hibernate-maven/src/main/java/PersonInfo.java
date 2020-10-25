@@ -2,8 +2,8 @@ import sun.jvm.hotspot.debugger.AddressException;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.mail.internet.InternetAddress;
 import javax.persistence.*;
-import javax.mail.internet;
 
 import static constants.ExceptionMessagesConstants.*;
 
@@ -41,18 +41,18 @@ public class PersonInfo implements Serializable {
         boolean result = true;
         try {
             InternetAddress emailAddr = new InternetAddress(email);
-        } catch (AddressException e) {
+        } catch (AddressException | javax.mail.internet.AddressException e) {
             result = false;
         }
         return result;
     }
 
-    public PersonInfo() {
-        fName = "";
-        lName = "";
-        EGN = "";
-        email = "";
-    }
+//    public PersonInfo() {
+//        fName = "";
+//        lName = "";
+//        EGN = "";
+//        email = "";
+//    }
 
     public PersonInfo(String first_name, String last_name, String egn, String email) {
         setfName(first_name);
@@ -72,7 +72,7 @@ public class PersonInfo implements Serializable {
     public void setfName(String fName) {
         if (fName == null || fName.trim().isEmpty()) {
             fName = "Person info first name";
-            throw new IllegalArgumentException(String.format(fName, NULL_OR_EMPTY_EXCEPTION_MESSAGE));
+            throw new IllegalArgumentException(String.format(NULL_OR_EMPTY_EXCEPTION_MESSAGE, fName));
         }
         if (fName.length() > 100) {
             throw new IllegalArgumentException(INVALID_LENGTH_GREATER_THAN_100_EXCEPTION_MESSAGE);
@@ -90,7 +90,7 @@ public class PersonInfo implements Serializable {
     public void setlName(String lName) {
         if (lName == null || lName.trim().isEmpty()) {
             lName = "Person info last name";
-            throw new IllegalArgumentException(String.format(lName, NULL_OR_EMPTY_EXCEPTION_MESSAGE));
+            throw new IllegalArgumentException(String.format(NULL_OR_EMPTY_EXCEPTION_MESSAGE, lName));
         }
         if (lName.length() > 100) {
             throw new IllegalArgumentException(INVALID_LENGTH_GREATER_THAN_100_EXCEPTION_MESSAGE);
@@ -108,7 +108,7 @@ public class PersonInfo implements Serializable {
     public void setEGN(String EGN) {
         if (EGN == null || EGN.trim().isEmpty()) {
             EGN = "Person info EGN";
-            throw new IllegalArgumentException(String.format(EGN, NULL_OR_EMPTY_EXCEPTION_MESSAGE));
+            throw new IllegalArgumentException(String.format(NULL_OR_EMPTY_EXCEPTION_MESSAGE, EGN));
         }
         if (EGN.length() != 10) {
             throw new IllegalArgumentException(INVALID_LENGTH_10_EXCEPTION_MESSAGE);
@@ -123,11 +123,11 @@ public class PersonInfo implements Serializable {
     public void setEmail(String email) {
         if (email == null || email.trim().isEmpty()) {
             email = "Person info Email";
-            throw new IllegalArgumentException(String.format(email, NULL_OR_EMPTY_EXCEPTION_MESSAGE));
+            throw new IllegalArgumentException(String.format(NULL_OR_EMPTY_EXCEPTION_MESSAGE, email));
         }
         boolean checkValid = isValidEmailAddress(email);
         if (!checkValid) {
-            throw new IllegalArgumentException(String.format(email, INVALID_EMAIL_EXCEPTION_MESSAGE));
+            throw new IllegalArgumentException(String.format(INVALID_EMAIL_EXCEPTION_MESSAGE, email));
         }
         this.email = email;
     }

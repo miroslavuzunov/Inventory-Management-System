@@ -1,5 +1,3 @@
-import net.bytebuddy.pool.TypePool;
-
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.*;
@@ -37,12 +35,12 @@ public class Address implements Serializable {
     @OneToOne(mappedBy = "stockroom")
     private List<Address> stockroomList;
 
-    public Address() {
-        street = "";
-        details = "";
-    }
+//    public Address() {
+//        street = "";
+//        details = "";
+//    }
 
-    public Address(String street, String details) {
+    public Address(City city, Country country, String street, String details) {
         setStreet(street);
         setDetails(details);
     }
@@ -58,7 +56,7 @@ public class Address implements Serializable {
     public void setStreet(String street) {
         if (street == null || street.trim().isEmpty()) {
             street = "Address details";
-            throw new IllegalArgumentException(String.format(street, NULL_OR_EMPTY_EXCEPTION_MESSAGE));
+            throw new IllegalArgumentException(String.format(NULL_OR_EMPTY_EXCEPTION_MESSAGE, street));
         }
         if (street.length() > 100) {
             throw new IllegalArgumentException(INVALID_LENGTH_GREATER_THAN_100_EXCEPTION_MESSAGE);
@@ -76,7 +74,7 @@ public class Address implements Serializable {
     public void setDetails(String details) {
         if (details == null || details.trim().isEmpty()) {
             details = "Address details";
-            throw new IllegalArgumentException(String.format(details, NULL_OR_EMPTY_EXCEPTION_MESSAGE));
+            throw new IllegalArgumentException(String.format(NULL_OR_EMPTY_EXCEPTION_MESSAGE, details));
         }
         if (details.length() > 200) {
             throw new IllegalArgumentException(INVALID_LENGTH_GREATER_THAN_200_EXCEPTION_MESSAGE);

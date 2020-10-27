@@ -14,6 +14,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 
@@ -86,6 +87,12 @@ public class AdminController implements Initializable {
     @FXML
     private Label nameLabel;
 
+    @FXML
+    private AnchorPane regPane;
+
+    @FXML
+    private ChoiceBox<String> countryChoiceBox;
+
     private static String adminFirstName;
 
     @Override
@@ -104,12 +111,20 @@ public class AdminController implements Initializable {
     private void handleClicks(ActionEvent event) {
         if (event.getSource() == genRefBtn) {
             mainPane.setDisable(true);
+            mainPane.toFront();
             fadeMain.toFront();
             genRefPane.toFront();
-        } else if (event.getSource() == clientManipBtn) {
+        }
+        if (event.getSource() == clientManipBtn) {
             mainPane.setDisable(true);
+            mainPane.toFront();
             fadeMain.toFront();
             clientManipPane.toFront();
+        }
+        if(event.getSource() == regMrtBtn){
+            mainPane.setDisable(true);
+            countryChoiceBox.getItems().add("Bulgaria"); //TODO Loading from DB
+            regPane.toFront();
         }
     }
 

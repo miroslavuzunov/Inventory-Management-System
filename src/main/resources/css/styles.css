@@ -17,7 +17,7 @@
 .menu-btn:hover,
 .menu-btn:focused{
     -fx-border-width: 0 0 0 3px;
-    -fx-border-color: rgb(79, 163, 212);
+    -fx-border-color: rgb(79, 163, 211);
     -fx-text-fill: rgba(255, 255, 255, 1);
     -fx-label-padding: 0 0 0 20px;
 }

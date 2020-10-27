@@ -41,7 +41,7 @@
          </font>
       </PasswordField>
       <Label fx:id="messageLabel" prefHeight="18.0" prefWidth="257.0" textFill="#ff3535" />
-      <Button mnemonicParsing="false" onAction="#login" prefHeight="37.0" prefWidth="261.0" styleClass="login-btn" stylesheets="@../css/styles.css" text="Login">
+      <Button fx:id="loginBtn" defaultButton="true" mnemonicParsing="false" onAction="#login" prefHeight="37.0" prefWidth="261.0" styleClass="login-btn" stylesheets="@../css/styles.css" text="Login">
          <font>
             <Font size="15.0" />
          </font>

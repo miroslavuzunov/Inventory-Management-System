@@ -23,7 +23,7 @@
             </ImageView>
             <VBox layoutY="58.0" prefHeight="185.0" prefWidth="669.0" styleClass="welcome-pane" stylesheets="@../css/styles.css">
                <children>
-                  <Label alignment="TOP_LEFT" prefHeight="65.0" prefWidth="226.0" text="Hello, Admin!" textFill="WHITE">
+                  <Label fx:id="nameLabel" alignment="TOP_LEFT" prefHeight="65.0" prefWidth="670.0" text="Hello, Admin!" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="30.0" />
                      </font>
@@ -276,12 +276,12 @@
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Button>
-                  <Label fx:id="todaysDate" layoutX="153.0" layoutY="144.0" prefHeight="27.0" prefWidth="76.0" style="-fx-text-fill: #fff;" text="10/18/2020" textFill="WHITE">
+                  <Label fx:id="todaysDate" layoutX="7.0" layoutY="144.0" prefHeight="27.0" prefWidth="226.0" style="-fx-text-fill: #fff;" text="10/18/2020" textFill="WHITE">
                      <font>
                         <Font name="Roboto Thin" size="14.0" />
                      </font>
                   </Label>
-                  <Label fx:id="userStatus" layoutX="7.0" layoutY="144.0" prefHeight="27.0" prefWidth="114.0" text="Status: Admin" textFill="WHITE">
+                  <Label fx:id="userStatus" layoutX="7.0" layoutY="117.0" prefHeight="27.0" prefWidth="114.0" text="Status: Admin" textFill="WHITE">
                      <font>
                         <Font name="Roboto Thin" size="14.0" />
                      </font>

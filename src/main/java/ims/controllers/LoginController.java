@@ -1,28 +1,19 @@
 package ims.controllers;
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import ims.App;
-import ims.entities.*;
 import ims.enums.Role;
+import ims.services.UserService;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-
-public class LoginController {
+public class LoginController implements Initializable {
 
     @FXML
     private TextField usernameField;
@@ -34,29 +25,42 @@ public class LoginController {
     private Label messageLabel;
 
     @FXML
+    private Button loginBtn;
+
+    private UserService userService;
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        loginBtn.setDefaultButton(true); // ENTER key calls login
+        userService = new UserService();
+    }
+
+    @FXML
     private void login() throws IOException {
 
         String username = usernameField.getText();
         String password = passwordField.getText();
 
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory("JPA");
-        EntityManager manager = factory.createEntityManager();
 
-        CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
-        CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
-        Root<User> userRoot = criteriaQuery.from(User.class);
 
-        criteriaQuery.where(criteriaBuilder.equal(userRoot.get("nickname"), username));
-        List<User> users = manager.createQuery(criteriaQuery).getResultList();
-
-        if(users.isEmpty())
+        if(userService.getUserByUsername(username) == null)
             messageLabel.setText("Invalid username! Try again!");
         else
-            if(users.get(0).getPassword().equals(password))
-                App.setRoot("/view/AdminPanel");
+            if(userService.getUserByUsername(username).getPassword().equals(password)) {
+                AdminController.passUserFirstName(userService.getUserByUsername(username));
+
+                switch (userService.getUserByUsername(username).getRole()) {
+                    case ADMIN:
+                        App.setRoot("/view/AdminPanel");
+                        break;
+                    case MRT:
+                        //TODO
+                    case CLIENT:
+                        //TODO
+                }
+            }
             else
                 messageLabel.setText("Wrong password! Try again!");
     }
-
 
 }

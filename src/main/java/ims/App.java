@@ -1,5 +1,6 @@
 package ims;
 
+import ims.controllers.LoginController;
 import ims.entities.City;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -41,7 +42,6 @@ public class App extends Application {
 
     public static void main(String[] args) {
           launch();
-
     }
 
 }

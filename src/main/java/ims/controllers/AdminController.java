@@ -1,21 +1,24 @@
 package ims.controllers;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import ims.App;
-import ims.entities.PersonInfo;
+import ims.dialogs.ConfirmationDialog;
 import ims.entities.User;
 import ims.services.UserRegistrationService;
-import ims.services.UserService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.Parent;
+import javafx.scene.control.Label;
 
 
 public class AdminController extends AdminControllerResources implements Initializable {
@@ -26,7 +29,53 @@ public class AdminController extends AdminControllerResources implements Initial
     public void initialize(URL url, ResourceBundle resourceBundle) {
         userStatus.setText("Status: ADMIN");
         todaysDate.setText("Today's date: " + LocalDate.now().toString());
-        nameLabel.setText("Hello, "+ loggedUser.getPersonInfo().getFirstName() + "!");
+        nameLabel.setText("Hello, " + loggedUser.getPersonInfo().getFirstName() + "!");
+
+        userRegistrationService = new UserRegistrationService();
+        userRegistrationService.initializeCountries(countryChoiceBox);
+    }
+
+    @FXML
+    private void handleClicks(ActionEvent event) {
+        switchScene(event.getSource() == genRefBtn,
+                Stream.of(
+                        mainPane,
+                        fadeMain,
+                        genRefPane
+                ));
+
+        switchScene(event.getSource() == clientManipBtn,
+                Stream.of(
+                        mainPane,
+                        fadeMain,
+                        clientManipPane
+                ));
+
+        switchScene(event.getSource() == regMrtBtn,
+                Stream.of(
+                        mainPane,
+                        cleanLeftPane,
+                        regPane
+                ));
+    }
+
+    @FXML
+    public void backToSideHome(ActionEvent event) {
+        switchScene(true,
+                Stream.of(
+                        mainPane,
+                        leftPane
+                ));
+    }
+
+    @FXML
+    public void signUp(ActionEvent event) throws InvocationTargetException, IllegalAccessException {
+        List<String> errorMessages = new ArrayList<>();
+
+        validateFields(errorMessages);
+
+        if (errorMessages.isEmpty())
+            ConfirmationDialog.confirm("Are you sure you want to sign up?");
     }
 
     @FXML
@@ -34,60 +83,50 @@ public class AdminController extends AdminControllerResources implements Initial
         App.setRoot("/view/Login");
     }
 
-    @FXML
-    private void handleClicks(ActionEvent event) {
-        if (event.getSource() == genRefBtn) {
-            mainPane.setDisable(true);
-            mainPane.toFront();
-            fadeMain.toFront();
-            genRefPane.toFront();
-        }
-        if (event.getSource() == clientManipBtn) {
-            mainPane.setDisable(true);
-            mainPane.toFront();
-            fadeMain.toFront();
-            clientManipPane.toFront();
-        }
-        if(event.getSource() == regMrtBtn){
-            userRegistrationService = new UserRegistrationService();
-            userRegistrationService.initializeCountries(countryChoiceBox);
-            mainPane.setDisable(true);
-            regPane.toFront();
+    private void validateFields(List<String> errorMessages) {
+        checkError(errorMessages,
+                userRegistrationService.checkIfUsernameExists(mrtRegUsernameField.getText()),
+                mrtRegUsernameMsg,
+                BUSY_USERNAME_MSG
+        );
+        checkError(errorMessages,
+                !userRegistrationService.checkIfPasswordsMatch(mrtRegPasswordField.getText(), mrtRegRepeatPasswordField.getText()),
+                mrtRegPasswordMsg,
+                PASSWORDS_DONT_MATCH_MSG
+        );
+        checkError(errorMessages,
+                userRegistrationService.checkIfEmailIsUsed(mrtRegEmailField.getText()),
+                mrtRegEmailMsg,
+                BUSY_EMAIL_MSG
+        );
+        checkError(errorMessages,
+                !userRegistrationService.checkIfEgnIsValid(mrtRegEgnField.getText()),
+                mrtRegEgnMsg,
+                INVALID_EGN_MSG
+        );
+    }
+
+    private void switchScene(boolean statement, Stream<Parent> parentWindows) {
+        List<Parent> parentWindowsList = parentWindows.collect(Collectors.toList());
+
+        if (statement)
+            parentWindowsList.forEach(window -> {
+                window.toFront();
+            });
+    }
+
+    private void checkError(List<String> errorMessages, boolean statement, Label messageLabel, String message) {
+        if (statement) {
+            messageLabel.setText(message);
+            errorMessages.add(message);
+        } else {
+            messageLabel.setText("");
+            errorMessages.removeIf(str -> str.equals(message));
         }
     }
 
-    @FXML
-    public void backToLeftHome(ActionEvent event) {
-        mainPane.setDisable(false);
-        mainPane.toFront();
-        leftPane.toFront();
-    }
-
-    public void signUp(ActionEvent event) {
-        //TODO confirmation prompt
-
-        if(userRegistrationService.checkIfUsernameExists(mrtRegUsernameField.getText()))
-            mrtRegUsernameMsg.setText("Username is busy!");
-        else
-            mrtRegUsernameMsg.setText("");
-        if(!userRegistrationService.checkIfPasswordsMatch(mrtRegPasswordField.getText(), mrtRegRepeatPasswordField.getText()))
-            mrtRegPasswordMsg.setText("Passwords don't match!");
-        else
-            mrtRegPasswordMsg.setText("");
-        if(userRegistrationService.checkIfEmailIsUsed(mrtRegEmailField.getText()))
-            mrtRegEmailMsg.setText("Email is already used!");
-        else
-            mrtRegEmailMsg.setText("");
-        if(!userRegistrationService.checkIfEgnIsValid(mrtRegEgnField.getText()))
-            mrtRegEgnMsg.setText("Invalid EGN!");
-        else
-            mrtRegEgnMsg.setText("");
-    }
-
-    public static void passUser(User passedUser){
+    public static void passUser(User passedUser) {
         loggedUser = passedUser;
     }
-
-
 
 }

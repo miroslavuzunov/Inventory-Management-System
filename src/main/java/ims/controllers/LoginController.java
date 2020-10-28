@@ -44,8 +44,6 @@ public class LoginController implements Initializable {
 
         user = userService.getUserByUsername(username);
 
-
-
         if(user == null)
             messageLabel.setText("Invalid username! Try again!");
         else

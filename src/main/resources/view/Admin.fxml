@@ -203,6 +203,21 @@
             </Label>
          </children>
       </AnchorPane>
+      <VBox fx:id="cleanLeftPane" prefHeight="600.0" prefWidth="232.0" styleClass="left-side" stylesheets="@../css/styles.css">
+         <children>
+            <Button mnemonicParsing="false" onAction="#backToSideHome" styleClass="home-btn" stylesheets="@../css/styles.css" text="BACK" underline="true">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Button>
+         </children>
+      </VBox>
       <VBox fx:id="clientManipPane" layoutX="1.0" prefHeight="600.0" prefWidth="232.0" styleClass="left-side" stylesheets="@../css/styles.css">
          <children>
             <Label alignment="CENTER" prefHeight="17.0" prefWidth="232.0" styleClass="left-side-header" stylesheets="@../css/styles.css" text="CLIENT MANIPULATION" textFill="WHITE">
@@ -258,7 +273,7 @@
                </VBox.margin>
             </Button>
             <Pane prefHeight="34.0" prefWidth="232.0" />
-            <Button mnemonicParsing="false" onAction="#backToLeftHome" styleClass="home-btn" stylesheets="@../css/styles.css" text="BACK" underline="true">
+            <Button mnemonicParsing="false" onAction="#backToSideHome" styleClass="home-btn" stylesheets="@../css/styles.css" text="BACK" underline="true">
                <VBox.margin>
                   <Insets left="8.0" />
                </VBox.margin>
@@ -326,7 +341,7 @@
                </VBox.margin>
             </Button>
             <Pane prefHeight="34.0" prefWidth="232.0" />
-            <Button mnemonicParsing="false" onAction="#backToLeftHome" styleClass="home-btn" stylesheets="@../css/styles.css" text="BACK" underline="true">
+            <Button mnemonicParsing="false" onAction="#backToSideHome" styleClass="home-btn" stylesheets="@../css/styles.css" text="BACK" underline="true">
                <VBox.margin>
                   <Insets left="8.0" />
                </VBox.margin>

@@ -9,102 +9,29 @@ import java.util.ResourceBundle;
 import ims.App;
 import ims.entities.PersonInfo;
 import ims.entities.User;
+import ims.services.UserRegistrationService;
 import ims.services.UserService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
 
-public class AdminController implements Initializable {
-
-    @FXML
-    private Pane fadeMain;
-
-    @FXML
-    private AnchorPane mainPane;
-
-    @FXML
-    private VBox clientManipPane;
-
-    @FXML
-    private Button regCardBtn;
-
-    @FXML
-    private Button addProductBtn;
-
-    @FXML
-    private Button removeProductBtn;
-
-    @FXML
-    private Button checkClientProductsBtn;
-
-    @FXML
-    private VBox genRefPane;
-
-    @FXML
-    private Button allProductsBtn;
-
-    @FXML
-    private Button checkStatusBtn;
-
-    @FXML
-    private Button productsByCategoryBtn;
-
-    @FXML
-    private Button scrappedProductsBtn;
-
-    @FXML
-    private VBox leftPane;
-
-    @FXML
-    private Button regMrtBtn;
-
-    @FXML
-    private Button genRefBtn;
-
-    @FXML
-    private Button stockRefBtn;
-
-    @FXML
-    private Button regProductBtn;
-
-    @FXML
-    private Button clientManipBtn;
-
-    @FXML
-    private Button notificationBtn;
-
-    @FXML
-    private Label todaysDate;
-
-    @FXML
-    private Label userStatus;
-
-    @FXML
-    private Label nameLabel;
-
-    @FXML
-    private AnchorPane regPane;
-
-    @FXML
-    private ChoiceBox<String> countryChoiceBox;
-
-    private static String adminFirstName;
+public class AdminController extends AdminControllerResources implements Initializable {
+    private static User loggedUser;
+    private UserRegistrationService userRegistrationService;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         userStatus.setText("Status: ADMIN");
         todaysDate.setText("Today's date: " + LocalDate.now().toString());
-        nameLabel.setText("Hello, "+ adminFirstName + "!");
+        nameLabel.setText("Hello, "+ loggedUser.getPersonInfo().getFirstName() + "!");
     }
 
     @FXML
     private void exit() throws IOException {
-        App.setRoot("/view/LoginPanel");
+        App.setRoot("/view/Login");
     }
 
     @FXML
@@ -122,24 +49,45 @@ public class AdminController implements Initializable {
             clientManipPane.toFront();
         }
         if(event.getSource() == regMrtBtn){
+            userRegistrationService = new UserRegistrationService();
+            userRegistrationService.initializeCountries(countryChoiceBox);
             mainPane.setDisable(true);
-            countryChoiceBox.getItems().add("Bulgaria"); //TODO Loading from DB
             regPane.toFront();
         }
     }
 
+    @FXML
     public void backToLeftHome(ActionEvent event) {
         mainPane.setDisable(false);
         mainPane.toFront();
         leftPane.toFront();
     }
 
-    public static void passUserFirstName(User user){
-        adminFirstName = user.getPersonInfo().getFirstName();
+    public void signUp(ActionEvent event) {
+        //TODO confirmation prompt
+
+        if(userRegistrationService.checkIfUsernameExists(mrtRegUsernameField.getText()))
+            mrtRegUsernameMsg.setText("Username is busy!");
+        else
+            mrtRegUsernameMsg.setText("");
+        if(!userRegistrationService.checkIfPasswordsMatch(mrtRegPasswordField.getText(), mrtRegRepeatPasswordField.getText()))
+            mrtRegPasswordMsg.setText("Passwords don't match!");
+        else
+            mrtRegPasswordMsg.setText("");
+        if(userRegistrationService.checkIfEmailIsUsed(mrtRegEmailField.getText()))
+            mrtRegEmailMsg.setText("Email is already used!");
+        else
+            mrtRegEmailMsg.setText("");
+        if(!userRegistrationService.checkIfEgnIsValid(mrtRegEgnField.getText()))
+            mrtRegEgnMsg.setText("Invalid EGN!");
+        else
+            mrtRegEgnMsg.setText("");
     }
 
-//    public static void disableAdminButton(){
-//        leftPane.getChildren().remove(regMrtBtn);
-//    }
+    public static void passUser(User passedUser){
+        loggedUser = passedUser;
+    }
+
+
 
 }

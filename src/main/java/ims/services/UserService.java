@@ -16,6 +16,8 @@ public class UserService {
     }
 
     public User getUserByUsername(String username){
-        return userDao.getUserByUsername(username);
+        return userDao.getUserByField("nickname", username);
     }
+
+
 }

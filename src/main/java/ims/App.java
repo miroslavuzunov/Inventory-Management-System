@@ -23,7 +23,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("/view/LoginPanel"),900,600);
+        scene = new Scene(loadFXML("/view/Login"),900,600);
         stage.setScene(scene);
         stage.setResizable(false);
         stage.setTitle("IMS - office edition");

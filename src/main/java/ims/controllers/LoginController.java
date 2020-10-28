@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import ims.App;
+import ims.entities.User;
 import ims.enums.Role;
 import ims.services.UserService;
 import javafx.fxml.FXML;
@@ -28,6 +29,7 @@ public class LoginController implements Initializable {
     private Button loginBtn;
 
     private UserService userService;
+    private User user;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -37,21 +39,21 @@ public class LoginController implements Initializable {
 
     @FXML
     private void login() throws IOException {
-
         String username = usernameField.getText();
         String password = passwordField.getText();
 
+        user = userService.getUserByUsername(username);
 
 
-        if(userService.getUserByUsername(username) == null)
+
+        if(user == null)
             messageLabel.setText("Invalid username! Try again!");
         else
-            if(userService.getUserByUsername(username).getPassword().equals(password)) {
-                AdminController.passUserFirstName(userService.getUserByUsername(username));
-
-                switch (userService.getUserByUsername(username).getRole()) {
+            if(user.getPassword().equals(password)) {
+                switch (user.getRole()) {
                     case ADMIN:
-                        App.setRoot("/view/AdminPanel");
+                        AdminController.passUser(user);
+                        App.setRoot("/view/Admin");
                         break;
                     case MRT:
                         //TODO

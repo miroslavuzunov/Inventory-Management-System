@@ -18,7 +18,7 @@ public class UserDao {
 
     }
 
-    public User getUserByUsername(String username){
+    public User getUserByField(String column, String value){
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("JPA");
         EntityManager manager = factory.createEntityManager();
 
@@ -26,7 +26,7 @@ public class UserDao {
         CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
         Root<User> userRoot = criteriaQuery.from(User.class);
 
-        criteriaQuery.where(criteriaBuilder.equal(userRoot.get("nickname"), username));
+        criteriaQuery.where(criteriaBuilder.equal(userRoot.get(column), value));
         List<User> users = manager.createQuery(criteriaQuery).getResultList();
 
         if(!users.isEmpty())

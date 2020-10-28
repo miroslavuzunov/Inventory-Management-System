@@ -21,7 +21,7 @@
          <children>
             <VBox layoutX="1.0" prefHeight="600.0" prefWidth="333.0" AnchorPane.bottomAnchor="0.0">
                <children>
-                  <TextField prefWidth="100.0" promptText="Username">
+                  <TextField fx:id="mrtRegUsernameField" prefWidth="100.0" promptText="Username">
                      <VBox.margin>
                         <Insets left="50.0" right="50.0" />
                      </VBox.margin>
@@ -29,7 +29,20 @@
                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                      </padding>
                   </TextField>
-                  <PasswordField promptText="Password">
+                  <Label fx:id="mrtRegUsernameMsg" prefHeight="17.0" prefWidth="234.0" textFill="#ff3535">
+                     <VBox.margin>
+                        <Insets left="50.0" right="50.0" />
+                     </VBox.margin>
+                  </Label>
+                  <PasswordField fx:id="mrtRegPasswordField" promptText="Password">
+                     <VBox.margin>
+                        <Insets left="50.0" right="50.0" top="30.0" />
+                     </VBox.margin>
+                     <padding>
+                        <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                     </padding>
+                  </PasswordField>
+                  <PasswordField fx:id="mrtRegRepeatPasswordField" promptText="Repeat password">
                      <VBox.margin>
                         <Insets left="50.0" right="50.0" top="40.0" />
                      </VBox.margin>
@@ -37,31 +50,33 @@
                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                      </padding>
                   </PasswordField>
-                  <PasswordField promptText="Repeat password">
+                  <Label fx:id="mrtRegPasswordMsg" prefHeight="17.0" prefWidth="234.0" textFill="#ff3535">
                      <VBox.margin>
-                        <Insets left="50.0" right="50.0" top="40.0" />
+                        <Insets left="50.0" right="50.0" />
                      </VBox.margin>
-                     <padding>
-                        <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
-                     </padding>
-                  </PasswordField>
-                  <TextField prefWidth="100.0" promptText="E-mail">
+                  </Label>
+                  <TextField fx:id="mrtRegEmailField" prefWidth="100.0" promptText="E-mail">
                      <VBox.margin>
-                        <Insets left="50.0" right="50.0" top="40.0" />
-                     </VBox.margin>
-                     <padding>
-                        <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
-                     </padding>
-                  </TextField>
-                  <TextField prefWidth="100.0" promptText="First name">
-                     <VBox.margin>
-                        <Insets left="50.0" right="50.0" top="40.0" />
+                        <Insets left="50.0" right="50.0" top="30.0" />
                      </VBox.margin>
                      <padding>
                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                      </padding>
                   </TextField>
-                  <TextField prefWidth="100.0" promptText="Last name">
+                  <Label fx:id="mrtRegEmailMsg" prefHeight="17.0" prefWidth="234.0" textFill="#ff3535">
+                     <VBox.margin>
+                        <Insets left="50.0" right="50.0" />
+                     </VBox.margin>
+                  </Label>
+                  <TextField fx:id="mrtRegFirstNameField" prefWidth="100.0" promptText="First name">
+                     <VBox.margin>
+                        <Insets left="50.0" right="50.0" top="30.0" />
+                     </VBox.margin>
+                     <padding>
+                        <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                     </padding>
+                  </TextField>
+                  <TextField fx:id="mrtRegLastNameField" prefWidth="100.0" promptText="Last name">
                      <VBox.margin>
                         <Insets left="50.0" right="50.0" top="40.0" />
                      </VBox.margin>
@@ -76,7 +91,7 @@
             </VBox>
             <VBox layoutX="337.0" layoutY="-1.0" prefHeight="600.0" prefWidth="333.0">
                <children>
-                  <TextField prefWidth="100.0" promptText="EGN">
+                  <TextField fx:id="mrtRegEgnField" prefWidth="100.0" promptText="EGN">
                      <VBox.margin>
                         <Insets left="50.0" right="50.0" />
                      </VBox.margin>
@@ -84,15 +99,20 @@
                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                      </padding>
                   </TextField>
-                  <ChoiceBox fx:id="countryChoiceBox" prefHeight="33.0" prefWidth="252.0">
+                  <Label fx:id="mrtRegEgnMsg" prefHeight="17.0" prefWidth="234.0" textFill="#ff3535">
                      <VBox.margin>
-                        <Insets left="50.0" right="50.0" top="40.0" />
+                        <Insets left="50.0" right="50.0" />
+                     </VBox.margin>
+                  </Label>
+                  <ChoiceBox fx:id="countryChoiceBox" nodeOrientation="LEFT_TO_RIGHT" prefHeight="33.0" prefWidth="252.0">
+                     <VBox.margin>
+                        <Insets left="50.0" right="50.0" top="30.0" />
                      </VBox.margin>
                      <padding>
                         <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                      </padding>
                   </ChoiceBox>
-                  <TextField prefWidth="100.0" promptText="City">
+                  <TextField fx:id="mrtRegCityField" prefWidth="100.0" promptText="City">
                      <padding>
                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                      </padding>
@@ -100,23 +120,23 @@
                         <Insets left="50.0" right="50.0" top="40.0" />
                      </VBox.margin>
                   </TextField>
-                  <TextField prefWidth="100.0" promptText="Region">
+                  <TextField fx:id="mrtRegRegionField" prefWidth="100.0" promptText="Region">
                      <padding>
                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                      </padding>
                      <VBox.margin>
-                        <Insets left="50.0" right="50.0" top="40.0" />
+                        <Insets left="50.0" right="50.0" top="45.0" />
                      </VBox.margin>
                   </TextField>
-                  <TextField prefWidth="100.0" promptText="Street">
+                  <TextField fx:id="mrtRegStreetField" prefWidth="100.0" promptText="Street">
                      <padding>
                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                      </padding>
                      <VBox.margin>
-                        <Insets left="50.0" right="50.0" top="40.0" />
+                        <Insets left="50.0" right="50.0" top="50.0" />
                      </VBox.margin>
                   </TextField>
-                  <TextField prefWidth="100.0" promptText="Details">
+                  <TextField fx:id="mrtRegDetailsField" prefWidth="100.0" promptText="Details">
                      <padding>
                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                      </padding>
@@ -129,7 +149,7 @@
                   <Insets top="80.0" />
                </padding>
             </VBox>
-            <Button layoutX="278.0" layoutY="519.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="114.0" styleClass="login-btn" stylesheets="@../css/styles.css" text="Sign up">
+            <Button layoutX="278.0" layoutY="531.0" mnemonicParsing="false" onAction="#signUp" prefHeight="25.0" prefWidth="114.0" styleClass="login-btn" stylesheets="@../css/styles.css" text="Sign up">
                <padding>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
@@ -137,6 +157,11 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
+            <Label alignment="CENTER" layoutX="213.0" layoutY="10.0" prefHeight="27.0" prefWidth="219.0" style="-fx-text-fill: rgb(79, 163, 211);" styleClass="left-side-header" stylesheets="@../css/styles.css" text="MRT REGISTRATION" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
       <AnchorPane fx:id="mainPane" layoutX="232.0" maxHeight="-Infinity" prefHeight="600.0" prefWidth="586.0" style="-fx-background-color: #fff;">

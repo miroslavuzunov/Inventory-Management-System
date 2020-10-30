@@ -132,7 +132,7 @@
                         <Insets left="50.0" right="50.0" top="50.0" />
                      </VBox.margin>
                   </TextField>
-                  <TextField fx:id="mrtRegDetailsField" prefWidth="100.0" promptText="Details">
+                  <TextField fx:id="mrtRegDetailsField" prefWidth="100.0" promptText="Address details">
                      <padding>
                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                      </padding>

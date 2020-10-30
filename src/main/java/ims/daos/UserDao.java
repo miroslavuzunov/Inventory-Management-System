@@ -1,5 +1,6 @@
 package ims.daos;
 
+import ims.entities.Address;
 import ims.entities.User;
 
 import javax.persistence.EntityManager;
@@ -15,7 +16,11 @@ public class UserDao {
     public UserDao(){}
 
     public void addUser(User user){
-
+        EntityManagerFactory factory = Persistence.createEntityManagerFactory("JPA");
+        EntityManager manager = factory.createEntityManager();
+        manager.getTransaction().begin();
+        manager.persist(user);
+        manager.getTransaction().commit();
     }
 
     public User getUserByField(String column, String value){
@@ -33,6 +38,4 @@ public class UserDao {
             return users.get(0);
         return null;
     }
-
-
 }

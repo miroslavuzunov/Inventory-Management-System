@@ -1,8 +1,9 @@
 package ims.controllers.secondary;
 
-import ims.controllers.primary.SceneController;
+import ims.controllers.SceneController;
 import ims.controllers.resources.RegisterMrtControllerResources;
-import ims.dialogs.ConfirmationDialog;
+import ims.entities.*;
+import ims.enums.Role;
 import ims.services.UserRegistrationService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,6 +13,7 @@ import javafx.scene.control.Label;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -28,20 +30,73 @@ public class RegisterMrtController extends RegisterMrtControllerResources implem
     }
 
     @FXML
-    public void handleClicks(ActionEvent event) throws IOException{
-        if(event.getSource() == signUpBtn)
+    public void handleClicks(ActionEvent event) throws IOException {
+        if (event.getSource() == signUpBtn)
             signUp();
 
-        SceneController.switchSceneByButton((Button)event.getSource());
+        SceneController.switchSceneByButton((Button) event.getSource());
     }
 
-    public void signUp(){
+    public void signUp() {
         List<String> errorMessages = new ArrayList<>();
 
         validateFields(errorMessages);
 
-        if (errorMessages.isEmpty())
-            ConfirmationDialog.confirm("Are you sure you want to sign up?");
+//        if (errorMessages.isEmpty())
+//            ConfirmationDialog.confirm("Are you sure you want to sign up?");
+
+        createUser();
+    }
+
+    private void createUser() {
+        Country country = new Country();
+        City city = new City();
+        Address address = new Address();
+        PersonInfo personInfo = new PersonInfo();
+        User user = new User();
+
+
+        //TODO COMPLETE METHOD
+
+        country.setName(countryChoiceBox.getSelectionModel().getSelectedItem());
+
+        city.setName(mrtRegCityField.getText());
+        city.setRegion(mrtRegRegionField.getText());
+
+        //address.setCountry(country);
+        //address.setCity(city);
+        address.setStreet(mrtRegStreetField.getText());
+        address.setDetails(mrtRegDetailsField.getText());
+
+
+        userRegistrationService.beginTransaction();
+
+        if (userRegistrationService.getCityId(city) == null)
+            address.setCity(city);
+        else
+            userRegistrationService.setUserAddressCity(address, userRegistrationService.getCityId(city));
+
+
+        userRegistrationService.setUserAddressCountry(address,
+                userRegistrationService.getCountryId(country));
+
+        userRegistrationService.commitTransaction();
+
+
+        //personInfo.setAddress(address);
+        personInfo.setFirstName(mrtRegFirstNameField.getText());
+        personInfo.setLastName(mrtRegLastNameField.getText());
+        personInfo.setEgn(mrtRegEgnField.getText());
+
+
+        user.setPersonInfo(personInfo);
+        user.setNickname(mrtRegUsernameField.getText());
+        user.setPassword(mrtRegPasswordField.getText());
+        user.setEmail(mrtRegEmailField.getText());
+        user.setRole(Role.MRT);
+        user.setCreatedOn(LocalDate.now());
+
+        //userRegistrationService.saveUser(user);
     }
 
     private void validateFields(List<String> errorMessages) {
@@ -51,7 +106,7 @@ public class RegisterMrtController extends RegisterMrtControllerResources implem
         validateEgnField(errorMessages);
     }
 
-    private void validateUsernameField(List<String> errorMessages){
+    private void validateUsernameField(List<String> errorMessages) {
         checkForError(errorMessages,
                 userRegistrationService.checkIfUsernameExists(mrtRegUsernameField.getText()),
                 mrtRegUsernameMsg,
@@ -59,7 +114,7 @@ public class RegisterMrtController extends RegisterMrtControllerResources implem
         );
     }
 
-    private void validatePasswordFields(List<String> errorMessages){
+    private void validatePasswordFields(List<String> errorMessages) {
         checkForError(errorMessages,
                 !userRegistrationService.checkIfPasswordsMatch(mrtRegPasswordField.getText(), mrtRegRepeatPasswordField.getText()),
                 mrtRegPasswordMsg,

@@ -4,7 +4,7 @@ import ims.daos.UserDao;
 import ims.entities.User;
 
 public class UserService {
-    private UserDao userDao;
+    private final UserDao userDao;
 
     public UserService(){
         userDao = new UserDao();

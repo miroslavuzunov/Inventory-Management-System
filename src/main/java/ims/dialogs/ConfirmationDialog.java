@@ -14,6 +14,7 @@ public class ConfirmationDialog {
         ButtonType noButton = new ButtonType("No", ButtonBar.ButtonData.NO);
         ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
         alert.getButtonTypes().setAll(okButton, noButton, cancelButton);
+        alert.setHeaderText("");
         alert.showAndWait();
     }
 }

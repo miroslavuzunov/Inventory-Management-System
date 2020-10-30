@@ -74,7 +74,7 @@ public class User extends BaseEntity {
         this.email = email;
     }
 
-    @OneToOne(targetEntity = PersonInfo.class)
+    @OneToOne(targetEntity = PersonInfo.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "person_info_id", referencedColumnName = "id")
     public PersonInfo getPersonInfo() {
         return personInfo;

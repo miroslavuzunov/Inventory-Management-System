@@ -1,26 +1,19 @@
-package ims.controllers;
+package ims.controllers.resources;
 
+import ims.controllers.primary.SceneController;
+import ims.controllers.contracts.ControllerConfig;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-public abstract class AdminControllerResources {
+import java.util.HashMap;
+
+public abstract class RegisterMrtControllerResources implements ControllerConfig {
     protected static final String BUSY_USERNAME_MSG = "Username is busy!";
     protected static final String PASSWORDS_DONT_MATCH_MSG = "Passwords don't match!";
     protected static final String BUSY_EMAIL_MSG = "Email is already used!";
     protected static final String INVALID_EGN_MSG = "Invalid EGN!";
-
-
-    @FXML
-    protected Pane fadeMain;
-
-    @FXML
-    protected AnchorPane mainPane;
-
-    @FXML
-    protected Label nameLabel;
 
     @FXML
     protected AnchorPane regPane;
@@ -74,62 +67,18 @@ public abstract class AdminControllerResources {
     protected TextField mrtRegDetailsField;
 
     @FXML
-    protected VBox clientManipPane;
-
-    @FXML
-    protected Button regCardBtn;
-
-    @FXML
-    protected Button addProductBtn;
-
-    @FXML
-    protected Button removeProductBtn;
-
-    @FXML
-    protected Button checkClientProductsBtn;
-
-    @FXML
-    protected VBox genRefPane;
-
-    @FXML
-    protected Button allProductsBtn;
-
-    @FXML
-    protected Button checkStatusBtn;
-
-    @FXML
-    protected Button productsByCategoryBtn;
-
-    @FXML
-    protected Button scrappedProductsBtn;
-
-    @FXML
-    protected VBox leftPane;
-
-    @FXML
     protected VBox cleanLeftPane;
 
     @FXML
-    protected Button regMrtBtn;
+    protected Button signUpBtn;
 
     @FXML
-    protected Button notificationBtn;
+    protected Button backBtn;
 
-    @FXML
-    protected Button genRefBtn;
-
-    @FXML
-    protected Button stockRefBtn;
-
-    @FXML
-    protected Button regProductBtn;
-
-    @FXML
-    protected Button clientManipBtn;
-
-    @FXML
-    protected Label todaysDate;
-
-    @FXML
-    protected Label userStatus;
+    @Override
+    public void initializeScenes(){
+        SceneController.loadScenes(new HashMap<>(){{
+            put(backBtn, "Admin");
+        }});
+    }
 }

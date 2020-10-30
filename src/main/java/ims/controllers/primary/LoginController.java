@@ -1,11 +1,11 @@
-package ims.controllers;
+package ims.controllers.primary;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 import ims.App;
+import ims.controllers.primary.AdminController;
 import ims.entities.User;
-import ims.enums.Role;
 import ims.services.UserService;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -51,7 +51,7 @@ public class LoginController implements Initializable {
                 switch (user.getRole()) {
                     case ADMIN:
                         AdminController.passUser(user);
-                        App.setRoot("/view/Admin");
+                        App.setScene("/view/Admin");
                         break;
                     case MRT:
                         //TODO

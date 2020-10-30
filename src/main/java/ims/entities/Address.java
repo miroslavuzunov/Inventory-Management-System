@@ -20,7 +20,7 @@ public class Address extends BaseEntity{
         setDetails(details);
     }
 
-    @ManyToOne(targetEntity = City.class)
+    @ManyToOne(targetEntity = City.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "city_id", referencedColumnName = "id")
     public City getCity() {
         return city;
@@ -30,7 +30,7 @@ public class Address extends BaseEntity{
         this.city = city;
     }
 
-    @ManyToOne(targetEntity = Country.class)
+    @ManyToOne(targetEntity = Country.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "country_id", referencedColumnName = "id")
     public Country getCountry() {
         return country;

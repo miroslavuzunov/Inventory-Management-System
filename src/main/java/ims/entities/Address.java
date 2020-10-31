@@ -13,13 +13,6 @@ public class Address extends BaseEntity{
     public Address() {
     }
 
-    public Address(City city, Country country, String street, String details) {
-        setCity(city);
-        setCountry(country);
-        setStreet(street);
-        setDetails(details);
-    }
-
     @ManyToOne(targetEntity = City.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "city_id", referencedColumnName = "id")
     public City getCity() {

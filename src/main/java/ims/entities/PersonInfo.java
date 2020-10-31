@@ -13,13 +13,6 @@ public class PersonInfo extends BaseEntity {
     public PersonInfo() {
     }
 
-    public PersonInfo(String firstName, String lastName, String egn, Address address) {
-        setFirstName(firstName);
-        setLastName(lastName);
-        setEgn(egn);
-        setAddress(address);
-    }
-
     @Column(name = "first_name")
     public String getFirstName() {
         return firstName;

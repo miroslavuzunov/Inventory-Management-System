@@ -4,7 +4,7 @@ import ims.enums.Role;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.*;
 
 @Entity
 @Table(name = "user")
@@ -15,17 +15,10 @@ public class User extends BaseEntity {
     private Role role;
     private String email;
     private PersonInfo personInfo;
+    private Set<PhoneNumber> phoneNumbers;
 
     public User() {
-    }
-
-    public User(String nickname, String password, LocalDate createdOn, Role role, String email, PersonInfo personInfo) {
-        setNickname(nickname);
-        setPassword(password);
-        setCreatedOn(createdOn);
-        setRole(role);
-        setEmail(email);
-        setPersonInfo(personInfo);
+        phoneNumbers = new HashSet<>();
     }
 
     @Column(name = "nickname")
@@ -82,5 +75,14 @@ public class User extends BaseEntity {
 
     public void setPersonInfo(PersonInfo personInfo) {
         this.personInfo = personInfo;
+    }
+
+    @OneToMany(mappedBy = "owner", targetEntity = PhoneNumber.class)
+    public Set<PhoneNumber> getPhoneNumbers() {
+        return phoneNumbers;
+    }
+
+    public void setPhoneNumbers(Set<PhoneNumber> phoneNumbers) {
+        this.phoneNumbers = phoneNumbers;
     }
 }

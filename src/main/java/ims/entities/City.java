@@ -11,11 +11,6 @@ public class City extends BaseEntity{
 
     public City(){}
 
-    public City(String name, String region) {
-        setName(name);
-        setRegion(region);
-    }
-
     @Column(name = "name")
     public String getName() {
         return name;

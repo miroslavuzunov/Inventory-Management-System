@@ -15,7 +15,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CityDao {
-    public CityDao(){}
+    private EntityManagerFactory factory;
+    private EntityManager manager;
+
+    public CityDao() {
+        factory = Persistence.createEntityManagerFactory("JPA");
+        manager = factory.createEntityManager();
+    }
+
+    public void beginTransaction(){
+        manager.getTransaction().begin();
+    }
+
+    public void commitTransaction(){
+        manager.getTransaction().commit();
+    }
 
     public List<City> getAll(){
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("JPA");
@@ -46,4 +60,5 @@ public class CityDao {
             return cities.get(0);
         return null;
     }
+
 }

@@ -19,7 +19,7 @@ public class UserDao {
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("JPA");
         EntityManager manager = factory.createEntityManager();
         manager.getTransaction().begin();
-        manager.persist(user);
+        manager.merge(user);
         manager.getTransaction().commit();
     }
 

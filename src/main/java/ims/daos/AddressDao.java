@@ -26,10 +26,8 @@ public class AddressDao {
         manager.getTransaction().commit();
     }
 
-    public void setAddressByCityId(Address address, Integer cityId) {
-        address.setCity(manager.getReference(City.class, cityId));
-
-        manager.persist(address);
+    public City getAddressReferenceToCity(Address address, Integer cityId) {
+        return manager.getReference(City.class, cityId);
     }
 
 }

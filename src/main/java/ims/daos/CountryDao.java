@@ -25,20 +25,4 @@ public class CountryDao {
         return manager.createQuery(criteria).getResultList();
     }
 
-    public Country getCountry(Country country) {
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory("JPA");
-        EntityManager manager = factory.createEntityManager();
-
-        CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
-        CriteriaQuery<Country> criteriaQuery = criteriaBuilder.createQuery(Country.class);
-        Root<Country> userRoot = criteriaQuery.from(Country.class);
-
-        criteriaQuery.where(criteriaBuilder.equal(userRoot.get("name"), country.getName()));
-        List<Country> countries = manager.createQuery(criteriaQuery).getResultList();
-
-        if(!countries.isEmpty())
-            return countries.get(0);
-
-        return null;
-    }
 }

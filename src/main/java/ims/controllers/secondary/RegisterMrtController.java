@@ -54,56 +54,52 @@ public class RegisterMrtController extends RegisterMrtControllerResources implem
 //        if (invalidFields.isEmpty())
 //            ConfirmationDialog.confirm("Are you sure you want to sign up?");
 
-        createUser();
+       // createUser();
     }
 
-    private void createUser() {
-//        Country country = new Country();
-//        City city = new City();
-//        Address address = new Address();
-//        PersonInfo personInfo = new PersonInfo();
-//        User user = new User();
-//
-//
-//        //TODO COMPLETE METHOD
-//
-//        country.setName(countryComboBox.getSelectionModel().getSelectedItem());
-//
-//        //city.setName();
-//        //city.setRegion();
-//
-//        //address.setCountry(country);
-//        //address.setCity(city);
-//        address.setStreet(mrtRegStreetField.getText());
-//        address.setDetails(mrtRegDetailsField.getText());
-//
-//
-//        userRegistrationService.beginTransaction();
-//
-//        if (userRegistrationService.getCityId(city) == null)
-//            address.setCity(city);
-//        else
-//            userRegistrationService.setUserAddressCity(address, userRegistrationService.getCityId(city));
-//
-//
-//        userRegistrationService.commitTransaction();
-//
-//
-//        //personInfo.setAddress(address);
-//        personInfo.setFirstName(mrtRegFirstNameField.getText());
-//        personInfo.setLastName(mrtRegLastNameField.getText());
-//        personInfo.setEgn(mrtRegEgnField.getText());
-//
-//
-//        user.setPersonInfo(personInfo);
-//        user.setNickname(mrtRegUsernameField.getText());
-//        user.setPassword(mrtRegPasswordField.getText());
-//        user.setEmail(mrtRegEmailField.getText());
-//        user.setRole(Role.MRT);
-//        user.setCreatedOn(LocalDate.now());
-//
-//        //userRegistrationService.saveUser(user);
+    private void createUser() {  //TODO ORGANIZE CREATING USER!
+        City city = new City();
+        Address address = new Address();
+        PersonInfo personInfo = new PersonInfo();
+        User user = new User();
+        PhoneNumber phoneNumber = new PhoneNumber();
 
+
+        //TODO COMPLETE METHOD
+
+        EntityManagerFactory factory = Persistence.createEntityManagerFactory("JPA");
+        EntityManager manager = factory.createEntityManager();
+
+        city.setName("Yambol");
+        city.setRegion("Yambol");
+
+        address.setStreet(mrtRegStreetField.getText());
+        address.setDetails(mrtRegDetailsField.getText());
+
+        address.setCity(userRegistrationService.getUserAddressCity(address, userRegistrationService.getCityId(city)));
+
+        personInfo.setFirstName(mrtRegFirstNameField.getText());
+        personInfo.setLastName(mrtRegLastNameField.getText());
+        personInfo.setEgn(mrtRegEgnField.getText());
+        personInfo.setAddress(address);
+
+        user.setPersonInfo(personInfo);
+        user.setNickname(mrtRegUsernameField.getText());
+        user.setPassword(mrtRegPasswordField.getText());
+        user.setEmail(mrtRegEmailField.getText());
+        user.setRole(Role.MRT);
+        user.setCreatedOn(LocalDate.now());
+
+        phoneNumber.setOwner(user);
+        if(toggleGroup.getSelectedToggle().equals(mrtRegPersonalPhoneRadioBtn))
+            phoneNumber.setPhoneType(PhoneType.PERSONAL);
+        else
+            phoneNumber.setPhoneType(PhoneType.OFFICE);
+
+        phoneNumber.setNumber(mrtRegPhoneNumberField.getText());
+
+       // userRegistrationService.saveUser(user);
+        userRegistrationService.savePhone(phoneNumber);
 
     }
 
@@ -252,6 +248,5 @@ public class RegisterMrtController extends RegisterMrtControllerResources implem
     private boolean checkIfChoiceBoxIsNotSelected(ComboBox<String> choiceBox) {
         return choiceBox.getSelectionModel().isEmpty();
     }
-
 
 }

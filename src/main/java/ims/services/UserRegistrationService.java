@@ -13,15 +13,15 @@ public class UserRegistrationService {
     private final UserDao userDao;
     private final CountryDao countryDao;
     private final CityDao cityDao;
-    private final PersonInfoDao personInfoDao;
+    private final PhoneNumberDao phoneNumberDao;
     private final AddressDao addressDao;
 
     public UserRegistrationService() {
         this.userDao = new UserDao();
         this.countryDao = new CountryDao();
         this.cityDao = new CityDao();
-        this.personInfoDao = new PersonInfoDao();
         this.addressDao = new AddressDao();
+        this.phoneNumberDao = new PhoneNumberDao();
     }
 
     public void initializeCountries(ComboBox<String> countryChoiceBox) {
@@ -75,10 +75,6 @@ public class UserRegistrationService {
         return egn.length() == 10;
     }
 
-    public void saveUser(User user) {
-        userDao.addUser(user);
-    }
-
     public Integer getCityId(City city) {
         City tempCity = cityDao.getCity(city);
 
@@ -88,24 +84,15 @@ public class UserRegistrationService {
         return tempCity.getId();
     }
 
-    public Integer getCountryId(Country country) {
-        Country tempCountry = countryDao.getCountry(country);
-
-        if (tempCountry == null)
-            return null;
-
-        return tempCountry.getId();
+    public City getUserAddressCity(Address address, Integer cityId) {
+        return addressDao.getAddressReferenceToCity(address, cityId);
     }
 
-    public void setUserAddressCity(Address address, Integer cityId) {
-        addressDao.setAddressByCityId(address, cityId);
+    public void saveUser(User user) {
+        userDao.addUser(user);
     }
 
-    public void beginTransaction() {
-        addressDao.beginTransaction();
-    }
-
-    public void commitTransaction() {
-        addressDao.commitTransaction();
+    public void savePhone(PhoneNumber phoneNumber) {
+        phoneNumberDao.addPhone(phoneNumber);
     }
 }

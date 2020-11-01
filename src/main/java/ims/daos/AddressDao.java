@@ -28,15 +28,8 @@ public class AddressDao {
 
     public void setAddressByCityId(Address address, Integer cityId) {
         address.setCity(manager.getReference(City.class, cityId));
-        address.setCountry(new Country());
-        address.getCountry().setName("");
 
         manager.persist(address);
     }
 
-    public void setAddressCountryById(Address address, Integer countryId) {
-        address.setCountry(manager.getReference(Country.class, countryId));
-
-        manager.merge(address);
-    }
 }

@@ -2,9 +2,12 @@ package ims.services;
 
 import ims.daos.*;
 import ims.entities.*;
-import javafx.scene.control.ChoiceBox;
-
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.control.ComboBox;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class UserRegistrationService {
     private final UserDao userDao;
@@ -21,12 +24,38 @@ public class UserRegistrationService {
         this.addressDao = new AddressDao();
     }
 
-    public void initializeCountries(ChoiceBox<String> countryChoiceBox) {
+    public void initializeCountries(ComboBox<String> countryChoiceBox) {
         List<Country> countries = countryDao.getAll();
 
         countries.forEach(country -> {
             countryChoiceBox.getItems().add(country.getName());
         });
+    }
+
+    public void initializeCities(ComboBox<String> countryComboBox, ComboBox<String> cityComboBox) {
+        ChangeListener<String> changeListener = new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String country, String t1) {
+                initializeCitiesAccordingCountry(cityComboBox, countryComboBox.getSelectionModel().getSelectedItem());
+            }
+        };
+        countryComboBox.getSelectionModel().selectedItemProperty().addListener(changeListener);
+    }
+
+    private void initializeCitiesAccordingCountry(ComboBox<String> cityComboBox, String selectedCountryName) {
+        cityComboBox.getItems().clear(); //Deletes previous country's cities
+
+        List<Country> countries = countryDao.getAll();
+        Set<City> cities = new HashSet<>();
+
+        for (Country country : countries) {
+            if (country.getName().equals(selectedCountryName))
+                cities = country.getCities();
+        }
+
+        for (City city : cities) {
+            cityComboBox.getItems().add(city.getName() + " (" + city.getRegion() + ")");
+        }
     }
 
     public boolean checkIfUsernameExists(String username) {
@@ -46,14 +75,14 @@ public class UserRegistrationService {
         return egn.length() == 10;
     }
 
-    public void saveUser(User user){
+    public void saveUser(User user) {
         userDao.addUser(user);
     }
 
-    public Integer getCityId(City city){
+    public Integer getCityId(City city) {
         City tempCity = cityDao.getCity(city);
 
-        if(tempCity == null)
+        if (tempCity == null)
             return null;
 
         return tempCity.getId();
@@ -62,21 +91,21 @@ public class UserRegistrationService {
     public Integer getCountryId(Country country) {
         Country tempCountry = countryDao.getCountry(country);
 
-        if(tempCountry == null)
+        if (tempCountry == null)
             return null;
 
         return tempCountry.getId();
     }
 
-    public void setUserAddressCity(Address address, Integer cityId){
+    public void setUserAddressCity(Address address, Integer cityId) {
         addressDao.setAddressByCityId(address, cityId);
     }
 
-    public void setUserAddressCountry(Address address, Integer countryId) {
-        addressDao.setAddressCountryById(address, countryId);
+    public void beginTransaction() {
+        addressDao.beginTransaction();
     }
 
-    public void beginTransaction(){addressDao.beginTransaction();}
-
-    public void commitTransaction(){addressDao.commitTransaction();}
+    public void commitTransaction() {
+        addressDao.commitTransaction();
+    }
 }

@@ -1,6 +1,7 @@
 package ims.daos;
 
 import ims.entities.City;
+import ims.entities.Country;
 import ims.entities.User;
 
 import javax.persistence.EntityManager;
@@ -15,6 +16,15 @@ import java.util.List;
 
 public class CityDao {
     public CityDao(){}
+
+    public List<City> getAll(){
+        EntityManagerFactory factory = Persistence.createEntityManagerFactory("JPA");
+        EntityManager manager = factory.createEntityManager();
+
+        CriteriaQuery<City> criteria = manager.getCriteriaBuilder().createQuery(City.class);
+        criteria.select(criteria.from(City.class));
+        return manager.createQuery(criteria).getResultList();
+    }
 
     public City getCity(City city){
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("JPA");

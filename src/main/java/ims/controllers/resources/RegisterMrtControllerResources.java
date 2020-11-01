@@ -14,6 +14,7 @@ public abstract class RegisterMrtControllerResources implements ControllerConfig
     protected static final String PASSWORDS_DONT_MATCH_MSG = "Passwords don't match!";
     protected static final String BUSY_EMAIL_MSG = "Email is already used!";
     protected static final String INVALID_EGN_MSG = "Invalid EGN!";
+    protected static final String EMPTY_FIELD_MSG = "Empty field!";
 
     @FXML
     protected AnchorPane regPane;
@@ -28,10 +29,13 @@ public abstract class RegisterMrtControllerResources implements ControllerConfig
     protected PasswordField mrtRegPasswordField;
 
     @FXML
-    protected PasswordField mrtRegRepeatPasswordField;
+    protected Label mrtRegPasswordMsg;
 
     @FXML
-    protected Label mrtRegPasswordMsg;
+    protected Label mrtRegRepeatPasswordMsg;
+
+    @FXML
+    protected PasswordField mrtRegRepeatPasswordField;
 
     @FXML
     protected TextField mrtRegEmailField;
@@ -43,7 +47,13 @@ public abstract class RegisterMrtControllerResources implements ControllerConfig
     protected TextField mrtRegFirstNameField;
 
     @FXML
+    protected Label mrtRegFirstNameMsg;
+
+    @FXML
     protected TextField mrtRegLastNameField;
+
+    @FXML
+    protected Label mrtRegLastNameMsg;
 
     @FXML
     protected TextField mrtRegEgnField;
@@ -52,28 +62,52 @@ public abstract class RegisterMrtControllerResources implements ControllerConfig
     protected Label mrtRegEgnMsg;
 
     @FXML
-    protected ChoiceBox<String> countryChoiceBox;
+    protected ComboBox<String> countryComboBox;
 
     @FXML
-    protected TextField mrtRegCityField;
+    protected ComboBox<String> cityComboBox;
 
     @FXML
-    protected TextField mrtRegRegionField;
+    protected Label mrtRegCountryMsg;
+
+    @FXML
+    protected Label mrtRegCityMsg;
 
     @FXML
     protected TextField mrtRegStreetField;
 
     @FXML
+    protected Label mrtRegStreetMsg;
+
+    @FXML
     protected TextField mrtRegDetailsField;
 
     @FXML
-    protected VBox cleanLeftPane;
+    protected Label mrtRegAddressMsg;
+
+    @FXML
+    protected RadioButton mrtRegPersonalPhoneRadioBtn;
+
+    @FXML
+    protected RadioButton mrtRegOfficePhoneRadioBtn;
+
+    @FXML
+    protected TextField mrtRegPhoneNumberField;
+
+    @FXML
+    protected Label mrtRegPhoneNumberMsg;
 
     @FXML
     protected Button signUpBtn;
 
     @FXML
+    protected VBox cleanLeftPane;
+
+    @FXML
     protected Button backBtn;
+
+    @FXML
+    protected ComboBox<String> test;
 
     @Override
     public void initializeScenes(){

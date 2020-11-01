@@ -1,11 +1,14 @@
 package ims.controllers.primary;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 import ims.App;
 import ims.controllers.primary.AdminController;
-import ims.entities.User;
+import ims.entities.*;
+import ims.enums.PhoneType;
+import ims.enums.Role;
 import ims.services.UserService;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -13,6 +16,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 public class LoginController implements Initializable {
 

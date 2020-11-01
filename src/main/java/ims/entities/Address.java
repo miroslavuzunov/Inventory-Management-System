@@ -6,7 +6,6 @@ import javax.persistence.*;
 @Table(name = "address")
 public class Address extends BaseEntity{
     private City city;
-    private Country country;
     private String street;
     private String details;
 
@@ -21,16 +20,6 @@ public class Address extends BaseEntity{
 
     public void setCity(City city) {
         this.city = city;
-    }
-
-    @ManyToOne(targetEntity = Country.class, cascade = CascadeType.ALL)
-    @JoinColumn(name = "country_id", referencedColumnName = "id")
-    public Country getCountry() {
-        return country;
-    }
-
-    public void setCountry(Country country) {
-        this.country = country;
     }
 
     @Column(name = "street")

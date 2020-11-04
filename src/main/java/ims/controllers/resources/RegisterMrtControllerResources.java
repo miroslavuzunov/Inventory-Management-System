@@ -2,19 +2,36 @@ package ims.controllers.resources;
 
 import ims.controllers.SceneController;
 import ims.controllers.contracts.ControllerConfig;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public abstract class RegisterMrtControllerResources implements ControllerConfig {
     protected static final String BUSY_USERNAME_MSG = "Username is busy!";
     protected static final String PASSWORDS_DONT_MATCH_MSG = "Passwords don't match!";
     protected static final String BUSY_EMAIL_MSG = "Email is already used!";
     protected static final String INVALID_EGN_MSG = "Invalid EGN!";
-    protected static final String EMPTY_FIELD_MSG = "Empty field!";
+    protected static final String EMPTY_FIELD_MSG = "Empty field forbidden!";
+    protected static final String CLEAN_MSG = "";
+    protected static final String USERNAME_FIELD_NAME = "Username";
+    protected static final String PASSWORD_FIELD_NAME = "Password";
+    protected static final String REPEAT_PASSWORD_FIELD_NAME = "Repeat password";
+    protected static final String EMAIL_FIELD_NAME = "E-mail";
+    protected static final String FIRST_NAME_FIELD_NAME = "First name";
+    protected static final String LAST_NAME_FIELD_NAME = "Last name";
+    protected static final String EGN_FIELD_NAME = "EGN";
+    protected static final String COUNTRY_FIELD_NAME = "Country";
+    protected static final String CITY_FIELD_NAME = "City";
+    protected static final String STREET_FIELD_NAME = "Street";
+    protected static final String ADDRESS_DETAILS_FIELD_NAME = "Address details";
+    protected static final String PHONE_NUMBER_FIELD_NAME = "Phone number";
 
     @FXML
     protected AnchorPane regPane;
@@ -106,13 +123,11 @@ public abstract class RegisterMrtControllerResources implements ControllerConfig
     @FXML
     protected Button backBtn;
 
-    @FXML
-    protected ComboBox<String> test;
-
     @Override
-    public void initializeScenes(){
-        SceneController.loadScenes(new HashMap<>(){{
+    public void initializeScenes() {
+        SceneController.loadScenes(new HashMap<>() {{
             put(backBtn, "Admin");
         }});
     }
+
 }

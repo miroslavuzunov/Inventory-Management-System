@@ -1,9 +1,6 @@
 package ims.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,7 +27,7 @@ public class Country extends BaseEntity{
         this.name = name;
     }
 
-    @OneToMany(mappedBy = "country", targetEntity = City.class)
+    @OneToMany(mappedBy = "country", targetEntity = City.class, fetch = FetchType.EAGER)
     public Set<City> getCities() {
         return cities;
     }

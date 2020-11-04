@@ -1,11 +1,9 @@
 package ims.daos;
 
-import ims.entities.Address;
+import ims.supporting.EntityManagerAssistant;
 import ims.entities.User;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -16,23 +14,25 @@ public class UserDao {
     public UserDao(){}
 
     public void addUser(User user){
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory("JPA");
-        EntityManager manager = factory.createEntityManager();
-        manager.getTransaction().begin();
+        EntityManager manager = EntityManagerAssistant.initEntityManager();
+        EntityManagerAssistant.beginTransaction(manager);
+
         manager.merge(user);
-        manager.getTransaction().commit();
+
+        EntityManagerAssistant.commit(manager);
+        EntityManagerAssistant.closeEntityManager(manager);
     }
 
     public User getUserByField(String column, String value){
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory("JPA");
-        EntityManager manager = factory.createEntityManager();
+        EntityManager manager = EntityManagerAssistant.initEntityManager();
 
         CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
         CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
         Root<User> userRoot = criteriaQuery.from(User.class);
-
         criteriaQuery.where(criteriaBuilder.equal(userRoot.get(column), value));
         List<User> users = manager.createQuery(criteriaQuery).getResultList();
+
+        EntityManagerAssistant.closeEntityManager(manager);
 
         if(!users.isEmpty())
             return users.get(0);

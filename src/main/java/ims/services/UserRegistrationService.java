@@ -63,7 +63,8 @@ public class UserRegistrationService {
         }
     }
 
-    public void validateData(Map<String, CustomField> fieldsByName) {
+    public boolean validateData(Map<String, CustomField> fieldsByName) {
+        boolean handlingResult = true;
         String inputUsername = fieldsByName.get(USERNAME_FIELD_NAME).getFieldValue();
         String inputEmail = fieldsByName.get(EMAIL_FIELD_NAME).getFieldValue();
         String inputEgn = fieldsByName.get(EGN_FIELD_NAME).getFieldValue();
@@ -73,15 +74,20 @@ public class UserRegistrationService {
         if (inputUsername.equals(existingUsersByFieldName.get(USERNAME_FIELD_NAME).getNickname())) {
             fieldsByName.get(USERNAME_FIELD_NAME).setState(State.INVALID);
             fieldsByName.get(USERNAME_FIELD_NAME).setMessage(BUSY_USERNAME_MSG);
+            handlingResult = false;
         }
         if (inputEmail.equals(existingUsersByFieldName.get(EMAIL_FIELD_NAME).getEmail())) {
             fieldsByName.get(EMAIL_FIELD_NAME).setState(State.INVALID);
             fieldsByName.get(EMAIL_FIELD_NAME).setMessage(BUSY_EMAIL_MSG);
+            handlingResult = false;
         }
         if (inputEgn.equals(existingUsersByFieldName.get(EGN_FIELD_NAME).getPersonInfo().getEgn())) {
             fieldsByName.get(EGN_FIELD_NAME).setState(State.INVALID);
             fieldsByName.get(EGN_FIELD_NAME).setMessage(BUSY_EGN_MSG);
+            handlingResult = false;
         }
+
+        return handlingResult;
     }
 
     public Map<String, User> requestData(String username, String email, String egn) {

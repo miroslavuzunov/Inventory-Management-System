@@ -7,11 +7,13 @@ import java.util.ResourceBundle;
 
 import ims.controllers.SceneController;
 import ims.controllers.resources.AdminControllerResources;
+import ims.dialogs.ConfirmationDialog;
 import ims.entities.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 
 public class AdminController extends AdminControllerResources implements Initializable {
     private static User loggedUser;
@@ -26,7 +28,7 @@ public class AdminController extends AdminControllerResources implements Initial
     }
 
     @FXML
-    private void handleClicks(ActionEvent event) throws NoSuchFieldException, IOException {
+    private void handleClicks(ActionEvent event) throws IOException {
         if (event.getSource() == genRefBtn) {
             fadeMain.toFront();
             genRefPane.toFront();
@@ -35,8 +37,14 @@ public class AdminController extends AdminControllerResources implements Initial
             fadeMain.toFront();
             clientManipPane.toFront();
         }
+        if (event.getSource() == exitBtn) {
+            ButtonType result = ConfirmationDialog.confirm("Are you sure you want exit from the system?");
 
-        SceneController.switchSceneByButton((Button)event.getSource());
+            if (result == ButtonType.YES)
+                SceneController.switchSceneByButton((Button) event.getSource());
+        }
+        else
+            SceneController.switchSceneByButton((Button) event.getSource());
     }
 
     public static void passUser(User passedUser) {

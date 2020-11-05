@@ -10,7 +10,7 @@ import javafx.scene.layout.VBox;
 import java.util.HashMap;
 
 public abstract class RegisterMrtControllerResources implements ControllerConfig {
-    public static final String BUSY_USERNAME_MSG = "Username is already busy!";
+    public static final String BUSY_USERNAME_MSG = "Username is already used!";
     protected static final String PASSWORDS_DONT_MATCH_MSG = "Passwords don't match!";
     public static final String BUSY_EMAIL_MSG = "Email is already used!";
     public static final String INVALID_EGN_MSG = "Invalid EGN!";

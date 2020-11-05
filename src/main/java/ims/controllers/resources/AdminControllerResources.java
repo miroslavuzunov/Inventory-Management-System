@@ -79,13 +79,13 @@ public abstract class AdminControllerResources implements ControllerConfig {
     protected Label userStatus;
 
     @FXML
-    private Button exitBtn;
+    protected Button exitBtn;
 
     @FXML
-    private Button getBackFromClientManipBtn;
+    protected Button getBackFromClientManipBtn;
 
     @FXML
-    private Button getBackFromGenRefBtn;
+    protected Button getBackFromGenRefBtn;
 
     @Override
     public void initializeScenes(){

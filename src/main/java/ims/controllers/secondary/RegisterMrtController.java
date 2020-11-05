@@ -11,7 +11,6 @@ import ims.supporting.CustomField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 
 import javax.persistence.EntityManager;
@@ -20,10 +19,7 @@ import javax.persistence.Persistence;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.Set;
+import java.util.*;
 
 public class RegisterMrtController extends RegisterMrtControllerResources implements Initializable {
     private UserRegistrationService userRegistrationService;
@@ -33,10 +29,9 @@ public class RegisterMrtController extends RegisterMrtControllerResources implem
     public void initialize(URL url, ResourceBundle resourceBundle) {
         userRegistrationService = new UserRegistrationService();
 
-        userRegistrationService.initializeCountries(countryComboBox);
-        userRegistrationService.initializeCities(countryComboBox, cityComboBox);
-
         makeToggleGroup(List.of(mrtRegPersonalPhoneRadioBtn, mrtRegOfficePhoneRadioBtn));
+        userRegistrationService.initializeCountries(countryComboBox);
+        userRegistrationService.generateCities(countryComboBox, cityComboBox);
         initializeScenes();
     }
 
@@ -49,14 +44,14 @@ public class RegisterMrtController extends RegisterMrtControllerResources implem
     }
 
     public void signUp() {
-        List<CustomField> inputFields = initializeCustomFields();
+        Map<String, CustomField> fieldsByName = initializeCustomFields();
 
-        checkForEmptyFields(inputFields);
-
-//        checkForPasswordsMatch(inputFields);
-//        checkForForbiddenChars(inputFields);
-//        checkForReservedData(inputFields);
-
+        handleEmptyFields(fieldsByName);
+        handlePasswordsMatching(fieldsByName);
+        //handleForbiddenChars(inputFields);
+        //handleEgnValidation(inputFields);
+        if(!emptyFieldsFound(fieldsByName))
+            handleTakenData(fieldsByName);
 
 //        if (invalidFields.isEmpty())
 //            ConfirmationDialog.confirm("Are you sure you want to sign up?");
@@ -64,63 +59,115 @@ public class RegisterMrtController extends RegisterMrtControllerResources implem
         //createUser();
     }
 
-
-    private void checkForEmptyFields(List<CustomField> inputFields) {
-        for (CustomField field : inputFields) {
-            if (field.getFieldValue() == null || field.getFieldValue().isEmpty()) {
-                field.setState(State.INVALID);
-                field.setMessage(EMPTY_FIELD_MSG);
-                field.setStyle("-fx-border-width: 1px;" + "-fx-border-color: red;" + "-fx-border-radius: 3px");
-            } else {
-                field.setState(State.VALID);
-                field.setMessage(CLEAN_MSG);
-                field.setStyle("-fx-border-width: 1px;" + "-fx-border-color: lightgrey;" + "-fx-border-radius: 3px");
-            }
+    private boolean emptyFieldsFound(Map<String, CustomField> fieldsByName) {
+        for(CustomField field : fieldsByName.values()){
+           if(field.getState().equals(State.INVALID) && field.getMessage().equals(EMPTY_FIELD_MSG))
+               return true;
         }
-        displayMessages(inputFields);
+        return false;
     }
 
-    private void displayMessages(List<CustomField> inputFields) {
-        for (CustomField field : inputFields) {
-            switch (field.getFieldName()) {
-                case USERNAME_FIELD_NAME:
-                    mrtRegUsernameMsg.setText(field.getMessage());
-                    mrtRegUsernameField.setStyle(field.getStyle());
-                case PASSWORD_FIELD_NAME:
-                    mrtRegPasswordMsg.setText(field.getMessage());
-                    mrtRegPasswordField.setStyle(field.getStyle());
-                case REPEAT_PASSWORD_FIELD_NAME:
-                    mrtRegRepeatPasswordMsg.setText(field.getMessage());
-                    mrtRegRepeatPasswordField.setStyle(field.getStyle());
-                case EMAIL_FIELD_NAME:
-                    mrtRegEmailMsg.setText(field.getMessage());
-                    mrtRegEmailField.setStyle(field.getStyle());
-                case FIRST_NAME_FIELD_NAME:
-                    mrtRegFirstNameMsg.setText(field.getMessage());
-                    mrtRegFirstNameField.setStyle(field.getStyle());
-                case LAST_NAME_FIELD_NAME:
-                    mrtRegLastNameMsg.setText(field.getMessage());
-                    mrtRegLastNameField.setStyle(field.getStyle());
-                case EGN_FIELD_NAME:
-                    mrtRegEgnMsg.setText(field.getMessage());
-                    mrtRegEgnField.setStyle(field.getStyle());
-                case COUNTRY_FIELD_NAME:
-                    mrtRegCountryMsg.setText(field.getMessage());
-                    countryComboBox.setStyle(field.getStyle());
-                case CITY_FIELD_NAME:
-                    mrtRegCityMsg.setText(field.getMessage());
-                    cityComboBox.setStyle(field.getStyle());
-                case STREET_FIELD_NAME:
-                    mrtRegStreetMsg.setText(field.getMessage());
-                    mrtRegStreetField.setStyle(field.getStyle());
-                case ADDRESS_DETAILS_FIELD_NAME:
-                    mrtRegAddressMsg.setText(field.getMessage());
-                    mrtRegDetailsField.setStyle(field.getStyle());
-                case PHONE_NUMBER_FIELD_NAME:
-                    mrtRegPhoneNumberMsg.setText(field.getMessage());
-                    mrtRegPhoneNumberField.setStyle(field.getStyle());
+
+    private void makeToggleGroup(List<RadioButton> phoneTypes) {
+        toggleGroup = new ToggleGroup();
+
+        phoneTypes.forEach(radioButton -> {
+            radioButton.setToggleGroup(toggleGroup);
+        });
+
+        toggleGroup.selectToggle(mrtRegPersonalPhoneRadioBtn);
+    }
+
+    private Map<String, CustomField> initializeCustomFields() {
+        Map<String, CustomField> fieldsByName = new HashMap<>();
+
+        fieldsByName.put(USERNAME_FIELD_NAME, new CustomField(mrtRegUsernameField.getText()));
+        fieldsByName.put(PASSWORD_FIELD_NAME,new CustomField(mrtRegPasswordField.getText()));
+        fieldsByName.put(REPEAT_PASSWORD_FIELD_NAME,new CustomField(mrtRegRepeatPasswordField.getText()));
+        fieldsByName.put(EMAIL_FIELD_NAME,new CustomField(mrtRegEmailField.getText()));
+        fieldsByName.put(FIRST_NAME_FIELD_NAME,new CustomField(mrtRegFirstNameField.getText()));
+        fieldsByName.put(LAST_NAME_FIELD_NAME,new CustomField(mrtRegLastNameField.getText()));
+        fieldsByName.put(EGN_FIELD_NAME,new CustomField(mrtRegEgnField.getText()));
+        fieldsByName.put(COUNTRY_FIELD_NAME,new CustomField(countryComboBox.getSelectionModel().getSelectedItem()));
+        fieldsByName.put(CITY_FIELD_NAME,new CustomField(cityComboBox.getSelectionModel().getSelectedItem()));
+        fieldsByName.put(STREET_FIELD_NAME,new CustomField(mrtRegStreetField.getText()));
+        fieldsByName.put(ADDRESS_DETAILS_FIELD_NAME,new CustomField(mrtRegDetailsField.getText()));
+        fieldsByName.put(PHONE_NUMBER_FIELD_NAME,new CustomField(mrtRegPhoneNumberField.getText()));
+
+
+        return fieldsByName;
+    }
+
+    private void handleEmptyFields(Map<String, CustomField> fieldsByName) {
+        for (CustomField field : fieldsByName.values()) {
+            if (field.getFieldValue() == null || field.getFieldValue().isEmpty()) {
+                handleField(field, State.INVALID, EMPTY_FIELD_MSG);
+            } else {
+                handleField(field, State.VALID, CLEAN_MSG);
             }
         }
+        displayMessages(fieldsByName);
+    }
+
+    private void handlePasswordsMatching(Map<String, CustomField> fieldsByName) {
+        CustomField passwordField;
+        CustomField repeatPasswordField;
+
+        if (!mrtRegPasswordField.getText().equals(mrtRegRepeatPasswordField.getText())) {
+            passwordField = fieldsByName.get(PASSWORD_FIELD_NAME);
+            repeatPasswordField = fieldsByName.get(REPEAT_PASSWORD_FIELD_NAME);
+
+            if(!passwordField.getFieldValue().isEmpty())
+                handleField(passwordField, State.INVALID, CLEAN_MSG);
+            handleField(repeatPasswordField, State.INVALID, PASSWORDS_DONT_MATCH_MSG);
+        }
+        displayMessages(fieldsByName);
+    }
+
+    private void handleTakenData(Map<String, CustomField> fieldsByName) {
+        userRegistrationService.validateData(fieldsByName);
+
+        for (CustomField field : fieldsByName.values())
+            handleField(field, field.getState(), field.getMessage());
+
+        displayMessages(fieldsByName);
+    }
+
+    private void handleField(CustomField inputField, State state, String message) {
+        if (state.equals(State.VALID)) {
+            inputField.setStyle("-fx-border-width: 1px;" + "-fx-border-color: lightgrey;" + "-fx-border-radius: 3px");
+        } else {
+            inputField.setStyle("-fx-border-width: 1px;" + "-fx-border-color: red;" + "-fx-border-radius: 3px");
+        }
+        inputField.setState(state);
+        inputField.setMessage(message);
+    }
+
+    private void displayMessages(Map<String, CustomField> fieldsByName) {
+        mrtRegUsernameMsg.setText(fieldsByName.get(USERNAME_FIELD_NAME).getMessage());
+        mrtRegUsernameField.setStyle(fieldsByName.get(USERNAME_FIELD_NAME).getStyle());
+        mrtRegPasswordMsg.setText(fieldsByName.get(PASSWORD_FIELD_NAME).getMessage());
+        mrtRegPasswordField.setStyle(fieldsByName.get(PASSWORD_FIELD_NAME).getStyle());
+        mrtRegRepeatPasswordMsg.setText(fieldsByName.get(REPEAT_PASSWORD_FIELD_NAME).getMessage());
+        mrtRegRepeatPasswordField.setStyle(fieldsByName.get(REPEAT_PASSWORD_FIELD_NAME).getStyle());
+        mrtRegEmailMsg.setText(fieldsByName.get(EMAIL_FIELD_NAME).getMessage());
+        mrtRegEmailField.setStyle(fieldsByName.get(EMAIL_FIELD_NAME).getStyle());
+        mrtRegFirstNameMsg.setText(fieldsByName.get(FIRST_NAME_FIELD_NAME).getMessage());
+        mrtRegFirstNameField.setStyle(fieldsByName.get(FIRST_NAME_FIELD_NAME).getStyle());
+        mrtRegLastNameMsg.setText(fieldsByName.get(LAST_NAME_FIELD_NAME).getMessage());
+        mrtRegLastNameField.setStyle(fieldsByName.get(LAST_NAME_FIELD_NAME).getStyle());
+        mrtRegEgnMsg.setText(fieldsByName.get(EGN_FIELD_NAME).getMessage());
+        mrtRegEgnField.setStyle(fieldsByName.get(EGN_FIELD_NAME).getStyle());
+        mrtRegCountryMsg.setText(fieldsByName.get(COUNTRY_FIELD_NAME).getMessage());
+        countryComboBox.setStyle(fieldsByName.get(COUNTRY_FIELD_NAME).getStyle());
+        mrtRegCityMsg.setText(fieldsByName.get(CITY_FIELD_NAME).getMessage());
+        cityComboBox.setStyle(fieldsByName.get(CITY_FIELD_NAME).getStyle());
+        mrtRegStreetMsg.setText(fieldsByName.get(STREET_FIELD_NAME).getMessage());
+        mrtRegStreetField.setStyle(fieldsByName.get(STREET_FIELD_NAME).getStyle());
+        mrtRegAddressMsg.setText(fieldsByName.get(ADDRESS_DETAILS_FIELD_NAME).getMessage());
+        mrtRegDetailsField.setStyle(fieldsByName.get(ADDRESS_DETAILS_FIELD_NAME).getStyle());
+        mrtRegPhoneNumberMsg.setText(fieldsByName.get(PHONE_NUMBER_FIELD_NAME).getMessage());
+        mrtRegPhoneNumberField.setStyle(fieldsByName.get(PHONE_NUMBER_FIELD_NAME).getStyle());
     }
 
     private void createUser() {  //TODO ORGANIZE CREATING USER!
@@ -166,35 +213,6 @@ public class RegisterMrtController extends RegisterMrtControllerResources implem
 
         userRegistrationService.saveUser(user);
         userRegistrationService.savePhone(phoneNumber);
-    }
-
-    private void makeToggleGroup(List<RadioButton> phoneTypes) {
-        toggleGroup = new ToggleGroup();
-
-        phoneTypes.forEach(radioButton -> {
-            radioButton.setToggleGroup(toggleGroup);
-        });
-
-        toggleGroup.selectToggle(mrtRegPersonalPhoneRadioBtn);
-    }
-
-    private List<CustomField> initializeCustomFields() {
-        List<CustomField> inputFields = new ArrayList<>();
-
-        inputFields.add(new CustomField(USERNAME_FIELD_NAME, mrtRegUsernameField.getText()));
-        inputFields.add(new CustomField(PASSWORD_FIELD_NAME, mrtRegPasswordField.getText()));
-        inputFields.add(new CustomField(REPEAT_PASSWORD_FIELD_NAME, mrtRegRepeatPasswordField.getText()));
-        inputFields.add(new CustomField(EMAIL_FIELD_NAME, mrtRegEmailField.getText()));
-        inputFields.add(new CustomField(FIRST_NAME_FIELD_NAME, mrtRegFirstNameField.getText()));
-        inputFields.add(new CustomField(LAST_NAME_FIELD_NAME, mrtRegLastNameField.getText()));
-        inputFields.add(new CustomField(EGN_FIELD_NAME, mrtRegEgnField.getText()));
-        inputFields.add(new CustomField(COUNTRY_FIELD_NAME, countryComboBox.getSelectionModel().getSelectedItem()));
-        inputFields.add(new CustomField(CITY_FIELD_NAME, cityComboBox.getSelectionModel().getSelectedItem()));
-        inputFields.add(new CustomField(STREET_FIELD_NAME, mrtRegStreetField.getText()));
-        inputFields.add(new CustomField(ADDRESS_DETAILS_FIELD_NAME, mrtRegDetailsField.getText()));
-        inputFields.add(new CustomField(PHONE_NUMBER_FIELD_NAME, mrtRegPhoneNumberField.getText()));
-
-        return inputFields;
     }
 
 }

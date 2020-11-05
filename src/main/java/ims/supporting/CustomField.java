@@ -4,20 +4,17 @@ import ims.enums.State;
 
 public class CustomField {
     private State state;
-    private String fieldName;
     private String fieldValue;
     private String message;
     private String style;
 
     public CustomField() {
-        this.fieldName = "";
         this.fieldValue = "";
         this.state = State.VALID;
         this.message = "";
     }
 
-    public CustomField(String fieldName, String fieldValue){
-        this.fieldName = fieldName;
+    public CustomField(String fieldValue){
         this.fieldValue = fieldValue;
         this.state = State.VALID;
         this.message = "";
@@ -29,14 +26,6 @@ public class CustomField {
 
     public void setState(State state) {
         this.state = state;
-    }
-
-    public String getFieldName() {
-        return fieldName;
-    }
-
-    public void setFieldName(String fieldName) {
-        this.fieldName = fieldName;
     }
 
     public String getFieldValue() {

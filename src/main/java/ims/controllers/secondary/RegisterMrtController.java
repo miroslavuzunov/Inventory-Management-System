@@ -1,8 +1,10 @@
 package ims.controllers.secondary;
 
+import ims.App;
 import ims.controllers.SceneController;
 import ims.controllers.resources.RegisterMrtControllerResources;
 import ims.dialogs.ConfirmationDialog;
+import ims.dialogs.SuccessDialog;
 import ims.entities.*;
 import ims.enums.PhoneType;
 import ims.enums.Role;
@@ -18,6 +20,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.regex.Pattern;
 
 public class RegisterMrtController extends RegisterMrtControllerResources implements Initializable {
     private UserRegistrationService userRegistrationService;
@@ -38,7 +41,7 @@ public class RegisterMrtController extends RegisterMrtControllerResources implem
         if (event.getSource() == signUpBtn)
             signUp();
         if (event.getSource() == backBtn) {
-            ButtonType result = ConfirmationDialog.confirm("Input data will be lost. Are you sure you want to get back?");
+            ButtonType result = ConfirmationDialog.askForConfirmation("Input data will be lost. Are you sure you want to get back?");
 
             if (result == ButtonType.YES)
                 SceneController.switchSceneByButton((Button) event.getSource());
@@ -47,7 +50,7 @@ public class RegisterMrtController extends RegisterMrtControllerResources implem
             SceneController.switchSceneByButton((Button) event.getSource());
     }
 
-    public void signUp() {
+    public void signUp() throws IOException {
         boolean noEmptyFields = true;
         boolean passwordsMatch = true;
         boolean noTakenData = true;
@@ -57,18 +60,21 @@ public class RegisterMrtController extends RegisterMrtControllerResources implem
         passwordsMatch = handlePasswordsMatching(fieldsByName);
         //handleForbiddenChars(inputFields);
         //handleEgnValidation(inputFields);
+
         if (noEmptyFields && passwordsMatch)
             noTakenData = handleTakenData(fieldsByName);
 
         if (noEmptyFields && passwordsMatch && noTakenData) {
-            ButtonType result = ConfirmationDialog.confirm("Are you sure you want to sign up new MRT?");
+            ButtonType result = ConfirmationDialog.askForConfirmation("Are you sure you want to sign up new MRT?");
 
-            if (result == ButtonType.YES)
+            if (result == ButtonType.YES) {
                 createUser();
+                SuccessDialog.success("Done! A new MRT has been signed up!");
+                App.setScene("/view/RegisterMrt"); //reloading same scene to clean the fields
+            }
 
         }
     }
-
 
     private void makeToggleGroup(List<RadioButton> phoneTypes) {
         toggleGroup = new ToggleGroup();
@@ -184,22 +190,21 @@ public class RegisterMrtController extends RegisterMrtControllerResources implem
         mrtRegPhoneNumberField.setStyle(fieldsByName.get(PHONE_NUMBER_FIELD_NAME).getStyle());
     }
 
-    private void createUser() {  //TODO ORGANIZE CREATING USER!
+    private void createUser() {  //TODO MOVE METHOD INTO SERVICE!!!
         City city = new City();
         Address address = new Address();
         PersonInfo personInfo = new PersonInfo();
         User user = new User();
         PhoneNumber phoneNumber = new PhoneNumber();
 
-        //TODO COMPLETE METHOD
-
-        city.setName("Yambol");
-        city.setRegion("Yambol");
+        String cityAndRegionTogether = cityComboBox.getSelectionModel().getSelectedItem();
+        String[] cityAndRegion = Pattern.compile("[\\(\\)]").split(cityAndRegionTogether);
+        city.setName(cityAndRegion[0]);
+        city.setRegion(cityAndRegion[1]);
 
         address.setStreet(mrtRegStreetField.getText());
         address.setDetails(mrtRegDetailsField.getText());
-
-        address.setCity(userRegistrationService.getUserAddressCity(address, userRegistrationService.getCityId(city)));
+        userRegistrationService.setUserAddressCity(address, userRegistrationService.getCityId(city));
 
         personInfo.setFirstName(mrtRegFirstNameField.getText());
         personInfo.setLastName(mrtRegLastNameField.getText());
@@ -222,8 +227,8 @@ public class RegisterMrtController extends RegisterMrtControllerResources implem
         phoneNumber.setNumber(mrtRegPhoneNumberField.getText());
         user.setPhoneNumbers(Set.of(phoneNumber));
 
-        //userRegistrationService.saveUser(user);
-        //userRegistrationService.savePhone(phoneNumber);
+        userRegistrationService.saveUser(user);
+        userRegistrationService.savePhone(phoneNumber);
     }
 
 }

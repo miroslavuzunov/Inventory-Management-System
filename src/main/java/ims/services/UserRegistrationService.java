@@ -123,8 +123,8 @@ public class UserRegistrationService {
         return tempCity.getId();
     }
 
-    public City getUserAddressCity(Address address, Integer cityId) {
-        return addressDao.getAddressReferenceToCity(address, cityId);
+    public void setUserAddressCity(Address address, Integer cityId) {
+         addressDao.setAddressReferenceToCity(address, cityId);
     }
 
     public void saveUser(User user) {

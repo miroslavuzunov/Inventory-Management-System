@@ -38,7 +38,7 @@ public class AdminController extends AdminControllerResources implements Initial
             clientManipPane.toFront();
         }
         if (event.getSource() == exitBtn) {
-            ButtonType result = ConfirmationDialog.confirm("Are you sure you want exit from the system?");
+            ButtonType result = ConfirmationDialog.askForConfirmation("Are you sure you want exit from the system?");
 
             if (result == ButtonType.YES)
                 SceneController.switchSceneByButton((Button) event.getSource());

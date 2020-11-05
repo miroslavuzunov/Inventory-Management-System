@@ -10,14 +10,13 @@ public class AddressDao {
 
     public AddressDao() {}
 
-    public City getAddressReferenceToCity(Address address, Integer cityId) {
+    public void setAddressReferenceToCity(Address address, Integer cityId) {
         EntityManager manager = EntityManagerAssistant.initEntityManager();
 
         City city = manager.getReference(City.class, cityId);
+        address.setCity(city);
 
         EntityManagerAssistant.closeEntityManager(manager);
-
-        return city;
     }
 
 }

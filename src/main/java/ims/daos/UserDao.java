@@ -1,5 +1,6 @@
 package ims.daos;
 
+import ims.entities.PhoneNumber;
 import ims.supporting.EntityManagerAssistant;
 import ims.entities.User;
 
@@ -13,11 +14,11 @@ public class UserDao {
 
     public UserDao(){}
 
-    public void addUser(User user){
+    public void addUser(User user, PhoneNumber phoneNumber){
         EntityManager manager = EntityManagerAssistant.initEntityManager();
         EntityManagerAssistant.beginTransaction(manager);
 
-        manager.merge(user);
+        manager.merge(user); //save or update
 
         EntityManagerAssistant.commit(manager);
         EntityManagerAssistant.closeEntityManager(manager);

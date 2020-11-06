@@ -26,7 +26,7 @@
                         <Insets left="50.0" right="50.0" />
                      </VBox.margin>
                   </Label>
-                  <TextField fx:id="mrtRegUsernameField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="34.0" prefWidth="100.0">
+                  <TextField fx:id="usernameField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="34.0" prefWidth="100.0">
                      <VBox.margin>
                         <Insets left="50.0" right="50.0" />
                      </VBox.margin>
@@ -37,7 +37,7 @@
                         <Insets />
                      </opaqueInsets>
                   </TextField>
-                  <Label fx:id="mrtRegUsernameMsg" alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="17.0" prefWidth="234.0" textFill="#ff3535" VBox.vgrow="NEVER">
+                  <Label fx:id="usernameMsg" alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="17.0" prefWidth="234.0" textFill="#ff3535" VBox.vgrow="NEVER">
                      <VBox.margin>
                         <Insets left="50.0" right="50.0" />
                      </VBox.margin>
@@ -50,7 +50,7 @@
                         <Insets left="5.0" />
                      </padding>
                   </Label>
-                  <PasswordField fx:id="mrtRegPasswordField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="34.0">
+                  <PasswordField fx:id="passwordField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="34.0">
                      <VBox.margin>
                         <Insets left="50.0" right="50.0" />
                      </VBox.margin>
@@ -58,7 +58,7 @@
                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                      </padding>
                   </PasswordField>
-                  <Label fx:id="mrtRegPasswordMsg" alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="17.0" prefWidth="234.0" textFill="#ff3535" VBox.vgrow="NEVER">
+                  <Label fx:id="passwordMsg" alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="17.0" prefWidth="234.0" textFill="#ff3535" VBox.vgrow="NEVER">
                      <VBox.margin>
                         <Insets left="50.0" right="50.0" />
                      </VBox.margin>
@@ -71,7 +71,7 @@
                         <Insets left="50.0" right="50.0" />
                      </VBox.margin>
                   </Label>
-                  <PasswordField fx:id="mrtRegRepeatPasswordField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="34.0">
+                  <PasswordField fx:id="repeatPasswordField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="34.0">
                      <VBox.margin>
                         <Insets left="50.0" right="50.0" />
                      </VBox.margin>
@@ -79,7 +79,7 @@
                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                      </padding>
                   </PasswordField>
-                  <Label fx:id="mrtRegRepeatPasswordMsg" alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="17.0" prefWidth="234.0" textFill="#ff3535" VBox.vgrow="NEVER">
+                  <Label fx:id="repeatPasswordMsg" alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="17.0" prefWidth="234.0" textFill="#ff3535" VBox.vgrow="NEVER">
                      <VBox.margin>
                         <Insets left="50.0" right="50.0" />
                      </VBox.margin>
@@ -92,7 +92,7 @@
                         <Insets left="50.0" right="50.0" />
                      </VBox.margin>
                   </Label>
-                  <TextField fx:id="mrtRegEmailField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="34.0" prefWidth="100.0">
+                  <TextField fx:id="emailField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="34.0" prefWidth="100.0">
                      <VBox.margin>
                         <Insets left="50.0" right="50.0" />
                      </VBox.margin>
@@ -100,7 +100,7 @@
                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                      </padding>
                   </TextField>
-                  <Label fx:id="mrtRegEmailMsg" alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="17.0" prefWidth="234.0" textFill="#ff3535" VBox.vgrow="NEVER">
+                  <Label fx:id="emailMsg" alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="17.0" prefWidth="234.0" textFill="#ff3535" VBox.vgrow="NEVER">
                      <VBox.margin>
                         <Insets left="50.0" right="50.0" />
                      </VBox.margin>
@@ -113,7 +113,7 @@
                         <Insets left="50.0" right="50.0" />
                      </VBox.margin>
                   </Label>
-                  <TextField fx:id="mrtRegFirstNameField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="34.0" prefWidth="100.0">
+                  <TextField fx:id="firstNameField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="34.0" prefWidth="100.0">
                      <VBox.margin>
                         <Insets left="50.0" right="50.0" />
                      </VBox.margin>
@@ -121,7 +121,7 @@
                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                      </padding>
                   </TextField>
-                  <Label fx:id="mrtRegFirstNameMsg" alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="17.0" prefWidth="234.0" textFill="#ff3535" VBox.vgrow="NEVER">
+                  <Label fx:id="firstNameMsg" alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="17.0" prefWidth="234.0" textFill="#ff3535" VBox.vgrow="NEVER">
                      <VBox.margin>
                         <Insets left="50.0" right="50.0" />
                      </VBox.margin>
@@ -134,7 +134,7 @@
                         <Insets left="50.0" right="50.0" />
                      </VBox.margin>
                   </Label>
-                  <TextField fx:id="mrtRegLastNameField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="34.0" prefWidth="100.0">
+                  <TextField fx:id="lastNameField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="34.0" prefWidth="100.0">
                      <VBox.margin>
                         <Insets left="50.0" right="50.0" />
                      </VBox.margin>
@@ -142,7 +142,7 @@
                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                      </padding>
                   </TextField>
-                  <Label fx:id="mrtRegLastNameMsg" alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="17.0" prefWidth="234.0" textFill="#ff3535" VBox.vgrow="NEVER">
+                  <Label fx:id="lastNameMsg" alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="17.0" prefWidth="234.0" textFill="#ff3535" VBox.vgrow="NEVER">
                      <VBox.margin>
                         <Insets left="50.0" right="50.0" />
                      </VBox.margin>
@@ -155,7 +155,7 @@
                         <Insets left="50.0" right="50.0" />
                      </VBox.margin>
                   </Label>
-                  <TextField fx:id="mrtRegEgnField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="34.0" prefWidth="100.0">
+                  <TextField fx:id="egnField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="34.0" prefWidth="100.0">
                      <VBox.margin>
                         <Insets left="50.0" right="50.0" />
                      </VBox.margin>
@@ -163,7 +163,7 @@
                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                      </padding>
                   </TextField>
-                  <Label fx:id="mrtRegEgnMsg" alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="17.0" prefWidth="234.0" textFill="#ff3535" VBox.vgrow="NEVER">
+                  <Label fx:id="regEgnMsg" alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="17.0" prefWidth="234.0" textFill="#ff3535" VBox.vgrow="NEVER">
                      <VBox.margin>
                         <Insets left="50.0" right="50.0" />
                      </VBox.margin>
@@ -191,7 +191,7 @@
                         <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                      </padding>
                   </ComboBox>
-                  <Label fx:id="mrtRegCountryMsg" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="234.0" textFill="#ff3535">
+                  <Label fx:id="countryMsg" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="234.0" textFill="#ff3535">
                      <VBox.margin>
                         <Insets left="50.0" right="50.0" />
                      </VBox.margin>
@@ -212,7 +212,7 @@
                         <Insets left="50.0" right="50.0" />
                      </VBox.margin>
                   </ComboBox>
-                  <Label fx:id="mrtRegCityMsg" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="234.0" textFill="#ff3535">
+                  <Label fx:id="cityMsg" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="234.0" textFill="#ff3535">
                      <VBox.margin>
                         <Insets left="50.0" right="50.0" />
                      </VBox.margin>
@@ -225,7 +225,7 @@
                         <Insets left="50.0" right="50.0" />
                      </VBox.margin>
                   </Label>
-                  <TextField fx:id="mrtRegStreetField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="34.0" prefWidth="100.0">
+                  <TextField fx:id="streetField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="34.0" prefWidth="100.0">
                      <padding>
                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                      </padding>
@@ -233,7 +233,7 @@
                         <Insets left="50.0" right="50.0" />
                      </VBox.margin>
                   </TextField>
-                  <Label fx:id="mrtRegStreetMsg" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="234.0" textFill="#ff3535">
+                  <Label fx:id="streetMsg" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="234.0" textFill="#ff3535">
                      <VBox.margin>
                         <Insets left="50.0" right="50.0" />
                      </VBox.margin>
@@ -246,7 +246,7 @@
                         <Insets left="50.0" right="50.0" />
                      </VBox.margin>
                   </Label>
-                  <TextField fx:id="mrtRegDetailsField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="34.0" prefWidth="100.0">
+                  <TextField fx:id="addressDetailsField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="34.0" prefWidth="100.0">
                      <padding>
                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                      </padding>
@@ -254,7 +254,7 @@
                         <Insets left="50.0" right="50.0" />
                      </VBox.margin>
                   </TextField>
-                  <Label fx:id="mrtRegAddressMsg" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="234.0" textFill="#ff3535">
+                  <Label fx:id="addressDetailsMsg" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="234.0" textFill="#ff3535">
                      <VBox.margin>
                         <Insets left="50.0" right="50.0" />
                      </VBox.margin>
@@ -267,7 +267,7 @@
                         <Insets left="5.0" top="5.0" />
                      </padding>
                   </Label>
-                  <RadioButton fx:id="mrtRegPersonalPhoneRadioBtn" mnemonicParsing="false" text="Personal" textFill="#575757">
+                  <RadioButton fx:id="personalPhoneRadioBtn" mnemonicParsing="false" text="Personal" textFill="#575757">
                      <padding>
                         <Insets left="5.0" />
                      </padding>
@@ -275,7 +275,7 @@
                         <Insets left="50.0" right="50.0" top="10.0" />
                      </VBox.margin>
                   </RadioButton>
-                  <RadioButton fx:id="mrtRegOfficePhoneRadioBtn" mnemonicParsing="false" text="Office" textFill="#575757">
+                  <RadioButton fx:id="officePhoneRadioBtn" mnemonicParsing="false" text="Office" textFill="#575757">
                      <VBox.margin>
                         <Insets left="50.0" right="50.0" top="20.0" />
                      </VBox.margin>
@@ -291,7 +291,7 @@
                         <Insets left="50.0" right="50.0" top="51.0" />
                      </VBox.margin>
                   </Label>
-                  <TextField fx:id="mrtRegPhoneNumberField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="34.0" prefWidth="100.0">
+                  <TextField fx:id="phoneNumberField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="34.0" prefWidth="100.0">
                      <padding>
                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                      </padding>
@@ -299,7 +299,7 @@
                         <Insets left="50.0" right="50.0" />
                      </VBox.margin>
                   </TextField>
-                  <Label fx:id="mrtRegPhoneNumberMsg" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="234.0" textFill="#ff3535">
+                  <Label fx:id="phoneNumberMsg" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="234.0" textFill="#ff3535">
                      <VBox.margin>
                         <Insets left="50.0" right="50.0" />
                      </VBox.margin>
@@ -309,7 +309,7 @@
                   <Insets top="60.0" />
                </padding>
             </VBox>
-            <Button fx:id="signUpBtn" layoutX="278.0" layoutY="550.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="25.0" prefWidth="114.0" styleClass="login-btn" stylesheets="@../css/styles.css" text="Sign up">
+            <Button fx:id="signUpBtn" layoutX="278.0" layoutY="549.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="25.0" prefWidth="114.0" styleClass="login-btn" stylesheets="@../css/styles.css" text="Sign up">
                <padding>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>

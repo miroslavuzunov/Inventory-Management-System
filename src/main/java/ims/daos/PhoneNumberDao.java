@@ -9,12 +9,11 @@ public class PhoneNumberDao {
     public PhoneNumberDao() {
     }
 
-    public void addPhone(PhoneNumber phoneNumber) {
+    public void addUserViaPhoneNumber(PhoneNumber phoneNumber) {
         EntityManager manager = EntityManagerAssistant.initEntityManager();
-
         EntityManagerAssistant.beginTransaction(manager);
 
-        manager.merge(phoneNumber);
+        manager.merge(phoneNumber); //save or update
 
         EntityManagerAssistant.commit(manager);
         EntityManagerAssistant.closeEntityManager(manager);

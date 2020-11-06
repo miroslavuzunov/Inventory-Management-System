@@ -1,4 +1,4 @@
-package ims.controllers;
+package ims.controllers.primary;
 
 import ims.App;
 import javafx.scene.control.Button;

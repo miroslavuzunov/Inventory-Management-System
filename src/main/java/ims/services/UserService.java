@@ -10,11 +10,6 @@ public class UserService {
         userDao = new UserDao();
     }
 
-    public void addUser(User user){
-        //TODO validations
-        userDao.addUser(user);
-    }
-
     public User getUserByUsername(String username){
         return userDao.getUserByField("nickname", username);
     }

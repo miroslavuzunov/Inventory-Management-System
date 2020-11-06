@@ -1,6 +1,6 @@
 package ims.controllers.resources;
 
-import ims.controllers.SceneController;
+import ims.controllers.primary.SceneController;
 import ims.controllers.contracts.ControllerConfig;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;

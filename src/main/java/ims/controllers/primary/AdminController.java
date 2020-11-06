@@ -5,7 +5,6 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
-import ims.controllers.SceneController;
 import ims.controllers.resources.AdminControllerResources;
 import ims.dialogs.ConfirmationDialog;
 import ims.entities.User;

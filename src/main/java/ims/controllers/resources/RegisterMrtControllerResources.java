@@ -1,6 +1,6 @@
 package ims.controllers.resources;
 
-import ims.controllers.SceneController;
+import ims.controllers.primary.SceneController;
 import ims.controllers.contracts.ControllerConfig;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -11,69 +11,70 @@ import java.util.HashMap;
 
 public abstract class RegisterMrtControllerResources implements ControllerConfig {
     public static final String BUSY_USERNAME_MSG = "Username is already used!";
-    protected static final String PASSWORDS_DONT_MATCH_MSG = "Passwords don't match!";
+    public static final String PASSWORDS_DONT_MATCH_MSG = "Passwords don't match!";
     public static final String BUSY_EMAIL_MSG = "Email is already used!";
     public static final String INVALID_EGN_MSG = "Invalid EGN!";
     public static final String BUSY_EGN_MSG = "EGN is already used!";
-    protected static final String EMPTY_FIELD_MSG = "Empty field forbidden!";
-    protected static final String CLEAN_MSG = "";
+    public static final String EMPTY_FIELD_MSG = "Empty field forbidden!";
+    public static final String CLEAN_MSG = "";
     public static final String USERNAME_FIELD_NAME = "Username";
-    protected static final String PASSWORD_FIELD_NAME = "Password";
-    protected static final String REPEAT_PASSWORD_FIELD_NAME = "Repeat password";
+    public static final String PASSWORD_FIELD_NAME = "Password";
+    public static final String REPEAT_PASSWORD_FIELD_NAME = "Repeat password";
     public static final String EMAIL_FIELD_NAME = "E-mail";
-    protected static final String FIRST_NAME_FIELD_NAME = "First name";
-    protected static final String LAST_NAME_FIELD_NAME = "Last name";
+    public static final String FIRST_NAME_FIELD_NAME = "First name";
+    public static final String LAST_NAME_FIELD_NAME = "Last name";
     public static final String EGN_FIELD_NAME = "EGN";
-    protected static final String COUNTRY_FIELD_NAME = "Country";
-    protected static final String CITY_FIELD_NAME = "City";
-    protected static final String STREET_FIELD_NAME = "Street";
-    protected static final String ADDRESS_DETAILS_FIELD_NAME = "Address details";
-    protected static final String PHONE_NUMBER_FIELD_NAME = "Phone number";
+    public static final String COUNTRY_FIELD_NAME = "Country";
+    public static final String CITY_FIELD_NAME = "City";
+    public static final String STREET_FIELD_NAME = "Street";
+    public static final String ADDRESS_DETAILS_FIELD_NAME = "Address details";
+    public static final String PHONE_NUMBER_FIELD_NAME = "Phone number";
+    public static final String PHONE_TYPE_FIELD_NAME = "Phone type";
 
     @FXML
     protected AnchorPane regPane;
 
     @FXML
-    protected TextField mrtRegUsernameField;
+    protected TextField usernameField;
 
     @FXML
-    protected Label mrtRegUsernameMsg;
+    protected Label usernameMsg;
 
     @FXML
-    protected PasswordField mrtRegPasswordField;
+    protected PasswordField passwordField;
 
     @FXML
-    protected Label mrtRegPasswordMsg;
+    protected Label passwordMsg;
 
     @FXML
-    protected Label mrtRegRepeatPasswordMsg;
+    protected PasswordField repeatPasswordField;
 
     @FXML
-    protected PasswordField mrtRegRepeatPasswordField;
+    protected Label repeatPasswordMsg;
 
     @FXML
-    protected TextField mrtRegEmailField;
+    protected TextField emailField;
 
     @FXML
-    protected Label mrtRegEmailMsg;
+    protected Label emailMsg;
 
     @FXML
-    protected TextField mrtRegFirstNameField;
+    protected TextField firstNameField;
 
     @FXML
-    protected Label mrtRegFirstNameMsg;
+    protected Label firstNameMsg;
 
     @FXML
-    protected TextField mrtRegLastNameField;
+    protected TextField lastNameField;
 
     @FXML
-    protected Label mrtRegLastNameMsg;
+    protected Label lastNameMsg;
 
     @FXML
-    protected TextField mrtRegEgnField;
+    protected TextField egnField;
 
     @FXML
-    protected Label mrtRegEgnMsg;
+    protected Label regEgnMsg;
 
     @FXML
     protected ComboBox<String> countryComboBox;
@@ -82,34 +83,34 @@ public abstract class RegisterMrtControllerResources implements ControllerConfig
     protected ComboBox<String> cityComboBox;
 
     @FXML
-    protected Label mrtRegCountryMsg;
+    protected Label countryMsg;
 
     @FXML
-    protected Label mrtRegCityMsg;
+    protected Label cityMsg;
 
     @FXML
-    protected TextField mrtRegStreetField;
+    protected TextField streetField;
 
     @FXML
-    protected Label mrtRegStreetMsg;
+    protected Label streetMsg;
 
     @FXML
-    protected TextField mrtRegDetailsField;
+    protected TextField addressDetailsField;
 
     @FXML
-    protected Label mrtRegAddressMsg;
+    protected Label addressDetailsMsg;
 
     @FXML
-    protected RadioButton mrtRegPersonalPhoneRadioBtn;
+    protected RadioButton personalPhoneRadioBtn;
 
     @FXML
-    protected RadioButton mrtRegOfficePhoneRadioBtn;
+    protected RadioButton officePhoneRadioBtn;
 
     @FXML
-    protected TextField mrtRegPhoneNumberField;
+    protected TextField phoneNumberField;
 
     @FXML
-    protected Label mrtRegPhoneNumberMsg;
+    protected Label phoneNumberMsg;
 
     @FXML
     protected Button signUpBtn;

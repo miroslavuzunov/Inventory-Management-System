@@ -2,13 +2,17 @@ package ims.services;
 
 import ims.daos.*;
 import ims.entities.*;
+import ims.enums.PhoneType;
+import ims.enums.Role;
 import ims.enums.State;
 import ims.supporting.CustomField;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.ComboBox;
 
+import java.time.LocalDate;
 import java.util.*;
+import java.util.regex.Pattern;
 
 import static ims.controllers.resources.RegisterMrtControllerResources.*;
 
@@ -127,12 +131,43 @@ public class UserRegistrationService {
          addressDao.setAddressReferenceToCity(address, cityId);
     }
 
-    public void saveUser(User user) {
-        userDao.addUser(user);
-    }
+    public void createUser(Map<String, CustomField> fieldsByName) {
+        City city = new City();
+        Address address = new Address();
+        PersonInfo personInfo = new PersonInfo();
+        User user = new User();
+        PhoneNumber phoneNumber = new PhoneNumber();
 
-    public void savePhone(PhoneNumber phoneNumber) {
-        phoneNumberDao.addPhone(phoneNumber);
-    }
+        String cityAndRegionTogether = fieldsByName.get(CITY_FIELD_NAME).getFieldValue();
+        String[] cityAndRegion = Pattern.compile("[\\(\\)]").split(cityAndRegionTogether); //separating 'City (Region)' string
+        city.setName(cityAndRegion[0]);
+        city.setRegion(cityAndRegion[1]);
 
+        address.setStreet(fieldsByName.get(STREET_FIELD_NAME).getFieldValue());
+        address.setDetails(fieldsByName.get(ADDRESS_DETAILS_FIELD_NAME).getFieldValue());
+        setUserAddressCity(address, getCityId(city));
+
+        personInfo.setFirstName(fieldsByName.get(FIRST_NAME_FIELD_NAME).getFieldValue());
+        personInfo.setLastName(fieldsByName.get(LAST_NAME_FIELD_NAME).getFieldValue());
+        personInfo.setEgn(fieldsByName.get(EGN_FIELD_NAME).getFieldValue());
+        personInfo.setAddress(address);
+
+        user.setPersonInfo(personInfo);
+        user.setNickname(fieldsByName.get(USERNAME_FIELD_NAME).getFieldValue());
+        user.setPassword(fieldsByName.get(PASSWORD_FIELD_NAME).getFieldValue());
+        user.setEmail(fieldsByName.get(EMAIL_FIELD_NAME).getFieldValue());
+        user.setRole(Role.MRT);
+        user.setCreatedOn(LocalDate.now());
+        user.setPhoneNumbers(Set.of());
+
+        phoneNumber.setOwner(user);
+        if (fieldsByName.get(PHONE_TYPE_FIELD_NAME).getFieldValue().equals("PERSONAL"))
+            phoneNumber.setPhoneType(PhoneType.PERSONAL);
+        else
+            phoneNumber.setPhoneType(PhoneType.OFFICE);
+
+        phoneNumber.setNumber(fieldsByName.get(PHONE_NUMBER_FIELD_NAME).getFieldValue());
+
+        phoneNumberDao.addUserViaPhoneNumber(phoneNumber);
+    }
 }

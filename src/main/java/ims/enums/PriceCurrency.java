@@ -1,6 +1,6 @@
 package ims.enums;
 
-public enum Currency {
+public enum PriceCurrency {
     BGN,
     EUR,
     USD

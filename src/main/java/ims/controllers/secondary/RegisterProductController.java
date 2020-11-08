@@ -3,6 +3,7 @@ package ims.controllers.secondary;
 import ims.controllers.primary.SceneController;
 import ims.controllers.resources.RegisterProductControllerResources;
 import ims.dialogs.ConfirmationDialog;
+import ims.enums.PriceCurrency;
 import ims.services.ProductRegistrationService;
 import ims.supporting.ToggleGrouper;
 import javafx.event.ActionEvent;
@@ -10,7 +11,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.ToggleGroup;
 
 import java.io.IOException;
@@ -28,8 +28,8 @@ public class RegisterProductController extends RegisterProductControllerResource
 
         initializeScenes();
         initializeCurrencies();
-        //productRegistrationService.initializeCurrencies(priceUnitComboBox);
         toggleGroup = ToggleGrouper.makeToggleGroup(List.of(lttaRadioBtn, taRadioBtn));
+        manipulateLttaPanel();
     }
 
     @FXML
@@ -46,6 +46,34 @@ public class RegisterProductController extends RegisterProductControllerResource
     }
 
     private void initializeCurrencies() {
+        for(PriceCurrency currency : PriceCurrency.values()){
+            priceUnitComboBox.getItems().add(currency.toString());
+        }
+    }
+
+    @FXML
+    private void manipulateLttaPanel(){
+        if(toggleGroup.getSelectedToggle().equals(lttaRadioBtn))
+            enableLttaOptions();
+        if(toggleGroup.getSelectedToggle().equals(taRadioBtn))
+            disableLttaOptions();
+    }
+
+    private void enableLttaOptions(){
+        scrappingCriteriaVBox.setDisable(false);
+        yearsOrMonthsVBox.setDisable(false);
+        depreciationDegreeVBox.setDisable(false);
+
+        initializeScrappingCriteria();
+    }
+
+    private void disableLttaOptions(){
+        scrappingCriteriaVBox.setDisable(true);
+        yearsOrMonthsVBox.setDisable(true);
+        depreciationDegreeVBox.setDisable(true);
+    }
+
+    private void initializeScrappingCriteria() {
 
     }
 }

@@ -54,10 +54,7 @@ public abstract class RegisterProductControllerResources implements ControllerCo
     protected RadioButton taRadioBtn;
 
     @FXML
-    protected Pane hideCriteriaValuePane;
-
-    @FXML
-    protected Pane hideCriteriaValuePane1;
+    protected VBox depreciationDegreeVBox;
 
     @FXML
     protected ComboBox<String> depreciationDegreeComboBox;
@@ -66,16 +63,28 @@ public abstract class RegisterProductControllerResources implements ControllerCo
     protected Label depreciationDegreeMsg;
 
     @FXML
+    protected VBox yearsOrMonthsVBox;
+
+    @FXML
     protected TextField yearsOrMonthsField;
 
     @FXML
     protected Label yearsOrMonthsMsg;
 
     @FXML
+    protected VBox scrappingCriteriaVBox;
+
+    @FXML
     protected ComboBox<String> scrappingCriteriaComboBox;
 
     @FXML
     protected Label scrappingCriteriaMsg;
+
+    @FXML
+    protected Pane hideCriteriaValuePane;
+
+    @FXML
+    protected Pane hideCriteriaValuePane1;
 
     @FXML
     protected VBox cleanLeftPane;

@@ -1,6 +1,6 @@
 package ims.entities;
 
-import ims.enums.Currency;
+import ims.enums.PriceCurrency;
 import ims.enums.ProductType;
 
 import javax.persistence.*;
@@ -10,8 +10,10 @@ import java.math.BigDecimal;
 @Table(name = "product_details")
 public class ProductDetails extends BaseEntity{
     private String brandAndModel;
-    private BigDecimal price;
-    private Currency priceCurrency;
+    private BigDecimal initialPrice;
+    private BigDecimal currentPrice;
+    private PriceCurrency priceCurrency;
+    private Integer quantity;
     private String description;
     private ProductType productType;
     private ScrappingCriteria scrappingCriteria;
@@ -29,23 +31,41 @@ public class ProductDetails extends BaseEntity{
         this.brandAndModel = brandAndModel;
     }
 
-    @Column(name = "price")
-    public BigDecimal getPrice() {
-        return price;
+    @Column(name = "initial_price")
+    public BigDecimal getInitialPrice() {
+        return initialPrice;
     }
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
+    public void setInitialPrice(BigDecimal price) {
+        this.initialPrice = price;
+    }
+
+    @Column(name = "current_price")
+    public BigDecimal getCurrentPrice() {
+        return currentPrice;
+    }
+
+    public void setCurrentPrice(BigDecimal currentPrice) {
+        this.currentPrice = currentPrice;
     }
 
     @Column(name = "price_currency")
     @Enumerated(EnumType.STRING)
-    public Currency getPriceCurrency() {
+    public PriceCurrency getPriceCurrency() {
         return priceCurrency;
     }
 
-    public void setPriceCurrency(Currency priceCurrency) {
+    public void setPriceCurrency(PriceCurrency priceCurrency) {
         this.priceCurrency = priceCurrency;
+    }
+
+    @Column(name = "quantity")
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 
     @Column(name = "description")

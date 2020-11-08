@@ -64,7 +64,7 @@ public abstract class AdminControllerResources implements ControllerConfig {
     protected Button genRefBtn;
 
     @FXML
-    protected Button stockRefBtn;
+    protected Button forcedScrapBtn;
 
     @FXML
     protected Button regProductBtn;
@@ -92,7 +92,7 @@ public abstract class AdminControllerResources implements ControllerConfig {
         SceneController.loadScenes(new HashMap<>(){{
             put(regMrtBtn, "RegisterMrt");
             put(notificationBtn, "");
-            put(stockRefBtn, "");
+            put(forcedScrapBtn, "");
             put(regProductBtn, "");
             put(exitBtn, "Login");
             put(getBackFromClientManipBtn, "Admin");

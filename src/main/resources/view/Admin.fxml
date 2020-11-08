@@ -233,7 +233,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="stockRefBtn" alignment="BASELINE_LEFT" contentDisplay="TOP" mnemonicParsing="false" onAction="#handleClicks" prefHeight="31.0" prefWidth="233.0" styleClass="menu-btn" stylesheets="@../css/styles.css" text="STOCKROOM REFERENCES">
+            <Button fx:id="forcedScrapBtn" alignment="BASELINE_LEFT" contentDisplay="TOP" mnemonicParsing="false" onAction="#handleClicks" prefHeight="31.0" prefWidth="233.0" styleClass="menu-btn" stylesheets="@../css/styles.css" text="FORCED SCRAP">
                <font>
                   <Font name="System Bold" size="13.0" />
                </font>

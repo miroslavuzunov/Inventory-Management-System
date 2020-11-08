@@ -23,7 +23,7 @@ public class Product extends BaseEntity{
         this.inventoryNumber = inventoryNumber;
     }
 
-    @Column(name = "received_date")
+    @Column(name = "created_on")
     public LocalDate getRegisteredOn() {
         return registeredOn;
     }

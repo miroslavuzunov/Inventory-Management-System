@@ -106,7 +106,7 @@ public class RegisterMrtController extends RegisterMrtControllerResources implem
 
     @FXML
     private void initializeCities() {
-        cityComboBox.getItems().clear(); //Deletes previous country's cities
+        cityComboBox.getItems().clear(); //Prevents data duplicating
 
         List<CustomField> citiesFromDb = userRegistrationService.initializeCitiesAccordingCountry(
                 countryComboBox.getSelectionModel().getSelectedItem()

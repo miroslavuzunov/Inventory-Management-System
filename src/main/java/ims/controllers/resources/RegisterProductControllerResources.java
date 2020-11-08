@@ -15,9 +15,6 @@ public abstract class RegisterProductControllerResources implements ControllerCo
     protected AnchorPane regPane;
 
     @FXML
-    protected Button addProductBtn;
-
-    @FXML
     protected TextField brandField;
 
     @FXML
@@ -54,13 +51,10 @@ public abstract class RegisterProductControllerResources implements ControllerCo
     protected RadioButton taRadioBtn;
 
     @FXML
+    protected AnchorPane lttaPanel;
+
+    @FXML
     protected VBox depreciationDegreeVBox;
-
-    @FXML
-    protected ComboBox<String> depreciationDegreeComboBox;
-
-    @FXML
-    protected Label depreciationDegreeMsg;
 
     @FXML
     protected VBox yearsOrMonthsVBox;
@@ -81,10 +75,13 @@ public abstract class RegisterProductControllerResources implements ControllerCo
     protected Label scrappingCriteriaMsg;
 
     @FXML
-    protected Pane hideCriteriaValuePane;
+    protected ComboBox<String> depreciationDegreeComboBox;
 
     @FXML
-    protected Pane hideCriteriaValuePane1;
+    protected Label depreciationDegreeMsg;
+
+    @FXML
+    protected Button addProductBtn;
 
     @FXML
     protected VBox cleanLeftPane;

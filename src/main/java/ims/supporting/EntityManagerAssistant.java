@@ -1,37 +1,108 @@
 package ims.supporting;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
-public class EntityManagerAssistant {
-    private static final EntityManagerFactory factory;
+public class EntityManagerAssistant<T> {
+    private final Class<T> classType;
 
-    static{
-        factory = Persistence.createEntityManagerFactory("JPA");
+    public EntityManagerAssistant(Class<T> classType) {
+        this.classType = classType;
     }
 
-    public static EntityManager initEntityManager(){
-        return factory.createEntityManager();
+    private EntityManager initEntityManager() {
+        return EntityFactory.getFactory().createEntityManager();
     }
 
-    public static void closeEntityManager(EntityManager manager){
+    private void closeEntityManager(EntityManager manager) {
         manager.close();
     }
 
-    public static void closeEntityManagerFactory(){
-        factory.close();
+    private void closeEntityManagerFactory() {
+        EntityFactory.closeFactory();
     }
 
-    public static void beginTransaction(EntityManager manager){
+    private void beginTransaction(EntityManager manager) {
         manager.getTransaction().begin();
     }
 
-    public static void rollback(EntityManager manager){
+    private void rollback(EntityManager manager) {
         manager.getTransaction().rollback();
     }
 
-    public static void commit(EntityManager manager){
+    private void commit(EntityManager manager) {
         manager.getTransaction().commit();
+    }
+
+    public List<T> getAll() {
+        EntityManager manager = initEntityManager();
+
+        CriteriaQuery<T> criteria = manager.getCriteriaBuilder().createQuery(classType);
+        criteria.select(criteria.from(classType));
+        List<T> records = manager.createQuery(criteria).getResultList();
+
+        closeEntityManager(manager);
+
+        return records;
+    }
+
+    public T getRecordByAttribute(String columnName, String value) {
+        EntityManager manager = initEntityManager();
+
+        CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
+        CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(classType);
+        Root<T> recordRoot = criteriaQuery.from(classType);
+        criteriaQuery.where(criteriaBuilder.equal(recordRoot.get(columnName), value));
+        List<T> records = manager.createQuery(criteriaQuery).getResultList();
+
+        closeEntityManager(manager);
+
+        if (!records.isEmpty())
+            return records.get(0);
+        return null;
+    }
+
+    public T getRecordByMultipleAttributes(Map<String, String> valuesByColumns) {
+        EntityManager manager = initEntityManager();
+
+        CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
+        CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(classType);
+        Root<T> recordRoot = criteriaQuery.from(classType);
+        List<Predicate> predicates = new ArrayList<>();
+
+        valuesByColumns.forEach((key, value) -> predicates.add(criteriaBuilder.like(recordRoot.get(key), value)));
+
+        criteriaQuery.select(recordRoot).where(predicates.toArray(new Predicate[]{}));
+        List<T> records = manager.createQuery(criteriaQuery).getResultList();
+
+        closeEntityManager(manager);
+
+        if (!records.isEmpty())
+            return records.get(0);
+        return null;
+    }
+
+    public T getRecordReference(Integer id) {
+        EntityManager manager = initEntityManager();
+        T reference = manager.getReference(classType, id);
+        closeEntityManager(manager);
+
+        return reference;
+    }
+
+    public void updateRecord(T record) {
+        EntityManager manager = initEntityManager();
+        beginTransaction(manager);
+
+        manager.merge(record);
+
+        commit(manager);
+        closeEntityManager(manager);
     }
 }

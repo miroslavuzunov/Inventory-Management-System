@@ -3,8 +3,10 @@ package ims.controllers.secondary;
 import ims.controllers.primary.SceneController;
 import ims.controllers.resources.RegisterProductControllerResources;
 import ims.dialogs.ConfirmationDialog;
+import ims.enums.Criteria;
 import ims.enums.PriceCurrency;
 import ims.services.ProductRegistrationService;
+import ims.supporting.CustomField;
 import ims.supporting.ToggleGrouper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -28,6 +30,8 @@ public class RegisterProductController extends RegisterProductControllerResource
 
         initializeScenes();
         initializeCurrencies();
+        initializeScrappingCriteria();
+        initializeDepreciationDegree();
         toggleGroup = ToggleGrouper.makeToggleGroup(List.of(lttaRadioBtn, taRadioBtn));
         manipulateLttaPanel();
     }
@@ -45,35 +49,53 @@ public class RegisterProductController extends RegisterProductControllerResource
             SceneController.switchSceneByButton((Button) event.getSource());
     }
 
+    @FXML
+    private void manipulateLttaPanel() {
+        if (toggleGroup.getSelectedToggle().equals(lttaRadioBtn))
+            enableLttaOptions();
+        if (toggleGroup.getSelectedToggle().equals(taRadioBtn))
+            disableLttaOptions();
+    }
+
+    @FXML
+    private void handleYearsOrMonthsField() {
+        if (!scrappingCriteriaComboBox.getSelectionModel().isEmpty())
+            if (scrappingCriteriaComboBox.getSelectionModel().getSelectedItem().equals(Criteria.CONDITION.toString()))
+                yearsOrMonthsVBox.setDisable(true);
+            else
+                yearsOrMonthsVBox.setDisable(false);
+    }
+
     private void initializeCurrencies() {
-        for(PriceCurrency currency : PriceCurrency.values()){
+        for (PriceCurrency currency : PriceCurrency.values()) {
             priceUnitComboBox.getItems().add(currency.toString());
         }
     }
 
-    @FXML
-    private void manipulateLttaPanel(){
-        if(toggleGroup.getSelectedToggle().equals(lttaRadioBtn))
-            enableLttaOptions();
-        if(toggleGroup.getSelectedToggle().equals(taRadioBtn))
-            disableLttaOptions();
-    }
-
-    private void enableLttaOptions(){
-        scrappingCriteriaVBox.setDisable(false);
-        yearsOrMonthsVBox.setDisable(false);
-        depreciationDegreeVBox.setDisable(false);
-
-        initializeScrappingCriteria();
-    }
-
-    private void disableLttaOptions(){
-        scrappingCriteriaVBox.setDisable(true);
-        yearsOrMonthsVBox.setDisable(true);
-        depreciationDegreeVBox.setDisable(true);
-    }
-
     private void initializeScrappingCriteria() {
+        scrappingCriteriaComboBox.getItems().clear(); //Prevents data duplicating
 
+        for (Criteria criteria : Criteria.values()) {
+            scrappingCriteriaComboBox.getItems().add(criteria.toString());
+        }
     }
+
+    private void initializeDepreciationDegree() {
+        depreciationDegreeComboBox.getItems().clear(); //Prevents data duplicating
+
+        List<CustomField> degreesFromDb = productRegistrationService.initializeDepreciationDegree();
+
+        degreesFromDb.forEach(degree -> {
+            depreciationDegreeComboBox.getItems().add(degree.getFieldValue());
+        });
+    }
+
+    private void enableLttaOptions() {
+        lttaPanel.setDisable(false);
+    }
+
+    private void disableLttaOptions() {
+        lttaPanel.setDisable(true);
+    }
+
 }

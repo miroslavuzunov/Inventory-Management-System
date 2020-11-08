@@ -5,17 +5,13 @@ import ims.entities.PhoneNumber;
 
 import javax.persistence.EntityManager;
 
-public class PhoneNumberDao {
-    public PhoneNumberDao() {
+public class PhoneNumberDao extends EntityManagerAssistant<PhoneNumber> {
+
+    public PhoneNumberDao(Class<PhoneNumber> classType) {
+        super(classType);
     }
 
     public void addUserViaPhoneNumber(PhoneNumber phoneNumber) {
-        EntityManager manager = EntityManagerAssistant.initEntityManager();
-        EntityManagerAssistant.beginTransaction(manager);
-
-        manager.merge(phoneNumber); //save or update
-
-        EntityManagerAssistant.commit(manager);
-        EntityManagerAssistant.closeEntityManager(manager);
+        updateRecord(phoneNumber);
     }
 }

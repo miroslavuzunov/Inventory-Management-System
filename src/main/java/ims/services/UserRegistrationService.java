@@ -6,9 +6,6 @@ import ims.enums.PhoneType;
 import ims.enums.Role;
 import ims.enums.State;
 import ims.supporting.CustomField;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.scene.control.ComboBox;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -25,17 +22,17 @@ public class UserRegistrationService {
     private final PersonInfoDao personInfoDao;
 
     public UserRegistrationService() {
-        this.userDao = new UserDao();
-        this.countryDao = new CountryDao();
-        this.cityDao = new CityDao();
-        this.addressDao = new AddressDao();
-        this.phoneNumberDao = new PhoneNumberDao();
-        this.personInfoDao = new PersonInfoDao();
+        this.userDao = new UserDao(User.class);
+        this.countryDao = new CountryDao(Country.class);
+        this.cityDao = new CityDao(City.class);
+        this.addressDao = new AddressDao(City.class);
+        this.phoneNumberDao = new PhoneNumberDao(PhoneNumber.class);
+        this.personInfoDao = new PersonInfoDao(PersonInfo.class);
     }
 
     public List<CustomField> initializeCountries() {
         List<CustomField> controllerCountries = new ArrayList<>();
-        List<Country> dbCountries = countryDao.getAll();
+        List<Country> dbCountries = countryDao.getAllCountries();
 
         dbCountries.forEach(country -> {
             controllerCountries.add(new CustomField(country.getName()));
@@ -46,11 +43,11 @@ public class UserRegistrationService {
 
     public List<CustomField> initializeCitiesAccordingCountry(String selectedCountryName) {
         List<CustomField> controllerCities = new ArrayList<>();
-        List<City> dbCities = cityDao.getAll();
+        List<City> dbCities = cityDao.getAllCities();
 
         dbCities.forEach(city -> {
-            if(city.getCountry().getName().equals(selectedCountryName))
-                controllerCities.add(new CustomField(city.getName() + " (" + city.getRegion() + ")"));
+            if (city.getCountry().getName().equals(selectedCountryName))
+                controllerCities.add(new CustomField(city.getName() + "(" + city.getRegion() + ")"));
         });
 
         return controllerCities;
@@ -91,13 +88,13 @@ public class UserRegistrationService {
             userWithSameNick.setNickname(userDao.getUserByField("nickname", username).getNickname());
 
         User userWithSameEmail = new User();
-        if(userDao.getUserByField("email", email) != null)
+        if (userDao.getUserByField("email", email) != null)
             userWithSameEmail.setEmail(userDao.getUserByField("email", email).getEmail());
 
         User userWithSameEgn = new User();
         PersonInfo personInfo = new PersonInfo();
         userWithSameEgn.setPersonInfo(personInfo);
-        if(personInfoDao.getPersonInfoByEgn(egn) != null)
+        if (personInfoDao.getPersonInfoByEgn(egn) != null)
             userWithSameEgn.setPersonInfo(personInfoDao.getPersonInfoByEgn(egn));
 
         users.put(USERNAME_FIELD_NAME, userWithSameNick);
@@ -117,7 +114,7 @@ public class UserRegistrationService {
     }
 
     public void setUserAddressCity(Address address, Integer cityId) {
-         addressDao.setAddressReferenceToCity(address, cityId);
+        addressDao.setAddressReferenceToCity(address, cityId);
     }
 
     public void createUser(Map<String, CustomField> fieldsByName) {

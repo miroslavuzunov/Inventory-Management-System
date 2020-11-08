@@ -1,5 +1,6 @@
 package ims.entities;
 
+import ims.enums.Currency;
 import ims.enums.ProductType;
 
 import javax.persistence.*;
@@ -10,6 +11,7 @@ import java.math.BigDecimal;
 public class ProductDetails extends BaseEntity{
     private String brandAndModel;
     private BigDecimal price;
+    private Currency priceCurrency;
     private String description;
     private ProductType productType;
     private ScrappingCriteria scrappingCriteria;
@@ -34,6 +36,16 @@ public class ProductDetails extends BaseEntity{
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    @Column(name = "price_currency")
+    @Enumerated(EnumType.STRING)
+    public Currency getPriceCurrency() {
+        return priceCurrency;
+    }
+
+    public void setPriceCurrency(Currency priceCurrency) {
+        this.priceCurrency = priceCurrency;
     }
 
     @Column(name = "description")

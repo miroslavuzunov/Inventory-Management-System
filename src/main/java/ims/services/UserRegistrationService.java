@@ -33,38 +33,27 @@ public class UserRegistrationService {
         this.personInfoDao = new PersonInfoDao();
     }
 
-    public void initializeCountries(ComboBox<String> countryChoiceBox) {
-        List<Country> countries = countryDao.getAll();
+    public List<CustomField> initializeCountries() {
+        List<CustomField> controllerCountries = new ArrayList<>();
+        List<Country> dbCountries = countryDao.getAll();
 
-        countries.forEach(country -> {
-            countryChoiceBox.getItems().add(country.getName());
+        dbCountries.forEach(country -> {
+            controllerCountries.add(new CustomField(country.getName()));
         });
+
+        return controllerCountries;
     }
 
-    public void generateCities(ComboBox<String> countryComboBox, ComboBox<String> cityComboBox) {
-        ChangeListener<String> changeListener = new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String country, String t1) {
-                initializeCitiesAccordingCountry(cityComboBox, countryComboBox.getSelectionModel().getSelectedItem());
-            }
-        };
-        countryComboBox.getSelectionModel().selectedItemProperty().addListener(changeListener);
-    }
+    public List<CustomField> initializeCitiesAccordingCountry(String selectedCountryName) {
+        List<CustomField> controllerCities = new ArrayList<>();
+        List<City> dbCities = cityDao.getAll();
 
-    private void initializeCitiesAccordingCountry(ComboBox<String> cityComboBox, String selectedCountryName) {
-        cityComboBox.getItems().clear(); //Deletes previous country's cities
+        dbCities.forEach(city -> {
+            if(city.getCountry().getName().equals(selectedCountryName))
+                controllerCities.add(new CustomField(city.getName() + " (" + city.getRegion() + ")"));
+        });
 
-        List<Country> countries = countryDao.getAll();
-        Set<City> cities = new HashSet<>();
-
-        for (Country country : countries) {
-            if (country.getName().equals(selectedCountryName))
-                cities = country.getCities();
-        }
-
-        for (City city : cities) {
-            cityComboBox.getItems().add(city.getName() + " (" + city.getRegion() + ")");
-        }
+        return controllerCities;
     }
 
     public boolean validateData(Map<String, CustomField> fieldsByName) {

@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ims.controllers.secondary.RegisterProductController">
+   <children>
+      <AnchorPane fx:id="regPane" layoutX="230.0" prefHeight="600.0" prefWidth="669.0" style="-fx-background-color: #ccc;">
+         <children>
+            <Button fx:id="addProductBtn" layoutX="278.0" layoutY="486.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="25.0" prefWidth="114.0" styleClass="login-btn" stylesheets="@../css/styles.css" text="Add new product">
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Label alignment="CENTER" layoutX="182.0" layoutY="10.0" prefHeight="27.0" prefWidth="291.0" style="-fx-text-fill: rgb(79, 163, 211);" styleClass="left-side-header" stylesheets="@../css/styles.css" text="PRODUCT REGISTRATION" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <HBox layoutY="44.0" prefHeight="258.0" prefWidth="670.0">
+               <children>
+                  <VBox prefHeight="224.0" prefWidth="346.0">
+                     <children>
+                        <Label prefHeight="17.0" prefWidth="234.0" text="Brand:" textFill="#6f6f6f">
+                           <padding>
+                              <Insets left="5.0" />
+                           </padding>
+                           <VBox.margin>
+                              <Insets left="50.0" right="50.0" top="35.0" />
+                           </VBox.margin>
+                        </Label>
+                        <TextField fx:id="brandField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="34.0" prefWidth="100.0" promptText="Lenovo">
+                           <VBox.margin>
+                              <Insets left="50.0" right="50.0" />
+                           </VBox.margin>
+                           <padding>
+                              <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                           </padding>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </TextField>
+                        <Label fx:id="brandMsg" alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="17.0" prefWidth="234.0" textFill="#ff3535" VBox.vgrow="NEVER">
+                           <VBox.margin>
+                              <Insets left="50.0" right="50.0" />
+                           </VBox.margin>
+                        </Label>
+                        <Label prefHeight="17.0" prefWidth="234.0" text="Model:" textFill="#6f6f6f">
+                           <VBox.margin>
+                              <Insets left="50.0" right="50.0" />
+                           </VBox.margin>
+                           <padding>
+                              <Insets left="5.0" />
+                           </padding>
+                        </Label>
+                        <TextField fx:id="modelField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="34.0" prefWidth="100.0" promptText="Legion Y530">
+                           <padding>
+                              <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                           </padding>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <VBox.margin>
+                              <Insets left="50.0" right="50.0" />
+                           </VBox.margin>
+                        </TextField>
+                        <Label fx:id="modelMsg" alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="17.0" prefWidth="234.0" textFill="#ff3535" VBox.vgrow="NEVER">
+                           <VBox.margin>
+                              <Insets left="50.0" right="50.0" />
+                           </VBox.margin>
+                        </Label>
+                        <Label prefHeight="17.0" prefWidth="234.0" text="Description:" textFill="#6f6f6f">
+                           <padding>
+                              <Insets left="5.0" />
+                           </padding>
+                           <VBox.margin>
+                              <Insets left="50.0" right="50.0" />
+                           </VBox.margin>
+                        </Label>
+                        <TextArea fx:id="descriptionArea" prefHeight="61.0" prefWidth="243.0" promptText="Delivered by...">
+                           <VBox.margin>
+                              <Insets left="50.0" right="50.0" />
+                           </VBox.margin>
+                        </TextArea>
+                     </children>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </VBox>
+                  <VBox prefHeight="174.0" prefWidth="362.0">
+                     <children>
+                        <Label prefHeight="17.0" prefWidth="234.0" text="Unit price:" textFill="#6f6f6f">
+                           <padding>
+                              <Insets left="5.0" />
+                           </padding>
+                           <VBox.margin>
+                              <Insets left="50.0" right="50.0" top="35.0" />
+                           </VBox.margin>
+                        </Label>
+                        <HBox prefHeight="35.0" prefWidth="333.0">
+                           <children>
+                              <TextField fx:id="priceValueField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="34.0" prefWidth="215.0" promptText="1700">
+                                 <padding>
+                                    <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                 </padding>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                              </TextField>
+                              <ComboBox fx:id="priceUnitComboBox" prefHeight="33.0" prefWidth="0.0">
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                              </ComboBox>
+                           </children>
+                           <VBox.margin>
+                              <Insets left="50.0" right="50.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <Label fx:id="priceMsg" alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="17.0" prefWidth="234.0" textFill="#ff3535" VBox.vgrow="NEVER">
+                           <VBox.margin>
+                              <Insets left="50.0" right="50.0" />
+                           </VBox.margin>
+                        </Label>
+                        <Label prefHeight="17.0" prefWidth="234.0" text="Quantity:" textFill="#6f6f6f">
+                           <padding>
+                              <Insets left="5.0" />
+                           </padding>
+                           <VBox.margin>
+                              <Insets left="50.0" right="50.0" />
+                           </VBox.margin>
+                        </Label>
+                        <TextField fx:id="quantityField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="34.0" prefWidth="100.0" promptText="20">
+                           <VBox.margin>
+                              <Insets left="50.0" right="50.0" />
+                           </VBox.margin>
+                           <padding>
+                              <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                           </padding>
+                        </TextField>
+                        <Label fx:id="quantityMsg" alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="17.0" prefWidth="234.0" textFill="#ff3535" VBox.vgrow="NEVER">
+                           <VBox.margin>
+                              <Insets left="50.0" right="50.0" />
+                           </VBox.margin>
+                        </Label>
+                        <Label text="Product type:" textFill="#6f6f6f">
+                           <VBox.margin>
+                              <Insets left="50.0" right="50.0" />
+                           </VBox.margin>
+                           <padding>
+                              <Insets left="5.0" top="5.0" />
+                           </padding>
+                        </Label>
+                        <RadioButton fx:id="lttaRadioBtn" mnemonicParsing="false" text="LTTA" textFill="#575757">
+                           <padding>
+                              <Insets left="5.0" />
+                           </padding>
+                           <VBox.margin>
+                              <Insets left="50.0" top="10.0" />
+                           </VBox.margin>
+                        </RadioButton>
+                        <RadioButton fx:id="taRadioBtn" mnemonicParsing="false" text="TA" textFill="#575757">
+                           <padding>
+                              <Insets left="5.0" />
+                           </padding>
+                           <VBox.margin>
+                              <Insets left="50.0" top="10.0" />
+                           </VBox.margin>
+                        </RadioButton>
+                     </children>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </VBox>
+               </children>
+            </HBox>
+            <AnchorPane layoutY="306.0" prefHeight="135.0" prefWidth="670.0">
+               <children>
+                  <VBox layoutX="343.0" layoutY="-6.0" prefHeight="161.0" prefWidth="327.0" style="-fx-background-color: #ccc;">
+                     <children>
+                        <Label prefHeight="17.0" prefWidth="227.0" text="Depreciation degree:" textFill="#6f6f6f">
+                           <padding>
+                              <Insets left="5.0" />
+                           </padding>
+                           <VBox.margin>
+                              <Insets left="50.0" right="50.0" top="50.0" />
+                           </VBox.margin>
+                        </Label>
+                        <ComboBox fx:id="depreciationDegreeComboBox" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="34.0" prefWidth="254.0">
+                           <VBox.margin>
+                              <Insets left="50.0" right="50.0" />
+                           </VBox.margin>
+                           <padding>
+                              <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                           </padding>
+                        </ComboBox>
+                        <Label fx:id="depreciationDegreeMsg" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="234.0" textFill="#ff3535">
+                           <VBox.margin>
+                              <Insets left="50.0" right="50.0" />
+                           </VBox.margin>
+                        </Label>
+                     </children>
+                  </VBox>
+                  <VBox layoutX="343.0" layoutY="-5.0" prefHeight="161.0" prefWidth="327.0" style="-fx-background-color: #ccc;">
+                     <children>
+                        <Label prefHeight="17.0" prefWidth="234.0" text="Years or months:" textFill="#6f6f6f">
+                           <padding>
+                              <Insets left="5.0" />
+                           </padding>
+                           <VBox.margin>
+                              <Insets left="50.0" right="50.0" top="50.0" />
+                           </VBox.margin>
+                        </Label>
+                        <TextField fx:id="yearsOrMonthsField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="34.0" prefWidth="100.0" promptText="5">
+                           <padding>
+                              <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                           </padding>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <VBox.margin>
+                              <Insets left="50.0" right="50.0" />
+                           </VBox.margin>
+                        </TextField>
+                        <Label fx:id="yearsOrMonthsMsg" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="234.0" textFill="#ff3535">
+                           <VBox.margin>
+                              <Insets left="50.0" right="50.0" />
+                           </VBox.margin>
+                        </Label>
+                     </children>
+                  </VBox>
+                  <VBox layoutY="-6.0" prefHeight="161.0" prefWidth="327.0">
+                     <children>
+                        <Label prefHeight="17.0" prefWidth="234.0" text="Scrapping criteria:" textFill="#6f6f6f">
+                           <padding>
+                              <Insets left="5.0" />
+                           </padding>
+                           <VBox.margin>
+                              <Insets left="50.0" right="50.0" top="50.0" />
+                           </VBox.margin>
+                        </Label>
+                        <ComboBox fx:id="scrappingCriteriaComboBox" prefHeight="33.0" prefWidth="422.0">
+                           <VBox.margin>
+                              <Insets left="50.0" right="50.0" />
+                           </VBox.margin>
+                        </ComboBox>
+                        <Label fx:id="scrappingCriteriaMsg" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="234.0" textFill="#ff3535">
+                           <VBox.margin>
+                              <Insets left="50.0" right="50.0" />
+                           </VBox.margin>
+                        </Label>
+                     </children>
+                  </VBox>
+                  <Pane fx:id="hideCriteriaValuePane" layoutX="327.0" prefHeight="161.0" prefWidth="343.0" style="-fx-background-color: #ccc;" />
+                  <Pane fx:id="hideCriteriaValuePane1" prefHeight="161.0" prefWidth="327.0" style="-fx-background-color: #ccc;" />
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+      <VBox fx:id="cleanLeftPane" layoutX="-2.0" prefHeight="600.0" prefWidth="232.0" styleClass="left-side" stylesheets="@../css/styles.css">
+         <children>
+            <Button fx:id="backBtn" mnemonicParsing="false" onAction="#handleClicks" styleClass="home-btn" stylesheets="@../css/styles.css" text="BACK" underline="true">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Button>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

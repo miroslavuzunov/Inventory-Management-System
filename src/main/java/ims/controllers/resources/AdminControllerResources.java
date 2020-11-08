@@ -97,6 +97,7 @@ public abstract class AdminControllerResources implements ControllerConfig {
             put(exitBtn, "Login");
             put(getBackFromClientManipBtn, "Admin");
             put(getBackFromGenRefBtn, "Admin");
+            put(regProductBtn, "RegisterProduct");
         }});
     }
 }

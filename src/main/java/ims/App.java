@@ -8,17 +8,18 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Queue;
 
 /**
  * JavaFX ims.App
  */
 public class App extends Application {
-
     private static Scene scene;
 
     @Override
     public void start(Stage stage) throws IOException {
         scene = new Scene(loadFXML("/view/Login"),900,600);
+        //ArrayList<Scene>
         stage.setScene(scene);
         stage.setResizable(false);
         stage.setTitle("IMS - office edition");

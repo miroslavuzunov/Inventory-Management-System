@@ -39,6 +39,7 @@ public class LoginController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         loginBtn.setDefaultButton(true); // ENTER key calls login
+        userService = new UserService();
     }
 
     @FXML

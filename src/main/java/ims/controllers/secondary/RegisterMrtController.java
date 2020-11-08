@@ -8,6 +8,7 @@ import ims.dialogs.SuccessDialog;
 import ims.enums.State;
 import ims.services.UserRegistrationService;
 import ims.supporting.CustomField;
+import ims.supporting.ToggleGrouper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -26,13 +27,14 @@ public class RegisterMrtController extends RegisterMrtControllerResources implem
         userRegistrationService = new UserRegistrationService();
 
         initializeScenes();
-        makeToggleGroup(List.of(personalPhoneRadioBtn, officePhoneRadioBtn));
-        userRegistrationService.initializeCountries(countryComboBox);
-        userRegistrationService.generateCities(countryComboBox, cityComboBox);
+        initializeCountries();
+        //initializeCities();
+        toggleGroup = ToggleGrouper.makeToggleGroup(List.of(personalPhoneRadioBtn, officePhoneRadioBtn));
     }
 
+
     @FXML
-    public void handleClicks(ActionEvent event) throws IOException {
+    private void handleClicks(ActionEvent event) throws IOException {
         if (event.getSource() == signUpBtn)
             signUp();
         if (event.getSource() == backBtn) {
@@ -40,8 +42,7 @@ public class RegisterMrtController extends RegisterMrtControllerResources implem
 
             if (result == ButtonType.YES)
                 SceneController.switchSceneByButton((Button) event.getSource());
-        }
-        else
+        } else
             SceneController.switchSceneByButton((Button) event.getSource());
     }
 
@@ -57,7 +58,7 @@ public class RegisterMrtController extends RegisterMrtControllerResources implem
         //handleEgnValidation(inputFields);
 
         if (noEmptyFields && passwordsMatch)
-            noTakenData = handleTakenData(fieldsByName);
+            noTakenData = handleBusyData(fieldsByName);
 
         if (noEmptyFields && passwordsMatch && noTakenData) {
             ButtonType result = ConfirmationDialog.askForConfirmation("Are you sure you want to sign up new MRT?");
@@ -69,16 +70,6 @@ public class RegisterMrtController extends RegisterMrtControllerResources implem
             }
 
         }
-    }
-
-    private void makeToggleGroup(List<RadioButton> phoneTypes) {
-        toggleGroup = new ToggleGroup();
-
-        phoneTypes.forEach(radioButton -> {
-            radioButton.setToggleGroup(toggleGroup);
-        });
-
-        toggleGroup.selectToggle(personalPhoneRadioBtn);
     }
 
     private Map<String, CustomField> initializeCustomFields() {
@@ -103,6 +94,27 @@ public class RegisterMrtController extends RegisterMrtControllerResources implem
             fieldsByName.put(PHONE_TYPE_FIELD_NAME, new CustomField("OFFICE"));
 
         return fieldsByName;
+    }
+
+    private void initializeCountries() {
+        List<CustomField> countriesFromDb = userRegistrationService.initializeCountries();
+
+        countriesFromDb.forEach(field -> {
+            countryComboBox.getItems().add(field.getFieldValue());
+        });
+    }
+
+    @FXML
+    private void initializeCities() {
+        cityComboBox.getItems().clear(); //Deletes previous country's cities
+
+        List<CustomField> citiesFromDb = userRegistrationService.initializeCitiesAccordingCountry(
+                countryComboBox.getSelectionModel().getSelectedItem()
+        );
+
+        citiesFromDb.forEach(field -> {
+            cityComboBox.getItems().add(field.getFieldValue());
+        });
     }
 
     private void handleField(CustomField inputField, State state, String message) {
@@ -151,7 +163,7 @@ public class RegisterMrtController extends RegisterMrtControllerResources implem
         return handlingResult;
     }
 
-    private boolean handleTakenData(Map<String, CustomField> fieldsByName) {
+    private boolean handleBusyData(Map<String, CustomField> fieldsByName) {
         boolean handlingResult = true;
         handlingResult = userRegistrationService.validateData(fieldsByName);
 

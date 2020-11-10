@@ -11,12 +11,12 @@ public class ProductRegistrationService {
     private final DepreciationDegreeDao depreciationDegreeDao;
 
     public ProductRegistrationService() {
-        this.depreciationDegreeDao = new DepreciationDegreeDao(DepreciationDegree.class);
+        this.depreciationDegreeDao = new DepreciationDegreeDao();
     }
 
     public List<CustomField> initializeDepreciationDegree() {
         List<CustomField> controllerDegrees = new ArrayList<>();
-        List<DepreciationDegree> dbDegrees = depreciationDegreeDao.getAllDegrees();
+        List<DepreciationDegree> dbDegrees = depreciationDegreeDao.getAll();
 
         dbDegrees.forEach(degree -> {
             controllerDegrees.add(new CustomField(degree.getCategory() + " (" + degree.getProductGroup() + ")"));

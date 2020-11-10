@@ -1,17 +1,13 @@
 package ims.daos;
 
 import ims.entities.DepreciationDegree;
-import ims.supporting.EntityManagerAssistant;
 
 import java.util.List;
 
-public class DepreciationDegreeDao extends EntityManagerAssistant<DepreciationDegree> {
+public class DepreciationDegreeDao extends AbstractDao<DepreciationDegree> {
 
-    public DepreciationDegreeDao(Class<DepreciationDegree> classType) {
-        super(classType);
+    public DepreciationDegreeDao() {
+        super(DepreciationDegree.class);
     }
 
-    public List<DepreciationDegree> getAllDegrees() {
-        return getAll();
-    }
 }

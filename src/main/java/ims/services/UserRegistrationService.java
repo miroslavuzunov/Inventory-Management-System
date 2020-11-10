@@ -22,17 +22,17 @@ public class UserRegistrationService {
     private final PersonInfoDao personInfoDao;
 
     public UserRegistrationService() {
-        this.userDao = new UserDao(User.class);
-        this.countryDao = new CountryDao(Country.class);
-        this.cityDao = new CityDao(City.class);
-        this.addressDao = new AddressDao(City.class);
-        this.phoneNumberDao = new PhoneNumberDao(PhoneNumber.class);
-        this.personInfoDao = new PersonInfoDao(PersonInfo.class);
+        this.userDao = new UserDao();
+        this.countryDao = new CountryDao();
+        this.cityDao = new CityDao();
+        this.addressDao = new AddressDao();
+        this.phoneNumberDao = new PhoneNumberDao();
+        this.personInfoDao = new PersonInfoDao();
     }
 
     public List<CustomField> initializeCountries() {
         List<CustomField> controllerCountries = new ArrayList<>();
-        List<Country> dbCountries = countryDao.getAllCountries();
+        List<Country> dbCountries = countryDao.getAll();
 
         dbCountries.forEach(country -> {
             controllerCountries.add(new CustomField(country.getName()));
@@ -43,7 +43,7 @@ public class UserRegistrationService {
 
     public List<CustomField> initializeCitiesAccordingCountry(String selectedCountryName) {
         List<CustomField> controllerCities = new ArrayList<>();
-        List<City> dbCities = cityDao.getAllCities();
+        List<City> dbCities = cityDao.getAll();
 
         dbCities.forEach(city -> {
             if (city.getCountry().getName().equals(selectedCountryName))
@@ -84,18 +84,18 @@ public class UserRegistrationService {
         Map<String, User> users = new HashMap<>();
 
         User userWithSameNick = new User();
-        if (userDao.getUserByField("nickname", username) != null)
-            userWithSameNick.setNickname(userDao.getUserByField("nickname", username).getNickname());
+        if (userDao.getUserByUsername(username) != null)
+            userWithSameNick.setNickname(userDao.getUserByUsername(username).getNickname());
 
         User userWithSameEmail = new User();
-        if (userDao.getUserByField("email", email) != null)
-            userWithSameEmail.setEmail(userDao.getUserByField("email", email).getEmail());
+        if (userDao.getUserByEmail(email) != null)
+            userWithSameEmail.setEmail(userDao.getUserByEmail(email).getEmail());
 
         User userWithSameEgn = new User();
         PersonInfo personInfo = new PersonInfo();
         userWithSameEgn.setPersonInfo(personInfo);
-        if (personInfoDao.getPersonInfoByEgn(egn) != null)
-            userWithSameEgn.setPersonInfo(personInfoDao.getPersonInfoByEgn(egn));
+        if (personInfoDao.getRecordByEGN(egn) != null)
+            userWithSameEgn.setPersonInfo(personInfoDao.getRecordByEGN(egn));
 
         users.put(USERNAME_FIELD_NAME, userWithSameNick);
         users.put(EMAIL_FIELD_NAME, userWithSameEmail);
@@ -105,16 +105,12 @@ public class UserRegistrationService {
     }
 
     public Integer getCityId(City city) {
-        City tempCity = cityDao.getCity(city);
+        City tempCity = cityDao.getRecordByNameAndRegion(city.getName(), city.getRegion());
 
         if (tempCity == null)
             return null;
 
         return tempCity.getId();
-    }
-
-    public void setUserAddressCity(Address address, Integer cityId) {
-        addressDao.setAddressReferenceToCity(address, cityId);
     }
 
     public void createUser(Map<String, CustomField> fieldsByName) {
@@ -131,7 +127,7 @@ public class UserRegistrationService {
 
         address.setStreet(fieldsByName.get(STREET_FIELD_NAME).getFieldValue());
         address.setDetails(fieldsByName.get(ADDRESS_DETAILS_FIELD_NAME).getFieldValue());
-        setUserAddressCity(address, getCityId(city));
+        address.setCity(addressDao.getCityReference(getCityId(city)));
 
         personInfo.setFirstName(fieldsByName.get(FIRST_NAME_FIELD_NAME).getFieldValue());
         personInfo.setLastName(fieldsByName.get(LAST_NAME_FIELD_NAME).getFieldValue());
@@ -154,6 +150,6 @@ public class UserRegistrationService {
 
         phoneNumber.setNumber(fieldsByName.get(PHONE_NUMBER_FIELD_NAME).getFieldValue());
 
-        phoneNumberDao.addUserViaPhoneNumber(phoneNumber);
+        phoneNumberDao.updateRecord(phoneNumber); //Indirectly creates user (using update because of cascaded references)
     }
 }

@@ -1,15 +1,39 @@
 package ims.daos;
 
-import ims.supporting.EntityManagerAssistant;
 import ims.entities.User;
 
-public class UserDao extends EntityManagerAssistant<User> {
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import java.util.List;
 
-    public UserDao(Class<User> classType) {
-        super(classType);
+public class UserDao extends AbstractDao<User> {
+
+    public UserDao() {
+        super(User.class);
     }
 
-    public User getUserByField(String column, String value) {
-        return getRecordByAttribute(column, value);
+    public User getUserByUsername(String username) {
+       return getUserByField("nickname", username, User.class);
+    }
+
+    public User getUserByEmail(String email) {
+       return getUserByField("email", email, User.class);
+    }
+
+    private <T> T getUserByField(String fieldName, String value, Class<T> classType) {
+        initEntityManager();
+
+        CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
+        CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(classType);
+        Root<T> recordRoot = criteriaQuery.from(classType);
+        criteriaQuery.where(criteriaBuilder.equal(recordRoot.get(fieldName), value));
+        List<T> records = manager.createQuery(criteriaQuery).getResultList();
+
+        closeEntityManager();
+
+        if (!records.isEmpty())
+            return records.get(0);
+        return null;
     }
 }

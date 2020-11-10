@@ -7,11 +7,11 @@ public class UserService {
     private final UserDao userDao;
 
     public UserService(){
-        userDao = new UserDao(User.class);
+        userDao = new UserDao();
     }
 
     public User getUserByUsername(String username){
-        return userDao.getUserByField("nickname", username);
+        return userDao.getUserByUsername(username);
     }
 
 

@@ -1,17 +1,11 @@
 package ims.daos;
 
-import ims.supporting.EntityManagerAssistant;
 import ims.entities.PhoneNumber;
 
-import javax.persistence.EntityManager;
+public class PhoneNumberDao extends AbstractDao<PhoneNumber> {
 
-public class PhoneNumberDao extends EntityManagerAssistant<PhoneNumber> {
-
-    public PhoneNumberDao(Class<PhoneNumber> classType) {
-        super(classType);
+    public PhoneNumberDao() {
+        super(PhoneNumber.class);
     }
 
-    public void addUserViaPhoneNumber(PhoneNumber phoneNumber) {
-        updateRecord(phoneNumber);
-    }
 }

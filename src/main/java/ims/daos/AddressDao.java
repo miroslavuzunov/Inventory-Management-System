@@ -1,17 +1,22 @@
 package ims.daos;
 
-import ims.supporting.EntityManagerAssistant;
 import ims.entities.Address;
 import ims.entities.City;
 
-public class AddressDao extends EntityManagerAssistant<City> {
+public class AddressDao extends AbstractDao<Address> {
 
-    public AddressDao(Class<City> classType) {
-        super(classType);
+    public AddressDao() {
+        super(Address.class);
     }
 
-    public void setAddressReferenceToCity(Address address, Integer cityId) {
-        address.setCity(getRecordReference(cityId));
+    public City getCityReference(Integer id) {
+        initEntityManager();
+
+        City reference = manager.getReference(City.class, id);
+
+        closeEntityManager();
+
+        return reference;
     }
 
 }

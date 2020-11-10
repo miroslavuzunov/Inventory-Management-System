@@ -184,7 +184,7 @@
                   <VBox fx:id="depreciationDegreeVBox" layoutX="343.0" layoutY="-6.0" prefHeight="161.0" prefWidth="327.0" style="-fx-background-color: #ccc;" />
                   <VBox fx:id="yearsOrMonthsVBox" layoutX="327.0" layoutY="-5.0" prefHeight="161.0" prefWidth="343.0" style="-fx-background-color: #ccc;">
                      <children>
-                        <Label prefHeight="17.0" prefWidth="234.0" text="Years or months:" textFill="#6f6f6f">
+                        <Label prefHeight="17.0" prefWidth="234.0" text="Scrap period (years or months):" textFill="#6f6f6f">
                            <padding>
                               <Insets left="5.0" />
                            </padding>

@@ -1,9 +1,7 @@
 package ims.daos;
 
-import ims.supporting.EntityManagerAssistant;
 import ims.entities.City;
 
-import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -13,21 +11,30 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CityDao extends EntityManagerAssistant<City> {
+public class CityDao extends AbstractDao<City> {
 
-    public CityDao(Class<City> classType) {
-        super(classType);
+    public CityDao() {
+        super(City.class);
     }
 
-    public List<City> getAllCities() {
-        return getAll();
-    }
+    public City getRecordByNameAndRegion(String name, String region) {
+        initEntityManager();
 
-    public City getCity(City city) {
-        Map<String, String> valuesByAttributes = new HashMap<>();
-        valuesByAttributes.put("name", city.getName());
-        valuesByAttributes.put("region", city.getRegion());
+        CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
+        CriteriaQuery<City> criteriaQuery = criteriaBuilder.createQuery(City.class);
+        Root<City> recordRoot = criteriaQuery.from(City.class);
+        List<Predicate> predicates = new ArrayList<>();
 
-        return getRecordByMultipleAttributes(valuesByAttributes);
+        predicates.add(criteriaBuilder.like(recordRoot.get("name"), name));
+        predicates.add(criteriaBuilder.like(recordRoot.get("region"), region));
+
+        criteriaQuery.select(recordRoot).where(predicates.toArray(new Predicate[]{}));
+        List<City> records = manager.createQuery(criteriaQuery).getResultList();
+
+        closeEntityManager();
+
+        if (!records.isEmpty())
+            return records.get(0);
+        return null;
     }
 }

@@ -1,23 +1,17 @@
 package ims.controllers.primary;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 import ims.App;
 import ims.entities.*;
-import ims.enums.ProductType;
 import ims.services.UserService;
-import ims.supporting.EntityManagerAssistant;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-
-import javax.persistence.EntityManager;
 
 public class LoginController implements Initializable {
 

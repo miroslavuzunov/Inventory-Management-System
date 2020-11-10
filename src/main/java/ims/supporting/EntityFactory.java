@@ -17,4 +17,5 @@ public class EntityFactory {
     public static void closeFactory(){
         factory.close();
     }
+
 }

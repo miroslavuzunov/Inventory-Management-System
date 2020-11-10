@@ -7,17 +7,27 @@ public class CustomField {
     private String fieldValue;
     private String message;
     private String style;
+    private boolean nullable;
 
     public CustomField() {
         this.fieldValue = "";
         this.state = State.VALID;
         this.message = "";
+        this.nullable = false;
     }
 
     public CustomField(String fieldValue){
         this.fieldValue = fieldValue;
         this.state = State.VALID;
         this.message = "";
+        this.nullable = false;
+    }
+
+    public CustomField(String fieldValue, boolean nullable){
+        this.fieldValue = fieldValue;
+        this.state = State.VALID;
+        this.message = "";
+        this.nullable = nullable;
     }
 
     public State getState() {
@@ -50,5 +60,13 @@ public class CustomField {
 
     public void setStyle(String style) {
         this.style = style;
+    }
+
+    public boolean isNullable() {
+        return nullable;
+    }
+
+    public void setNullable(boolean nullable) {
+        this.nullable = nullable;
     }
 }

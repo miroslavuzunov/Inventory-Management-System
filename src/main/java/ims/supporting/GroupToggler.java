@@ -5,7 +5,7 @@ import javafx.scene.control.ToggleGroup;
 
 import java.util.List;
 
-public class ToggleGrouper {
+public class GroupToggler {
     public static ToggleGroup makeToggleGroup(List<RadioButton> buttons){
         ToggleGroup toggleGroup = new ToggleGroup();
 
@@ -13,7 +13,7 @@ public class ToggleGrouper {
             button.setToggleGroup(toggleGroup);
         });
 
-        toggleGroup.selectToggle(buttons.get(0)); //default select
+        toggleGroup.selectToggle(buttons.get(1)); //default select
 
         return toggleGroup;
     }

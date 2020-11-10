@@ -113,42 +113,42 @@ public class UserRegistrationService {
         return tempCity.getId();
     }
 
-    public void createUser(Map<String, CustomField> fieldsByName) {
+    public void createUser(Map<String, CustomField> customFieldsByName) {
         City city = new City();
         Address address = new Address();
         PersonInfo personInfo = new PersonInfo();
         User user = new User();
         PhoneNumber phoneNumber = new PhoneNumber();
 
-        String cityAndRegionTogether = fieldsByName.get(CITY_FIELD_NAME).getFieldValue();
+        String cityAndRegionTogether = customFieldsByName.get(CITY_FIELD_NAME).getFieldValue();
         String[] cityAndRegion = Pattern.compile("[\\(\\)]").split(cityAndRegionTogether); //separating 'City (Region)' string
         city.setName(cityAndRegion[0]);
         city.setRegion(cityAndRegion[1]);
 
-        address.setStreet(fieldsByName.get(STREET_FIELD_NAME).getFieldValue());
-        address.setDetails(fieldsByName.get(ADDRESS_DETAILS_FIELD_NAME).getFieldValue());
+        address.setStreet(customFieldsByName.get(STREET_FIELD_NAME).getFieldValue());
+        address.setDetails(customFieldsByName.get(ADDRESS_DETAILS_FIELD_NAME).getFieldValue());
         address.setCity(addressDao.getCityReference(getCityId(city)));
 
-        personInfo.setFirstName(fieldsByName.get(FIRST_NAME_FIELD_NAME).getFieldValue());
-        personInfo.setLastName(fieldsByName.get(LAST_NAME_FIELD_NAME).getFieldValue());
-        personInfo.setEgn(fieldsByName.get(EGN_FIELD_NAME).getFieldValue());
+        personInfo.setFirstName(customFieldsByName.get(FIRST_NAME_FIELD_NAME).getFieldValue());
+        personInfo.setLastName(customFieldsByName.get(LAST_NAME_FIELD_NAME).getFieldValue());
+        personInfo.setEgn(customFieldsByName.get(EGN_FIELD_NAME).getFieldValue());
         personInfo.setAddress(address);
 
         user.setPersonInfo(personInfo);
-        user.setNickname(fieldsByName.get(USERNAME_FIELD_NAME).getFieldValue());
-        user.setPassword(fieldsByName.get(PASSWORD_FIELD_NAME).getFieldValue());
-        user.setEmail(fieldsByName.get(EMAIL_FIELD_NAME).getFieldValue());
+        user.setNickname(customFieldsByName.get(USERNAME_FIELD_NAME).getFieldValue());
+        user.setPassword(customFieldsByName.get(PASSWORD_FIELD_NAME).getFieldValue());
+        user.setEmail(customFieldsByName.get(EMAIL_FIELD_NAME).getFieldValue());
         user.setRole(Role.MRT);
         user.setCreatedOn(LocalDate.now());
         user.setPhoneNumbers(Set.of());
 
         phoneNumber.setOwner(user);
-        if (fieldsByName.get(PHONE_TYPE_FIELD_NAME).getFieldValue().equals("PERSONAL"))
+        if (customFieldsByName.get(PHONE_TYPE_FIELD_NAME).getFieldValue().equals("PERSONAL"))
             phoneNumber.setPhoneType(PhoneType.PERSONAL);
         else
             phoneNumber.setPhoneType(PhoneType.OFFICE);
 
-        phoneNumber.setNumber(fieldsByName.get(PHONE_NUMBER_FIELD_NAME).getFieldValue());
+        phoneNumber.setNumber(customFieldsByName.get(PHONE_NUMBER_FIELD_NAME).getFieldValue());
 
         phoneNumberDao.updateRecord(phoneNumber); //Indirectly creates user (using update because of cascaded references)
     }

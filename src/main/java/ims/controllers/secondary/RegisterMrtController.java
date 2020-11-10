@@ -7,8 +7,9 @@ import ims.dialogs.ConfirmationDialog;
 import ims.dialogs.SuccessDialog;
 import ims.enums.State;
 import ims.services.UserRegistrationService;
+import ims.supporting.Cache;
 import ims.supporting.CustomField;
-import ims.supporting.ToggleGrouper;
+import ims.supporting.GroupToggler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -26,10 +27,9 @@ public class RegisterMrtController extends RegisterMrtControllerResources implem
     public void initialize(URL url, ResourceBundle resourceBundle) {
         userRegistrationService = new UserRegistrationService();
 
+        toggleGroup = GroupToggler.makeToggleGroup(List.of(personalPhoneRadioBtn, officePhoneRadioBtn));
         initializeScenes();
         initializeCountries();
-        //initializeCities();
-        toggleGroup = ToggleGrouper.makeToggleGroup(List.of(personalPhoneRadioBtn, officePhoneRadioBtn));
     }
 
 
@@ -50,54 +50,54 @@ public class RegisterMrtController extends RegisterMrtControllerResources implem
         boolean noEmptyFields = true;
         boolean passwordsMatch = true;
         boolean noTakenData = true;
-        Map<String, CustomField> fieldsByName = initializeCustomFields();
 
-        noEmptyFields = handleEmptyFields(fieldsByName);
-        passwordsMatch = handlePasswordsMatching(fieldsByName);
+        noEmptyFields = handleEmptyFields();
+        passwordsMatch = handlePasswordsMatching(customFieldsByName);
         //handleForbiddenChars(inputFields);
         //handleEgnValidation(inputFields);
 
         if (noEmptyFields && passwordsMatch)
-            noTakenData = handleBusyData(fieldsByName);
+            noTakenData = handleBusyData(customFieldsByName);
 
         if (noEmptyFields && passwordsMatch && noTakenData) {
             ButtonType result = ConfirmationDialog.askForConfirmation("Are you sure you want to sign up new MRT?");
 
             if (result == ButtonType.YES) {
-                userRegistrationService.createUser(fieldsByName);
+                userRegistrationService.createUser(customFieldsByName);
                 SuccessDialog.success("Done! A new MRT has been signed up!");
                 App.setScene("/view/RegisterMrt"); //reloading same scene to clean the fields
             }
-
         }
     }
 
-    private Map<String, CustomField> initializeCustomFields() {
-        Map<String, CustomField> fieldsByName = new HashMap<>();
-
-        fieldsByName.put(USERNAME_FIELD_NAME, new CustomField(usernameField.getText()));
-        fieldsByName.put(PASSWORD_FIELD_NAME, new CustomField(passwordField.getText()));
-        fieldsByName.put(REPEAT_PASSWORD_FIELD_NAME, new CustomField(repeatPasswordField.getText()));
-        fieldsByName.put(EMAIL_FIELD_NAME, new CustomField(emailField.getText()));
-        fieldsByName.put(FIRST_NAME_FIELD_NAME, new CustomField(firstNameField.getText()));
-        fieldsByName.put(LAST_NAME_FIELD_NAME, new CustomField(lastNameField.getText()));
-        fieldsByName.put(EGN_FIELD_NAME, new CustomField(egnField.getText()));
-        fieldsByName.put(COUNTRY_FIELD_NAME, new CustomField(countryComboBox.getSelectionModel().getSelectedItem()));
-        fieldsByName.put(CITY_FIELD_NAME, new CustomField(cityComboBox.getSelectionModel().getSelectedItem()));
-        fieldsByName.put(STREET_FIELD_NAME, new CustomField(streetField.getText()));
-        fieldsByName.put(ADDRESS_DETAILS_FIELD_NAME, new CustomField(addressDetailsField.getText()));
-        fieldsByName.put(PHONE_NUMBER_FIELD_NAME, new CustomField(phoneNumberField.getText()));
+    @Override
+    protected void initializeCustomFields() {
+        customFieldsByName.put(USERNAME_FIELD_NAME, new CustomField(usernameField.getText()));
+        customFieldsByName.put(PASSWORD_FIELD_NAME, new CustomField(passwordField.getText()));
+        customFieldsByName.put(REPEAT_PASSWORD_FIELD_NAME, new CustomField(repeatPasswordField.getText()));
+        customFieldsByName.put(EMAIL_FIELD_NAME, new CustomField(emailField.getText()));
+        customFieldsByName.put(FIRST_NAME_FIELD_NAME, new CustomField(firstNameField.getText()));
+        customFieldsByName.put(LAST_NAME_FIELD_NAME, new CustomField(lastNameField.getText()));
+        customFieldsByName.put(EGN_FIELD_NAME, new CustomField(egnField.getText()));
+        customFieldsByName.put(COUNTRY_FIELD_NAME, new CustomField(countryComboBox.getSelectionModel().getSelectedItem()));
+        customFieldsByName.put(CITY_FIELD_NAME, new CustomField(cityComboBox.getSelectionModel().getSelectedItem()));
+        customFieldsByName.put(STREET_FIELD_NAME, new CustomField(streetField.getText()));
+        customFieldsByName.put(ADDRESS_DETAILS_FIELD_NAME, new CustomField(addressDetailsField.getText()));
+        customFieldsByName.put(PHONE_NUMBER_FIELD_NAME, new CustomField(phoneNumberField.getText()));
 
         if (toggleGroup.getSelectedToggle().equals(personalPhoneRadioBtn))
-            fieldsByName.put(PHONE_TYPE_FIELD_NAME, new CustomField("PERSONAL"));
+            customFieldsByName.put(PHONE_TYPE_FIELD_NAME, new CustomField("PERSONAL"));
         else
-            fieldsByName.put(PHONE_TYPE_FIELD_NAME, new CustomField("OFFICE"));
-
-        return fieldsByName;
+            customFieldsByName.put(PHONE_TYPE_FIELD_NAME, new CustomField("OFFICE"));
     }
 
     private void initializeCountries() {
-        List<CustomField> countriesFromDb = userRegistrationService.initializeCountries();
+        List<CustomField> countriesFromDb = Cache.getCachedFields("Countries");
+
+        if (countriesFromDb == null) {
+            countriesFromDb = userRegistrationService.initializeCountries();
+            Cache.cacheList("Countries", countriesFromDb);
+        }
 
         countriesFromDb.forEach(field -> {
             countryComboBox.getItems().add(field.getFieldValue());
@@ -108,39 +108,17 @@ public class RegisterMrtController extends RegisterMrtControllerResources implem
     private void initializeCities() {
         cityComboBox.getItems().clear(); //Prevents data duplicating
 
-        List<CustomField> citiesFromDb = userRegistrationService.initializeCitiesAccordingCountry(
-                countryComboBox.getSelectionModel().getSelectedItem()
-        );
+        String chosenCountry = countryComboBox.getSelectionModel().getSelectedItem();
+        List<CustomField> citiesFromDb = Cache.getCachedFields(chosenCountry);
+
+        if(citiesFromDb == null){
+            citiesFromDb = userRegistrationService.initializeCitiesAccordingCountry(chosenCountry);
+            Cache.cacheList(chosenCountry, citiesFromDb);
+        }
 
         citiesFromDb.forEach(field -> {
             cityComboBox.getItems().add(field.getFieldValue());
         });
-    }
-
-    private void handleField(CustomField inputField, State state, String message) {
-        if (state.equals(State.VALID)) {
-            inputField.setStyle("-fx-border-width: 1px;" + "-fx-border-color: lightgrey;" + "-fx-border-radius: 3px");
-        } else {
-            inputField.setStyle("-fx-border-width: 1px;" + "-fx-border-color: red;" + "-fx-border-radius: 3px");
-        }
-        inputField.setState(state);
-        inputField.setMessage(message);
-    }
-
-    private boolean handleEmptyFields(Map<String, CustomField> fieldsByName) {
-        boolean handlingResult = true;
-
-        for (CustomField field : fieldsByName.values()) {
-            if (field.getFieldValue() == null || field.getFieldValue().isEmpty()) {
-                handleField(field, State.INVALID, EMPTY_FIELD_MSG);
-                handlingResult = false;
-            } else {
-                handleField(field, State.VALID, CLEAN_MSG);
-            }
-        }
-        displayMessages(fieldsByName);
-
-        return handlingResult;
     }
 
     private boolean handlePasswordsMatching(Map<String, CustomField> fieldsByName) {
@@ -175,7 +153,8 @@ public class RegisterMrtController extends RegisterMrtControllerResources implem
         return handlingResult;
     }
 
-    private void displayMessages(Map<String, CustomField> fieldsByName) {
+    @Override
+    protected void displayMessages(Map<String, CustomField> fieldsByName) {
         usernameMsg.setText(fieldsByName.get(USERNAME_FIELD_NAME).getMessage());
         usernameField.setStyle(fieldsByName.get(USERNAME_FIELD_NAME).getStyle());
         passwordMsg.setText(fieldsByName.get(PASSWORD_FIELD_NAME).getMessage());

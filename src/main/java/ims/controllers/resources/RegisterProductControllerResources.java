@@ -17,6 +17,7 @@ public abstract class RegisterProductControllerResources extends AbstractControl
     public static final String INVALID_INFO_MSG = "Invalid information entered!";
     public static final String CLEAN_MSG = "";
     public static final String BRAND_FIELD_NAME = "Brand";
+    public static final String BRAND_MODEL_EXISTS = "Such model of this brand is already in the system!";
     public static final String MODEL_FIELD_NAME = "Field";
     public static final String DESCRIPTION_FIELD_NAME = "Description";
     public static final String UNIT_PRICE_FIELD_NAME = "Unit price";
@@ -71,24 +72,6 @@ public abstract class RegisterProductControllerResources extends AbstractControl
 
     @FXML
     protected VBox depreciationDegreeVBox;
-
-    @FXML
-    protected VBox yearsOrMonthsVBox;
-
-    @FXML
-    protected TextField yearsOrMonthsField;
-
-    @FXML
-    protected Label yearsOrMonthsMsg;
-
-    @FXML
-    protected VBox scrappingCriteriaVBox;
-
-    @FXML
-    protected ComboBox<String> scrappingCriteriaComboBox;
-
-    @FXML
-    protected Label scrappingCriteriaMsg;
 
     @FXML
     protected ComboBox<String> depreciationDegreeComboBox;

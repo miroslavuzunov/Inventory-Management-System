@@ -18,8 +18,6 @@ public class CityDao extends AbstractDao<City> {
     }
 
     public City getRecordByNameAndRegion(String name, String region) {
-        initEntityManager();
-
         CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
         CriteriaQuery<City> criteriaQuery = criteriaBuilder.createQuery(City.class);
         Root<City> recordRoot = criteriaQuery.from(City.class);
@@ -30,8 +28,6 @@ public class CityDao extends AbstractDao<City> {
 
         criteriaQuery.select(recordRoot).where(predicates.toArray(new Predicate[]{}));
         List<City> records = manager.createQuery(criteriaQuery).getResultList();
-
-        closeEntityManager();
 
         if (!records.isEmpty())
             return records.get(0);

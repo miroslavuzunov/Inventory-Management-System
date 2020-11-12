@@ -2,6 +2,5 @@ package ims.enums;
 
 public enum Criteria {
     YEARS,
-    MONTHS,
-    CONDITION
+    MONTHS
 }

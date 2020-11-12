@@ -14,15 +14,11 @@ public class PersonInfoDao extends AbstractDao<PersonInfo> {
     }
 
     public PersonInfo getRecordByEGN(String egn) {
-        initEntityManager();
-
         CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
         CriteriaQuery<PersonInfo> criteriaQuery = criteriaBuilder.createQuery(PersonInfo.class);
         Root<PersonInfo> recordRoot = criteriaQuery.from(PersonInfo.class);
         criteriaQuery.where(criteriaBuilder.equal(recordRoot.get("egn"), egn));
         List<PersonInfo> records = manager.createQuery(criteriaQuery).getResultList();
-
-        closeEntityManager();
 
         if (!records.isEmpty())
             return records.get(0);

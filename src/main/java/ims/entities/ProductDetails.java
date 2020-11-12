@@ -9,26 +9,25 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "product_details")
 public class ProductDetails extends BaseEntity{
-    private String brandAndModel;
+    private String brandModel;
     private BigDecimal initialPrice;
     private BigDecimal currentPrice;
     private PriceCurrency priceCurrency;
     private Integer quantity;
     private String description;
     private ProductType productType;
-    private ScrappingCriteria scrappingCriteria;
     private DepreciationDegree depreciationDegree;
 
     public ProductDetails() {
     }
 
     @Column(name = "brand_model")
-    public String getBrandAndModel() {
-        return brandAndModel;
+    public String getBrandModel() {
+        return brandModel;
     }
 
-    public void setBrandAndModel(String brandAndModel) {
-        this.brandAndModel = brandAndModel;
+    public void setBrandModel(String brandAndModel) {
+        this.brandModel = brandAndModel;
     }
 
     @Column(name = "initial_price")
@@ -85,16 +84,6 @@ public class ProductDetails extends BaseEntity{
 
     public void setProductType(ProductType productType) {
         this.productType = productType;
-    }
-
-    @ManyToOne(targetEntity = ScrappingCriteria.class, cascade = CascadeType.ALL)
-    @JoinColumn(name = "scrapping_criteria_id", referencedColumnName = "id")
-    public ScrappingCriteria getScrappingCriteria() {
-        return scrappingCriteria;
-    }
-
-    public void setScrappingCriteria(ScrappingCriteria scrappingCriteria) {
-        this.scrappingCriteria = scrappingCriteria;
     }
 
     @ManyToOne(targetEntity = DepreciationDegree.class, cascade = CascadeType.ALL)

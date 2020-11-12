@@ -3,6 +3,7 @@ package ims.controllers.secondary;
 import ims.App;
 import ims.controllers.primary.SceneController;
 import ims.controllers.resources.RegisterMrtControllerResources;
+import ims.daos.AbstractDao;
 import ims.dialogs.ConfirmationDialog;
 import ims.dialogs.SuccessDialog;
 import ims.enums.State;
@@ -40,8 +41,10 @@ public class RegisterMrtController extends RegisterMrtControllerResources implem
         if (event.getSource() == backBtn) {
             ButtonType result = ConfirmationDialog.askForConfirmation("Input data will be lost. Are you sure you want to get back?");
 
-            if (result == ButtonType.YES)
+            if (result == ButtonType.YES) {
                 SceneController.switchSceneByButton((Button) event.getSource());
+                AbstractDao.closeEntityManager();
+            }
         } else
             SceneController.switchSceneByButton((Button) event.getSource());
     }
@@ -49,7 +52,7 @@ public class RegisterMrtController extends RegisterMrtControllerResources implem
     public void signUp() throws IOException {
         boolean noEmptyFields = true;
         boolean passwordsMatch = true;
-        boolean noTakenData = true;
+        boolean noBusyData = true;
 
         noEmptyFields = handleEmptyFields();
         passwordsMatch = handlePasswordsMatching(customFieldsByName);
@@ -57,9 +60,9 @@ public class RegisterMrtController extends RegisterMrtControllerResources implem
         //handleEgnValidation(inputFields);
 
         if (noEmptyFields && passwordsMatch)
-            noTakenData = handleBusyData(customFieldsByName);
+            noBusyData = handleBusyData(customFieldsByName);
 
-        if (noEmptyFields && passwordsMatch && noTakenData) {
+        if (noEmptyFields && passwordsMatch && noBusyData) {
             ButtonType result = ConfirmationDialog.askForConfirmation("Are you sure you want to sign up new MRT?");
 
             if (result == ButtonType.YES) {

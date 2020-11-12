@@ -10,11 +10,8 @@ public class AddressDao extends AbstractDao<Address> {
     }
 
     public City getCityReference(Integer id) {
-        initEntityManager();
 
         City reference = manager.getReference(City.class, id);
-
-        closeEntityManager();
 
         return reference;
     }

@@ -181,61 +181,14 @@
             </HBox>
             <AnchorPane fx:id="lttaPanel" layoutY="333.0" prefHeight="135.0" prefWidth="670.0">
                <children>
-                  <VBox fx:id="depreciationDegreeVBox" layoutX="343.0" layoutY="-6.0" prefHeight="161.0" prefWidth="327.0" style="-fx-background-color: #ccc;" />
-                  <VBox fx:id="yearsOrMonthsVBox" layoutX="327.0" layoutY="-5.0" prefHeight="161.0" prefWidth="343.0" style="-fx-background-color: #ccc;">
+                  <VBox fx:id="depreciationDegreeVBox" layoutY="-6.0" prefHeight="161.0" prefWidth="327.0">
                      <children>
-                        <Label prefHeight="17.0" prefWidth="234.0" text="Scrap period (years or months):" textFill="#6f6f6f">
-                           <padding>
-                              <Insets left="5.0" />
-                           </padding>
-                           <VBox.margin>
-                              <Insets left="50.0" right="50.0" top="25.0" />
-                           </VBox.margin>
-                        </Label>
-                        <TextField fx:id="yearsOrMonthsField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="34.0" prefWidth="100.0" promptText="6">
-                           <padding>
-                              <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
-                           </padding>
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                           <VBox.margin>
-                              <Insets left="50.0" right="50.0" />
-                           </VBox.margin>
-                        </TextField>
-                        <Label fx:id="yearsOrMonthsMsg" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="234.0" textFill="#ff3535">
-                           <VBox.margin>
-                              <Insets left="50.0" right="50.0" />
-                           </VBox.margin>
-                        </Label>
-                     </children>
-                  </VBox>
-                  <VBox fx:id="scrappingCriteriaVBox" layoutY="-6.0" prefHeight="161.0" prefWidth="327.0">
-                     <children>
-                        <Label prefHeight="17.0" prefWidth="234.0" text="Scrapping criteria:" textFill="#6f6f6f">
-                           <padding>
-                              <Insets left="5.0" />
-                           </padding>
-                           <VBox.margin>
-                              <Insets left="50.0" right="50.0" top="25.0" />
-                           </VBox.margin>
-                        </Label>
-                        <ComboBox fx:id="scrappingCriteriaComboBox" onAction="#handleYearsOrMonthsField" prefHeight="33.0" prefWidth="422.0">
-                           <VBox.margin>
-                              <Insets left="50.0" right="50.0" />
-                           </VBox.margin>
-                        </ComboBox>
-                        <Label fx:id="scrappingCriteriaMsg" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="234.0" textFill="#ff3535">
-                           <VBox.margin>
-                              <Insets left="50.0" right="50.0" />
-                           </VBox.margin>
-                        </Label>
                         <Label prefHeight="17.0" prefWidth="227.0" text="Depreciation degree:" textFill="#6f6f6f">
                            <padding>
                               <Insets left="5.0" />
                            </padding>
                            <VBox.margin>
-                              <Insets left="50.0" right="50.0" />
+                              <Insets left="50.0" right="50.0" top="25.0" />
                            </VBox.margin>
                         </Label>
                         <ComboBox fx:id="depreciationDegreeComboBox" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="34.0" prefWidth="254.0">

@@ -10,21 +10,19 @@ import java.util.Set;
 
 public abstract class AbstractDao<T> {
     private Class<T> classType;
-    protected EntityManager manager;
+    protected static EntityManager manager;
+
+    static{
+        manager = EntityFactory.getFactory().createEntityManager();
+    }
 
     protected AbstractDao(Class<T> classType) {
-        initEntityManager();
-
         if (isEntity(classType))
             this.classType = classType;
     }
 
-    protected void initEntityManager() {
-        this.manager = EntityFactory.getFactory().createEntityManager();
-    }
-
-    protected void closeEntityManager() {
-        this.manager.close();
+    public static void closeEntityManager() {
+        manager.close();
     }
 
     protected void beginTransaction() {
@@ -40,33 +38,27 @@ public abstract class AbstractDao<T> {
     }
 
     public void saveRecord(T record) {
-        initEntityManager();
         beginTransaction();
 
         manager.persist(record);
 
         commit();
-        closeEntityManager();
     }
 
     public void updateRecord(T record) {
-        initEntityManager();
         beginTransaction();
 
         manager.merge(record);
 
         commit();
-        closeEntityManager();
     }
 
     public void deleteRecord(T record) {
-        initEntityManager();
         beginTransaction();
 
         manager.remove(record);
 
         commit();
-        closeEntityManager();
     }
 
     public T getOne(Long id) {
@@ -74,13 +66,10 @@ public abstract class AbstractDao<T> {
     }
 
     public List<T> getAll() {
-        initEntityManager();
 
         CriteriaQuery<T> criteria = manager.getCriteriaBuilder().createQuery(classType);
         criteria.select(criteria.from(classType));
         List<T> records = manager.createQuery(criteria).getResultList();
-
-        closeEntityManager();
 
         return records;
     }

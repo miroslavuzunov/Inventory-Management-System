@@ -5,9 +5,7 @@ import ims.controllers.primary.SceneController;
 import ims.controllers.resources.RegisterProductControllerResources;
 import ims.dialogs.ConfirmationDialog;
 import ims.dialogs.SuccessDialog;
-import ims.enums.Criteria;
 import ims.enums.PriceCurrency;
-import ims.enums.State;
 import ims.services.ProductRegistrationService;
 import ims.supporting.Cache;
 import ims.supporting.CustomField;
@@ -37,7 +35,6 @@ public class RegisterProductController extends RegisterProductControllerResource
         initializeScenes();
         initializeCurrencies();
         manipulateLttaPanel();
-        initializeScrappingCriteria();
     }
 
     @FXML
@@ -61,30 +58,24 @@ public class RegisterProductController extends RegisterProductControllerResource
             disableLttaOptions();
     }
 
-    @FXML
-    private void handleYearsOrMonthsField() {
-        if (!scrappingCriteriaComboBox.getSelectionModel().isEmpty())
-            if (scrappingCriteriaComboBox.getSelectionModel().getSelectedItem().equals(Criteria.CONDITION.toString()))
-                yearsOrMonthsVBox.setDisable(true);
-            else
-                yearsOrMonthsVBox.setDisable(false);
-    }
-
     private void addProduct() throws IOException {
         boolean noEmptyFields = true;
+        boolean noBusyData = true;
 
         noEmptyFields = handleEmptyFields();
 
-        if (noEmptyFields) {
+        if (noEmptyFields)
+            noBusyData = handleBusyData(customFieldsByName);
+
+        if(noEmptyFields && noBusyData){
             ButtonType result = ConfirmationDialog.askForConfirmation("Are you sure you want to sign up new MRT?");
 
             if (result == ButtonType.YES) {
-                productRegistrationService.addProduct(customFieldsByName);
-                SuccessDialog.success("Done! A new MRT has been signed up!");
+                productRegistrationService.createProduct(customFieldsByName);
+                SuccessDialog.success("Done! New product added to the system!");
                 App.setScene("/view/RegisterProduct"); //reloading same scene to clean the fields
             }
         }
-
     }
 
     @Override
@@ -98,31 +89,28 @@ public class RegisterProductController extends RegisterProductControllerResource
 
         if (toggleGroup.getSelectedToggle().equals(lttaRadioBtn)) {
             customFieldsByName.put(PRODUCT_TYPE_FIELD_NAME, new CustomField("LTTA"));
-            customFieldsByName.put(SCRAPPING_CRITERIA_FIELD_NAME, new CustomField(scrappingCriteriaComboBox.getSelectionModel().getSelectedItem()));
             customFieldsByName.put(DEPRECIATION_DEGREE_FIELD_NAME, new CustomField(depreciationDegreeComboBox.getSelectionModel().getSelectedItem()));
-            if (yearsOrMonthsField.isDisabled())
-                customFieldsByName.put(SCRAP_PERIOD_FIELD_NAME, new CustomField(yearsOrMonthsField.getText(), true));
-            else
-                customFieldsByName.put(SCRAP_PERIOD_FIELD_NAME, new CustomField(yearsOrMonthsField.getText()));
         } else {
             customFieldsByName.put(PRODUCT_TYPE_FIELD_NAME, new CustomField("TA"));
-            customFieldsByName.put(SCRAPPING_CRITERIA_FIELD_NAME, new CustomField(scrappingCriteriaComboBox.getSelectionModel().getSelectedItem(), true));
             customFieldsByName.put(DEPRECIATION_DEGREE_FIELD_NAME, new CustomField(depreciationDegreeComboBox.getSelectionModel().getSelectedItem(), true));
-            customFieldsByName.put(SCRAP_PERIOD_FIELD_NAME, new CustomField(yearsOrMonthsField.getText(), true));
         }
+    }
+
+    private boolean handleBusyData(Map<String, CustomField> fieldsByName) {
+        boolean handlingResult = true;
+        handlingResult = productRegistrationService.validateData(fieldsByName);
+
+        for (CustomField field : fieldsByName.values())
+            handleField(field, field.getState(), field.getMessage());
+
+        displayMessages(fieldsByName);
+
+        return handlingResult;
     }
 
     private void initializeCurrencies() {
         for (PriceCurrency currency : PriceCurrency.values()) {
             priceUnitComboBox.getItems().add(currency.toString());
-        }
-    }
-
-    private void initializeScrappingCriteria() {
-        scrappingCriteriaComboBox.getItems().clear(); //Prevents data duplicating
-
-        for (Criteria criteria : Criteria.values()) {
-            scrappingCriteriaComboBox.getItems().add(criteria.toString());
         }
     }
 
@@ -164,12 +152,8 @@ public class RegisterProductController extends RegisterProductControllerResource
         quantityField.setStyle(fieldsByName.get(QUANTITY_FIELD_NAME).getStyle());
 
         if (toggleGroup.getSelectedToggle().equals(lttaRadioBtn)) {
-            scrappingCriteriaMsg.setText(fieldsByName.get(SCRAPPING_CRITERIA_FIELD_NAME).getMessage());
-            scrappingCriteriaComboBox.setStyle(fieldsByName.get(SCRAPPING_CRITERIA_FIELD_NAME).getStyle());
             depreciationDegreeMsg.setText(fieldsByName.get(DEPRECIATION_DEGREE_FIELD_NAME).getMessage());
             depreciationDegreeComboBox.setStyle(fieldsByName.get(DEPRECIATION_DEGREE_FIELD_NAME).getStyle());
-            yearsOrMonthsMsg.setText(fieldsByName.get(SCRAP_PERIOD_FIELD_NAME).getMessage());
-            yearsOrMonthsField.setStyle(fieldsByName.get(SCRAP_PERIOD_FIELD_NAME).getStyle());
         }
     }
 

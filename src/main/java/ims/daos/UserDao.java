@@ -22,15 +22,11 @@ public class UserDao extends AbstractDao<User> {
     }
 
     private <T> T getUserByField(String fieldName, String value, Class<T> classType) {
-        initEntityManager();
-
         CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
         CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(classType);
         Root<T> recordRoot = criteriaQuery.from(classType);
         criteriaQuery.where(criteriaBuilder.equal(recordRoot.get(fieldName), value));
         List<T> records = manager.createQuery(criteriaQuery).getResultList();
-
-        closeEntityManager();
 
         if (!records.isEmpty())
             return records.get(0);

@@ -53,27 +53,27 @@ public class UserRegistrationService {
         return controllerCities;
     }
 
-    public boolean validateData(Map<String, CustomField> fieldsByName) {
+    public boolean validateData(Map<String, CustomField> customFieldsByName) {
         boolean handlingResult = true;
-        String inputUsername = fieldsByName.get(USERNAME_FIELD_NAME).getFieldValue();
-        String inputEmail = fieldsByName.get(EMAIL_FIELD_NAME).getFieldValue();
-        String inputEgn = fieldsByName.get(EGN_FIELD_NAME).getFieldValue();
+        String inputUsername = customFieldsByName.get(USERNAME_FIELD_NAME).getFieldValue();
+        String inputEmail = customFieldsByName.get(EMAIL_FIELD_NAME).getFieldValue();
+        String inputEgn = customFieldsByName.get(EGN_FIELD_NAME).getFieldValue();
 
         Map<String, User> existingUsersByFieldName = requestData(inputUsername, inputEmail, inputEgn);
 
         if (inputUsername.equals(existingUsersByFieldName.get(USERNAME_FIELD_NAME).getNickname())) {
-            fieldsByName.get(USERNAME_FIELD_NAME).setState(State.INVALID);
-            fieldsByName.get(USERNAME_FIELD_NAME).setMessage(BUSY_USERNAME_MSG);
+            customFieldsByName.get(USERNAME_FIELD_NAME).setState(State.INVALID);
+            customFieldsByName.get(USERNAME_FIELD_NAME).setMessage(BUSY_USERNAME_MSG);
             handlingResult = false;
         }
         if (inputEmail.equals(existingUsersByFieldName.get(EMAIL_FIELD_NAME).getEmail())) {
-            fieldsByName.get(EMAIL_FIELD_NAME).setState(State.INVALID);
-            fieldsByName.get(EMAIL_FIELD_NAME).setMessage(BUSY_EMAIL_MSG);
+            customFieldsByName.get(EMAIL_FIELD_NAME).setState(State.INVALID);
+            customFieldsByName.get(EMAIL_FIELD_NAME).setMessage(BUSY_EMAIL_MSG);
             handlingResult = false;
         }
         if (inputEgn.equals(existingUsersByFieldName.get(EGN_FIELD_NAME).getPersonInfo().getEgn())) {
-            fieldsByName.get(EGN_FIELD_NAME).setState(State.INVALID);
-            fieldsByName.get(EGN_FIELD_NAME).setMessage(BUSY_EGN_MSG);
+            customFieldsByName.get(EGN_FIELD_NAME).setState(State.INVALID);
+            customFieldsByName.get(EGN_FIELD_NAME).setMessage(BUSY_EGN_MSG);
             handlingResult = false;
         }
 
@@ -120,20 +120,37 @@ public class UserRegistrationService {
         User user = new User();
         PhoneNumber phoneNumber = new PhoneNumber();
 
+        setUserCity(customFieldsByName, city);
+        setUserAddress(customFieldsByName, address,city);
+        setUserPersonInfo(customFieldsByName, personInfo, address);
+        setUser(customFieldsByName, user, personInfo);
+        setPhoneNumber(customFieldsByName, phoneNumber, user);
+
+        userDao.saveRecord(user);
+        phoneNumberDao.updateRecord(phoneNumber); //Indirectly creates user (using update because of cascaded references)
+    }
+
+    private void setUserCity(Map<String, CustomField> customFieldsByName, City city){
         String cityAndRegionTogether = customFieldsByName.get(CITY_FIELD_NAME).getFieldValue();
         String[] cityAndRegion = Pattern.compile("[\\(\\)]").split(cityAndRegionTogether); //separating 'City (Region)' string
         city.setName(cityAndRegion[0]);
         city.setRegion(cityAndRegion[1]);
+    }
 
+    private void setUserAddress(Map<String, CustomField> customFieldsByName, Address address, City city){
         address.setStreet(customFieldsByName.get(STREET_FIELD_NAME).getFieldValue());
         address.setDetails(customFieldsByName.get(ADDRESS_DETAILS_FIELD_NAME).getFieldValue());
         address.setCity(addressDao.getCityReference(getCityId(city)));
+    }
 
+    private void setUserPersonInfo(Map<String, CustomField> customFieldsByName, PersonInfo personInfo, Address address){
         personInfo.setFirstName(customFieldsByName.get(FIRST_NAME_FIELD_NAME).getFieldValue());
         personInfo.setLastName(customFieldsByName.get(LAST_NAME_FIELD_NAME).getFieldValue());
         personInfo.setEgn(customFieldsByName.get(EGN_FIELD_NAME).getFieldValue());
         personInfo.setAddress(address);
+    }
 
+    private void setUser(Map<String, CustomField> customFieldsByName, User user, PersonInfo personInfo){
         user.setPersonInfo(personInfo);
         user.setNickname(customFieldsByName.get(USERNAME_FIELD_NAME).getFieldValue());
         user.setPassword(customFieldsByName.get(PASSWORD_FIELD_NAME).getFieldValue());
@@ -141,7 +158,9 @@ public class UserRegistrationService {
         user.setRole(Role.MRT);
         user.setCreatedOn(LocalDate.now());
         user.setPhoneNumbers(Set.of());
+    }
 
+    private void setPhoneNumber(Map<String, CustomField> customFieldsByName,PhoneNumber phoneNumber, User user){
         phoneNumber.setOwner(user);
         if (customFieldsByName.get(PHONE_TYPE_FIELD_NAME).getFieldValue().equals("PERSONAL"))
             phoneNumber.setPhoneType(PhoneType.PERSONAL);
@@ -149,7 +168,6 @@ public class UserRegistrationService {
             phoneNumber.setPhoneType(PhoneType.OFFICE);
 
         phoneNumber.setNumber(customFieldsByName.get(PHONE_NUMBER_FIELD_NAME).getFieldValue());
-
-        phoneNumberDao.updateRecord(phoneNumber); //Indirectly creates user (using update because of cascaded references)
     }
+
 }

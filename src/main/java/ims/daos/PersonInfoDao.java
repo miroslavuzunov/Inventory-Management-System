@@ -22,6 +22,6 @@ public class PersonInfoDao extends AbstractDao<PersonInfo> {
 
         if (!records.isEmpty())
             return records.get(0);
-        return null;
+        return new PersonInfo();
     }
 }

@@ -3,6 +3,7 @@ package ims.daos;
 import ims.entities.DepreciationDegree;
 import ims.entities.ProductDetails;
 
+import javax.management.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -23,11 +24,11 @@ public class ProductDetailsDao  extends AbstractDao<ProductDetails>{
         CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
         CriteriaQuery<ProductDetails> criteriaQuery = criteriaBuilder.createQuery(ProductDetails.class);
         Root<ProductDetails> recordRoot = criteriaQuery.from(ProductDetails.class);
-        criteriaQuery.where(criteriaBuilder.equal(recordRoot.get("brand_model"), brandModel));
+        criteriaQuery.where(criteriaBuilder.equal(recordRoot.get("brandModel"), brandModel));
         List<ProductDetails> records = manager.createQuery(criteriaQuery).getResultList();
 
         if (!records.isEmpty())
             return records.get(0);
-        return null;
+        return new ProductDetails();
     }
 }

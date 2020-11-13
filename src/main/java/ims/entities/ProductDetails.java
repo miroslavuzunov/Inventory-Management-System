@@ -26,8 +26,8 @@ public class ProductDetails extends BaseEntity{
         return brandModel;
     }
 
-    public void setBrandModel(String brandAndModel) {
-        this.brandModel = brandAndModel;
+    public void setBrandModel(String brandModel) {
+        this.brandModel = brandModel;
     }
 
     @Column(name = "initial_price")

@@ -31,6 +31,6 @@ public class CityDao extends AbstractDao<City> {
 
         if (!records.isEmpty())
             return records.get(0);
-        return null;
+        return new City();
     }
 }

@@ -22,6 +22,6 @@ public class DepreciationDegreeDao extends AbstractDao<DepreciationDegree> {
 
         if (!records.isEmpty())
             return records.get(0);
-        return null;
+        return new DepreciationDegree();
     }
 }

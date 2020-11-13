@@ -69,9 +69,9 @@
                               <Insets left="50.0" right="50.0" />
                            </VBox.margin>
                         </TextField>
-                        <Label fx:id="modelMsg" alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="17.0" prefWidth="234.0" textFill="#ff3535" VBox.vgrow="NEVER">
+                        <Label fx:id="modelMsg" alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="17.0" prefWidth="286.0" textFill="#ff3535" VBox.vgrow="NEVER">
                            <VBox.margin>
-                              <Insets left="50.0" right="50.0" />
+                              <Insets right="50.0" />
                            </VBox.margin>
                         </Label>
                         <Label prefHeight="17.0" prefWidth="234.0" text="Description:" textFill="#6f6f6f">

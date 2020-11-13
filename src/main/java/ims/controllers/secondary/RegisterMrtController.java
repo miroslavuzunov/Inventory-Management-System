@@ -26,13 +26,13 @@ public class RegisterMrtController extends RegisterMrtControllerResources implem
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        AbstractDao.newEntityManager();
         userRegistrationService = new UserRegistrationService();
 
         toggleGroup = GroupToggler.makeToggleGroup(List.of(personalPhoneRadioBtn, officePhoneRadioBtn));
         initializeScenes();
         initializeCountries();
     }
-
 
     @FXML
     private void handleClicks(ActionEvent event) throws IOException {
@@ -47,30 +47,6 @@ public class RegisterMrtController extends RegisterMrtControllerResources implem
             }
         } else
             SceneController.switchSceneByButton((Button) event.getSource());
-    }
-
-    public void signUp() throws IOException {
-        boolean noEmptyFields = true;
-        boolean passwordsMatch = true;
-        boolean noBusyData = true;
-
-        noEmptyFields = handleEmptyFields();
-        passwordsMatch = handlePasswordsMatching(customFieldsByName);
-        //handleForbiddenChars(inputFields);
-        //handleEgnValidation(inputFields);
-
-        if (noEmptyFields && passwordsMatch)
-            noBusyData = handleBusyData(customFieldsByName);
-
-        if (noEmptyFields && passwordsMatch && noBusyData) {
-            ButtonType result = ConfirmationDialog.askForConfirmation("Are you sure you want to sign up new MRT?");
-
-            if (result == ButtonType.YES) {
-                userRegistrationService.createUser(customFieldsByName);
-                SuccessDialog.success("Done! A new MRT has been signed up!");
-                App.setScene("/view/RegisterMrt"); //reloading same scene to clean the fields
-            }
-        }
     }
 
     @Override
@@ -123,6 +99,33 @@ public class RegisterMrtController extends RegisterMrtControllerResources implem
             cityComboBox.getItems().add(field.getFieldValue());
         });
     }
+
+    public void signUp() throws IOException {
+        boolean noEmptyFields = true;
+        boolean passwordsMatch = true;
+        boolean noBusyData = true;
+        boolean noForbiddenChars = true;
+        boolean validEgn = true;
+
+        noEmptyFields = handleEmptyFields();
+        passwordsMatch = handlePasswordsMatching(customFieldsByName);
+        //noForbiddenChars = handleForbiddenChars(inputFields);
+        //validEgn = handleEgnValidation(inputFields);
+
+        if (noEmptyFields && passwordsMatch && noForbiddenChars && validEgn)
+            noBusyData = handleBusyData(customFieldsByName);
+
+        if (noEmptyFields && passwordsMatch && noBusyData) {
+            ButtonType result = ConfirmationDialog.askForConfirmation("Are you sure you want to sign up new MRT?");
+
+            if (result == ButtonType.YES) {
+                userRegistrationService.createUser(customFieldsByName);
+                SuccessDialog.success("Done! A new MRT has been signed up!");
+                App.setScene("/view/RegisterMrt"); //reloading same scene to clean the fields
+            }
+        }
+    }
+
 
     private boolean handlePasswordsMatching(Map<String, CustomField> fieldsByName) {
         boolean handlingResult = true;

@@ -12,13 +12,17 @@ public abstract class AbstractDao<T> {
     private Class<T> classType;
     protected static EntityManager manager;
 
-    static{
+    static {
         manager = EntityFactory.getFactory().createEntityManager();
     }
 
     protected AbstractDao(Class<T> classType) {
         if (isEntity(classType))
             this.classType = classType;
+    }
+
+    public static void newEntityManager() {
+        manager = EntityFactory.getFactory().createEntityManager();
     }
 
     public static void closeEntityManager() {

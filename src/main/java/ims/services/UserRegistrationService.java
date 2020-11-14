@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.regex.Pattern;
 
-import static ims.controllers.resources.RegisterMrtControllerResources.*;
+import static ims.controllers.resources.RegisterUserControllerResources.*;
 
 public class UserRegistrationService {
     private final UserDao userDao;
@@ -113,7 +113,7 @@ public class UserRegistrationService {
         return tempCity.getId();
     }
 
-    public void createUser(Map<String, CustomField> customFieldsByName) {
+    public void createUser(Map<String, CustomField> customFieldsByName, Role role) {
         City city = new City();
         Address address = new Address();
         PersonInfo personInfo = new PersonInfo();
@@ -123,7 +123,7 @@ public class UserRegistrationService {
         setUserCity(customFieldsByName, city);
         setUserAddress(customFieldsByName, address,city);
         setUserPersonInfo(customFieldsByName, personInfo, address);
-        setUser(customFieldsByName, user, personInfo);
+        setUser(customFieldsByName, user, personInfo, role);
         setPhoneNumber(customFieldsByName, phoneNumber, user);
 
         userDao.saveRecord(user);
@@ -150,12 +150,12 @@ public class UserRegistrationService {
         personInfo.setAddress(address);
     }
 
-    private void setUser(Map<String, CustomField> customFieldsByName, User user, PersonInfo personInfo){
+    private void setUser(Map<String, CustomField> customFieldsByName, User user, PersonInfo personInfo, Role role){
         user.setPersonInfo(personInfo);
         user.setNickname(customFieldsByName.get(USERNAME_FIELD_NAME).getFieldValue());
         user.setPassword(customFieldsByName.get(PASSWORD_FIELD_NAME).getFieldValue());
         user.setEmail(customFieldsByName.get(EMAIL_FIELD_NAME).getFieldValue());
-        user.setRole(Role.MRT);
+        user.setRole(role);
         user.setCreatedOn(LocalDate.now());
         user.setPhoneNumbers(Set.of());
     }

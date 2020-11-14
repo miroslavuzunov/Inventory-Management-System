@@ -82,6 +82,10 @@ public class ProductRegistrationService {
         int count = productDetails.getQuantity();
         int lastProductID = getIDFromInventoryNumber(productDao.getLastRecord().getInventoryNumber());
 
+        String productCategory = "X";
+        if(productDetails.getDepreciationDegree() != null)
+         productCategory = productDetails.getDepreciationDegree().getCategory();
+
         while (count != 0) {
             Product product = new Product();
             product.setProductDetails(productDetails);
@@ -89,7 +93,8 @@ public class ProductRegistrationService {
             product.setAvailable(true);
             product.setInventoryNumber(generateUniqueInventoryNumber(customFieldsByName,
                     count,
-                    productDetails.getDepreciationDegree().getCategory(),
+                    productCategory
+                    ,
                     lastProductID)
             );
             productDao.saveRecord(product);
@@ -127,8 +132,10 @@ public class ProductRegistrationService {
     private void setProductDetails(Map<String, CustomField> customFieldsByName, ProductDetails productDetails) {
         DepreciationDegree depreciationDegree = new DepreciationDegree();
 
-        setProductDepreciationDegree(customFieldsByName, depreciationDegree);
-        productDetails.setDepreciationDegree(productDetailsDao.getDepreciationDegreeReference(getDepreciationDegreeId(depreciationDegree)));
+        if(customFieldsByName.get(DEPRECIATION_DEGREE_FIELD_NAME).getFieldValue() != null) {
+            setProductDepreciationDegree(customFieldsByName, depreciationDegree);
+            productDetails.setDepreciationDegree(productDetailsDao.getDepreciationDegreeReference(getDepreciationDegreeId(depreciationDegree)));
+        }
         setProductType(customFieldsByName, productDetails);
         productDetails.setBrandModel(
                 customFieldsByName.get(BRAND_FIELD_NAME).getFieldValue() + " " +

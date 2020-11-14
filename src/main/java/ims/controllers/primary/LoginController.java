@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import ims.App;
+import ims.daos.AbstractDao;
 import ims.entities.*;
 import ims.services.UserService;
 import javafx.fxml.FXML;
@@ -32,6 +33,7 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        AbstractDao.newEntityManager();
         loginBtn.setDefaultButton(true); // ENTER key calls login
         userService = new UserService();
     }

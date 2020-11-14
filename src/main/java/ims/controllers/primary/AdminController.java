@@ -6,8 +6,10 @@ import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 import ims.controllers.resources.AdminControllerResources;
+import ims.controllers.secondary.RegisterUserController;
 import ims.dialogs.ConfirmationDialog;
 import ims.entities.User;
+import ims.enums.Role;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -36,6 +38,10 @@ public class AdminController extends AdminControllerResources implements Initial
             fadeMain.toFront();
             clientManipPane.toFront();
         }
+        if(event.getSource() == regMrtBtn)
+            RegisterUserController.passRole(Role.MRT);
+        if(event.getSource() == regCardBtn)
+            RegisterUserController.passRole(Role.CLIENT);
         if (event.getSource() == exitBtn) {
             ButtonType result = ConfirmationDialog.askForConfirmation("Are you sure you want exit from the system?");
 

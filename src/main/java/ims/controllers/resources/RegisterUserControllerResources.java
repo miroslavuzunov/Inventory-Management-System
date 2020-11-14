@@ -10,7 +10,7 @@ import javafx.scene.layout.VBox;
 
 import java.util.HashMap;
 
-public abstract class RegisterMrtControllerResources extends AbstractController implements ControllerConfig {
+public abstract class RegisterUserControllerResources extends AbstractController implements ControllerConfig {
     public static final String BUSY_USERNAME_MSG = "Username is already used!";
     public static final String PASSWORDS_DONT_MATCH_MSG = "Passwords don't match!";
     public static final String BUSY_EMAIL_MSG = "Email is already used!";
@@ -119,6 +119,9 @@ public abstract class RegisterMrtControllerResources extends AbstractController 
 
     @FXML
     protected Button backBtn;
+
+    @FXML
+    protected Label header;
 
     @Override
     public void initializeScenes() {

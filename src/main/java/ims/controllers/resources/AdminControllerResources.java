@@ -90,7 +90,8 @@ public abstract class AdminControllerResources implements ControllerConfig {
     @Override
     public void initializeScenes(){
         SceneController.loadScenes(new HashMap<>(){{
-            put(regMrtBtn, "RegisterMrt");
+            put(regMrtBtn, "RegisterUser");
+            put(regCardBtn, "RegisterUser");
             put(notificationBtn, "");
             put(forcedScrapBtn, "");
             put(regProductBtn, "");
@@ -98,6 +99,7 @@ public abstract class AdminControllerResources implements ControllerConfig {
             put(getBackFromClientManipBtn, "Admin");
             put(getBackFromGenRefBtn, "Admin");
             put(regProductBtn, "RegisterProduct");
+            put(checkClientProductsBtn, "ClientCard");
         }});
     }
 }

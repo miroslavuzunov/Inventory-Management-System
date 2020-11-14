@@ -1,0 +1,56 @@
+package ims.controllers.resources;
+
+import ims.controllers.contracts.ControllerConfig;
+import ims.controllers.primary.SceneController;
+import ims.supporting.TableProduct;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
+
+import java.util.HashMap;
+
+public abstract class ClientCardControllerResources implements ControllerConfig {
+    @FXML
+    protected VBox cleanLeftPane;
+
+    @FXML
+    protected Button backBtn;
+
+    @FXML
+    protected AnchorPane regPane;
+
+    @FXML
+    protected Label clientName;
+
+    @FXML
+    protected TableView<TableProduct> clientsProductsTable;
+
+    @FXML
+    protected TableColumn<String, String> productColumn;
+
+    @FXML
+    protected TableColumn<String, String> invNumberColumn;
+
+    @FXML
+    protected TableColumn<String, String> givenByColumn;
+
+    @FXML
+    protected TableColumn<String, String> givenOnColumn;
+
+    @FXML
+    protected Button removeSelectedBtn;
+
+    @FXML
+    protected Button addAnotherBtn;
+
+    @Override
+    public void initializeScenes() {
+        SceneController.loadScenes(new HashMap<>() {{
+            put(backBtn, "Admin");
+        }});
+    }
+}

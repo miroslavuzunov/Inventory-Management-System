@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ims.controllers.secondary.RegisterMrtController">
+<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ims.controllers.secondary.RegisterUserController">
    <children>
       <AnchorPane fx:id="regPane" layoutX="230.0" prefHeight="600.0" prefWidth="669.0" style="-fx-background-color: #ccc;">
          <children>
@@ -317,7 +317,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Label alignment="CENTER" layoutX="213.0" layoutY="10.0" prefHeight="27.0" prefWidth="219.0" style="-fx-text-fill: rgb(79, 163, 211);" styleClass="left-side-header" stylesheets="@../css/styles.css" text="MRT REGISTRATION" textFill="WHITE">
+            <Label fx:id="header" alignment="CENTER" layoutX="213.0" layoutY="10.0" prefHeight="27.0" prefWidth="219.0" style="-fx-text-fill: rgb(79, 163, 211);" styleClass="left-side-header" stylesheets="@../css/styles.css" text="MRT REGISTRATION" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>

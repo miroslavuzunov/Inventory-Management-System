@@ -2,10 +2,11 @@ package ims.controllers.secondary;
 
 import ims.App;
 import ims.controllers.primary.SceneController;
-import ims.controllers.resources.RegisterMrtControllerResources;
+import ims.controllers.resources.RegisterUserControllerResources;
 import ims.daos.AbstractDao;
 import ims.dialogs.ConfirmationDialog;
 import ims.dialogs.SuccessDialog;
+import ims.enums.Role;
 import ims.enums.State;
 import ims.services.UserRegistrationService;
 import ims.supporting.Cache;
@@ -20,14 +21,16 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
-public class RegisterMrtController extends RegisterMrtControllerResources implements Initializable {
+public class RegisterUserController extends RegisterUserControllerResources implements Initializable {
     private UserRegistrationService userRegistrationService;
     private ToggleGroup toggleGroup;
+    private static Role role;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         AbstractDao.newEntityManager();
         userRegistrationService = new UserRegistrationService();
+        header.setText(role.toString() + " REGISTRATION");
 
         toggleGroup = GroupToggler.makeToggleGroup(List.of(personalPhoneRadioBtn, officePhoneRadioBtn));
         initializeScenes();
@@ -90,7 +93,7 @@ public class RegisterMrtController extends RegisterMrtControllerResources implem
         String chosenCountry = countryComboBox.getSelectionModel().getSelectedItem();
         List<CustomField> citiesFromDb = Cache.getCachedFields(chosenCountry);
 
-        if(citiesFromDb == null){
+        if (citiesFromDb == null) {
             citiesFromDb = userRegistrationService.initializeCitiesAccordingCountry(chosenCountry);
             Cache.cacheList(chosenCountry, citiesFromDb);
         }
@@ -116,12 +119,12 @@ public class RegisterMrtController extends RegisterMrtControllerResources implem
             noBusyData = handleBusyData(customFieldsByName);
 
         if (noEmptyFields && passwordsMatch && noBusyData) {
-            ButtonType result = ConfirmationDialog.askForConfirmation("Are you sure you want to sign up new MRT?");
+            ButtonType result = ConfirmationDialog.askForConfirmation("Are you sure you want to sign up new " + role.toString() + "?");
 
             if (result == ButtonType.YES) {
-                userRegistrationService.createUser(customFieldsByName);
-                SuccessDialog.success("Done! A new MRT has been signed up!");
-                App.setScene("/view/RegisterMrt"); //reloading same scene to clean the fields
+                userRegistrationService.createUser(customFieldsByName, role);
+                SuccessDialog.success("Done! A new " + role.toString() + " has been signed up!");
+                App.setScene("/view/RegisterUser"); //reloading same scene to clean the fields
             }
         }
     }
@@ -185,6 +188,10 @@ public class RegisterMrtController extends RegisterMrtControllerResources implem
         addressDetailsField.setStyle(fieldsByName.get(ADDRESS_DETAILS_FIELD_NAME).getStyle());
         phoneNumberMsg.setText(fieldsByName.get(PHONE_NUMBER_FIELD_NAME).getMessage());
         phoneNumberField.setStyle(fieldsByName.get(PHONE_NUMBER_FIELD_NAME).getStyle());
+    }
+
+    public static void passRole(Role passedRole) {
+        role = passedRole;
     }
 
 }

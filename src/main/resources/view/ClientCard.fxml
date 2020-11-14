@@ -35,7 +35,7 @@
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <Label fx:id="clientName" alignment="CENTER_RIGHT" layoutX="327.0" layoutY="95.0" prefHeight="35.0" prefWidth="329.0" stylesheets="@../css/styles.css" text="client: Miroslav Uzunov" textAlignment="RIGHT" textFill="#5b5b5b">
+            <Label fx:id="clientName" alignment="CENTER_RIGHT" layoutX="327.0" layoutY="95.0" prefHeight="35.0" prefWidth="329.0" stylesheets="@../css/styles.css" textAlignment="RIGHT" textFill="#5b5b5b">
                <font>
                   <Font name="Roboto Light" size="21.0" />
                </font>
@@ -43,9 +43,9 @@
             <TableView fx:id="clientsProductsTable" layoutX="14.0" layoutY="154.0" prefHeight="336.0" prefWidth="641.0">
               <columns>
                 <TableColumn fx:id="productColumn" prefWidth="230.0" text="Product" />
-                <TableColumn fx:id="invNumberColumn" prefWidth="131.0" text="Inv. number" />
-                  <TableColumn fx:id="givenByColumn" prefWidth="172.0" text="Given by" />
-                  <TableColumn fx:id="givenOnColumn" prefWidth="107.0" text="Given on" />
+                <TableColumn fx:id="invNumberColumn" prefWidth="165.0" text="Inv. number" />
+                  <TableColumn fx:id="givenByColumn" prefWidth="139.0" text="Given by" />
+                  <TableColumn fx:id="givenOnColumn" prefWidth="106.0" text="Given on" />
               </columns>
             </TableView>
             <Button fx:id="removeSelectedBtn" layoutX="380.0" layoutY="538.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="113.0" style="-fx-background-color: red;" text="Remove selected" textFill="WHITE">
@@ -56,7 +56,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="addAnotherBtn" layoutX="162.0" layoutY="538.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="113.0" style="-fx-background-color: green;" text="Add another" textFill="WHITE">
+            <Button fx:id="addAnotherBtn" layoutX="162.0" layoutY="538.0" mnemonicParsing="false" onAction="#addAnotherProductToCard" prefHeight="37.0" prefWidth="113.0" style="-fx-background-color: green;" text="Add another" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -64,17 +64,18 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <TextField layoutX="14.0" layoutY="96.0" prefHeight="37.0" prefWidth="193.0" promptText="9706095566" />
+            <TextField fx:id="egnField" layoutX="14.0" layoutY="96.0" prefHeight="37.0" prefWidth="193.0" promptText="9706095566" />
             <Label alignment="CENTER" layoutY="69.0" prefHeight="27.0" prefWidth="106.0" stylesheets="@../css/styles.css" text="Client's EGN:" textFill="#7c7c7c">
                <font>
                   <Font size="13.0" />
                </font>
             </Label>
-            <Button layoutX="212.0" layoutY="96.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="52.0" text="Search">
+            <Button fx:id="searchBtn" layoutX="212.0" layoutY="96.0" mnemonicParsing="false" onAction="#searchByEgn" prefHeight="37.0" prefWidth="52.0" text="Search">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
+            <Label fx:id="egnMsg" layoutX="15.0" layoutY="134.0" prefHeight="17.0" prefWidth="250.0" textFill="#ff1a1a" />
          </children>
       </AnchorPane>
    </children>

@@ -5,6 +5,7 @@ import ims.enums.ProductType;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Set;
 
 @Entity
 @Table(name = "product_details")
@@ -17,6 +18,7 @@ public class ProductDetails extends BaseEntity{
     private String description;
     private ProductType productType;
     private DepreciationDegree depreciationDegree;
+    private Set<Product> products;
 
     public ProductDetails() {
     }
@@ -94,5 +96,14 @@ public class ProductDetails extends BaseEntity{
 
     public void setDepreciationDegree(DepreciationDegree depreciationDegree) {
         this.depreciationDegree = depreciationDegree;
+    }
+
+    @OneToMany(mappedBy = "productDetails", targetEntity = Product.class, fetch = FetchType.LAZY)
+    public Set<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(Set<Product> products) {
+        this.products = products;
     }
 }

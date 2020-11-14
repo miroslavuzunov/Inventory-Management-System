@@ -16,6 +16,7 @@ public class User extends BaseEntity {
     private String email;
     private PersonInfo personInfo;
     private Set<PhoneNumber> phoneNumbers;
+    private List<ProductClient> productClientTransactions;
 
     public User() {
         phoneNumbers = new HashSet<>();
@@ -84,5 +85,14 @@ public class User extends BaseEntity {
 
     public void setPhoneNumbers(Set<PhoneNumber> phoneNumbers) {
         this.phoneNumbers = phoneNumbers;
+    }
+
+    @OneToMany(mappedBy = "client", targetEntity = ProductClient.class, fetch = FetchType.LAZY)
+    public List<ProductClient> getProductClientTransactions() {
+        return productClientTransactions;
+    }
+
+    public void setProductClientTransactions(List<ProductClient> productClientTransactions) {
+        this.productClientTransactions = productClientTransactions;
     }
 }

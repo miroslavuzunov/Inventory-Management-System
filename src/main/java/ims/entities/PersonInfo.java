@@ -9,6 +9,7 @@ public class PersonInfo extends BaseEntity {
     private String lastName;
     private String egn;
     private Address address;
+    private User user;
 
     public PersonInfo() {
     }
@@ -48,5 +49,14 @@ public class PersonInfo extends BaseEntity {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    @OneToOne(mappedBy = "personInfo", targetEntity = User.class, fetch = FetchType.LAZY)
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

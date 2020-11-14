@@ -2,18 +2,18 @@ package ims.controllers.resources;
 
 import ims.controllers.contracts.ControllerConfig;
 import ims.controllers.primary.SceneController;
+import ims.controllers.secondary.AbstractController;
 import ims.supporting.TableProduct;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
 import java.util.HashMap;
 
-public abstract class ClientCardControllerResources implements ControllerConfig {
+public abstract class ClientCardControllerResources extends AbstractController implements ControllerConfig {
+    public static final String EGN_FIELD_NAME = "Egn";
+
     @FXML
     protected VBox cleanLeftPane;
 
@@ -46,6 +46,15 @@ public abstract class ClientCardControllerResources implements ControllerConfig 
 
     @FXML
     protected Button addAnotherBtn;
+
+    @FXML
+    protected TextField egnField;
+
+    @FXML
+    protected Label egnMsg;
+
+    @FXML
+    protected Button searchBtn;
 
     @Override
     public void initializeScenes() {

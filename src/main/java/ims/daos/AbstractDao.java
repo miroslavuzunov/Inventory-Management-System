@@ -65,7 +65,7 @@ public abstract class AbstractDao<T> {
         commit();
     }
 
-    public T getOne(Long id) {
+    public T getOne(Integer id) {
         return manager.find(classType, id);
     }
 

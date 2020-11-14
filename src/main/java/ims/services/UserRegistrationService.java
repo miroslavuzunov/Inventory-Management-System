@@ -107,10 +107,9 @@ public class UserRegistrationService {
     public Integer getCityId(City city) {
         City tempCity = cityDao.getRecordByNameAndRegion(city.getName(), city.getRegion());
 
-        if (tempCity == null)
-            return null;
-
-        return tempCity.getId();
+        if (tempCity != null)
+            return tempCity.getId();
+        return null;
     }
 
     public void createUser(Map<String, CustomField> customFieldsByName, Role role) {
@@ -121,7 +120,7 @@ public class UserRegistrationService {
         PhoneNumber phoneNumber = new PhoneNumber();
 
         setUserCity(customFieldsByName, city);
-        setUserAddress(customFieldsByName, address,city);
+        setUserAddress(customFieldsByName, address, city);
         setUserPersonInfo(customFieldsByName, personInfo, address);
         setUser(customFieldsByName, user, personInfo, role);
         setPhoneNumber(customFieldsByName, phoneNumber, user);
@@ -130,27 +129,27 @@ public class UserRegistrationService {
         phoneNumberDao.updateRecord(phoneNumber); //Indirectly creates user (using update because of cascaded references)
     }
 
-    private void setUserCity(Map<String, CustomField> customFieldsByName, City city){
+    private void setUserCity(Map<String, CustomField> customFieldsByName, City city) {
         String cityAndRegionTogether = customFieldsByName.get(CITY_FIELD_NAME).getFieldValue();
         String[] cityAndRegion = Pattern.compile("[\\(\\)]").split(cityAndRegionTogether); //separating 'City (Region)' string
         city.setName(cityAndRegion[0]);
         city.setRegion(cityAndRegion[1]);
     }
 
-    private void setUserAddress(Map<String, CustomField> customFieldsByName, Address address, City city){
+    private void setUserAddress(Map<String, CustomField> customFieldsByName, Address address, City city) {
         address.setStreet(customFieldsByName.get(STREET_FIELD_NAME).getFieldValue());
         address.setDetails(customFieldsByName.get(ADDRESS_DETAILS_FIELD_NAME).getFieldValue());
         address.setCity(addressDao.getCityReference(getCityId(city)));
     }
 
-    private void setUserPersonInfo(Map<String, CustomField> customFieldsByName, PersonInfo personInfo, Address address){
+    private void setUserPersonInfo(Map<String, CustomField> customFieldsByName, PersonInfo personInfo, Address address) {
         personInfo.setFirstName(customFieldsByName.get(FIRST_NAME_FIELD_NAME).getFieldValue());
         personInfo.setLastName(customFieldsByName.get(LAST_NAME_FIELD_NAME).getFieldValue());
         personInfo.setEgn(customFieldsByName.get(EGN_FIELD_NAME).getFieldValue());
         personInfo.setAddress(address);
     }
 
-    private void setUser(Map<String, CustomField> customFieldsByName, User user, PersonInfo personInfo, Role role){
+    private void setUser(Map<String, CustomField> customFieldsByName, User user, PersonInfo personInfo, Role role) {
         user.setPersonInfo(personInfo);
         user.setNickname(customFieldsByName.get(USERNAME_FIELD_NAME).getFieldValue());
         user.setPassword(customFieldsByName.get(PASSWORD_FIELD_NAME).getFieldValue());
@@ -160,7 +159,7 @@ public class UserRegistrationService {
         user.setPhoneNumbers(Set.of());
     }
 
-    private void setPhoneNumber(Map<String, CustomField> customFieldsByName,PhoneNumber phoneNumber, User user){
+    private void setPhoneNumber(Map<String, CustomField> customFieldsByName, PhoneNumber phoneNumber, User user) {
         phoneNumber.setOwner(user);
         if (customFieldsByName.get(PHONE_TYPE_FIELD_NAME).getFieldValue().equals("PERSONAL"))
             phoneNumber.setPhoneType(PhoneType.PERSONAL);

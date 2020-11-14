@@ -1,10 +1,14 @@
 package ims.daos;
 
+import ims.entities.City;
 import ims.entities.User;
+import ims.enums.Role;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserDao extends AbstractDao<User> {
@@ -31,5 +35,22 @@ public class UserDao extends AbstractDao<User> {
         if (!records.isEmpty())
             return records.get(0);
         return null;
+    }
+
+    public User getUserByPersonInfoIdAndRole(Integer id, Role role) {
+        CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
+        CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
+        Root<User> recordRoot = criteriaQuery.from(User.class);
+        List<Predicate> predicates = new ArrayList<>();
+
+        predicates.add(criteriaBuilder.like(recordRoot.get("personInfo"), id.toString()));
+        predicates.add(criteriaBuilder.like(recordRoot.get("role"), role.toString()));
+
+        criteriaQuery.select(recordRoot).where(predicates.toArray(new Predicate[]{}));
+        List<User> records = manager.createQuery(criteriaQuery).getResultList();
+
+        if (!records.isEmpty())
+            return records.get(0);
+        return new User();
     }
 }

@@ -14,7 +14,7 @@ public class PersonInfoDao extends AbstractDao<PersonInfo> {
         super(PersonInfo.class);
     }
 
-    public PersonInfo getRecordByEgnAndPeriod(String egn) {
+    public PersonInfo getRecordByEgn(String egn) {
         CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
         CriteriaQuery<PersonInfo> criteriaQuery = criteriaBuilder.createQuery(PersonInfo.class);
         Root<PersonInfo> recordRoot = criteriaQuery.from(PersonInfo.class);

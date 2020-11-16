@@ -12,7 +12,7 @@ public class Address extends BaseEntity{
     public Address() {
     }
 
-    @ManyToOne(targetEntity = City.class, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = City.class)
     @JoinColumn(name = "city_id", referencedColumnName = "id")
     public City getCity() {
         return city;

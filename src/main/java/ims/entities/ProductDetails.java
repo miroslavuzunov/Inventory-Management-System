@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "product_details")
-public class ProductDetails extends BaseEntity{
+public class ProductDetails extends BaseEntity {
     private String brandModel;
     private BigDecimal initialPrice;
     private BigDecimal currentPrice;
@@ -106,4 +106,5 @@ public class ProductDetails extends BaseEntity{
     public void setProducts(Set<Product> products) {
         this.products = products;
     }
+
 }

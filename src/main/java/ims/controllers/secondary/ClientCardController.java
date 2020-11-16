@@ -16,6 +16,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,8 @@ public class ClientCardController extends ClientCardControllerResources implemen
         AbstractDao.newEntityManager();
         cardService = new CardService();
         initializeScenes();
+        endDate.setValue(LocalDate.now());
+        startDate.setValue(endDate.getValue().minusYears(1));
     }
 
     @FXML
@@ -50,7 +53,7 @@ public class ClientCardController extends ClientCardControllerResources implemen
     }
 
     @FXML
-    private void searchByEgn(){
+    private void searchByEgn() {
         boolean noEmptyFields = true;
         boolean noForbiddenChars = true;
 
@@ -59,8 +62,13 @@ public class ClientCardController extends ClientCardControllerResources implemen
         List<TableProduct> tableProducts = new ArrayList<>();
         StringBuilder clientsName = new StringBuilder();
 
-        if(noEmptyFields && noForbiddenChars)
-            tableProducts =  cardService.getClientsProductsByEgn(egnField.getText(), clientsName);
+        if (noEmptyFields && noForbiddenChars)
+            tableProducts = cardService.getClientsProductsByEgnAndPeriod(
+                    egnField.getText(),
+                    clientsName,
+                    startDate.getValue(),
+                    endDate.getValue()
+            );
 
         clientName.setText(String.valueOf(clientsName));
         setTableColumns();
@@ -68,11 +76,10 @@ public class ClientCardController extends ClientCardControllerResources implemen
     }
 
     @FXML
-    public void addAnotherProductToCard(){
-
+    public void addAnotherProductToCard() {
     }
 
-    private void setTableColumns() {
+    private void setTableColumns() {  //Mapping with TableProduct fields
         productColumn.setCellValueFactory(new PropertyValueFactory<>("brand"));
         invNumberColumn.setCellValueFactory(new PropertyValueFactory<>("invNum"));
         givenByColumn.setCellValueFactory(new PropertyValueFactory<>("givenBy"));
@@ -81,7 +88,7 @@ public class ClientCardController extends ClientCardControllerResources implemen
 
     private void fillTable(List<TableProduct> tableProducts) {
         clientsProductsTable.getItems().clear();
-        for(TableProduct product : tableProducts){
+        for (TableProduct product : tableProducts) {
             clientsProductsTable.getItems().add(product);
         }
     }

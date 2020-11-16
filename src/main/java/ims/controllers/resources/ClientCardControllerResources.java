@@ -56,6 +56,13 @@ public abstract class ClientCardControllerResources extends AbstractController i
     @FXML
     protected Button searchBtn;
 
+    @FXML
+    protected DatePicker startDate;
+
+    @FXML
+    protected DatePicker endDate;
+
+
     @Override
     public void initializeScenes() {
         SceneController.loadScenes(new HashMap<>() {{

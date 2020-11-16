@@ -94,8 +94,8 @@ public class UserRegistrationService {
         User userWithSameEgn = new User();
         PersonInfo personInfo = new PersonInfo();
         userWithSameEgn.setPersonInfo(personInfo);
-        if (personInfoDao.getRecordByEGN(egn) != null)
-            userWithSameEgn.setPersonInfo(personInfoDao.getRecordByEGN(egn));
+        if (personInfoDao.getRecordByEgnAndPeriod(egn) != null)
+            userWithSameEgn.setPersonInfo(personInfoDao.getRecordByEgnAndPeriod(egn));
 
         users.put(USERNAME_FIELD_NAME, userWithSameNick);
         users.put(EMAIL_FIELD_NAME, userWithSameEmail);

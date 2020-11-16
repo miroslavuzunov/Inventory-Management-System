@@ -1,10 +1,10 @@
 package ims.supporting;
 
 public class TableProduct {
-    private String brand = "Lenovo";
-    private String invNum = "LL-IV-1231231231-1-10";
-    private String givenBy = "Miroslav Uzunov";
-    private String givenOn = "Today";
+    private String brand;
+    private String invNum;
+    private String givenBy;
+    private String givenOn;
 
     public TableProduct(String brand, String invNum, String givenBy, String givenOn) {
         this.brand = brand;

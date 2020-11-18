@@ -25,15 +25,4 @@ public class ProductDao extends AbstractDao<Product> {
         return new Product();
     }
 
-    public Product getProductByInvNumber(String invNum) {
-        CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
-        CriteriaQuery<Product> criteriaQuery = criteriaBuilder.createQuery(Product.class);
-        Root<Product> recordRoot = criteriaQuery.from(Product.class);
-        criteriaQuery.where(criteriaBuilder.equal(recordRoot.get("inventoryNumber"), invNum));
-        List<Product> records = manager.createQuery(criteriaQuery).getResultList();
-
-        if (!records.isEmpty())
-            return records.get(0);
-        return new Product();
-    }
 }

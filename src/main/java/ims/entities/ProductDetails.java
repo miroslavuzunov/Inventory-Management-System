@@ -10,7 +10,7 @@ import java.util.Set;
 @Entity
 @Table(name = "product_details")
 public class ProductDetails extends BaseEntity {
-    private String brandModel;
+    private String brandAndModel;
     private BigDecimal initialPrice;
     private BigDecimal currentPrice;
     private PriceCurrency priceCurrency;
@@ -24,12 +24,12 @@ public class ProductDetails extends BaseEntity {
     }
 
     @Column(name = "brand_model")
-    public String getBrandModel() {
-        return brandModel;
+    public String getBrandAndModel() {
+        return brandAndModel;
     }
 
-    public void setBrandModel(String brandModel) {
-        this.brandModel = brandModel;
+    public void setBrandAndModel(String brandModel) {
+        this.brandAndModel = brandModel;
     }
 
     @Column(name = "initial_price")

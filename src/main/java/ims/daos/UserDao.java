@@ -36,21 +36,4 @@ public class UserDao extends AbstractDao<User> {
             return records.get(0);
         return null;
     }
-
-    public User getUserByPersonInfoIdAndRole(Integer id, Role role) {
-        CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
-        CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
-        Root<User> recordRoot = criteriaQuery.from(User.class);
-        List<Predicate> predicates = new ArrayList<>();
-
-        predicates.add(criteriaBuilder.like(recordRoot.get("personInfo"), id.toString()));
-        predicates.add(criteriaBuilder.like(recordRoot.get("role"), role.toString()));
-
-        criteriaQuery.select(recordRoot).where(predicates.toArray(new Predicate[]{}));
-        List<User> records = manager.createQuery(criteriaQuery).getResultList();
-
-        if (!records.isEmpty())
-            return records.get(0);
-        return new User();
-    }
 }

@@ -14,7 +14,7 @@
 
 <AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ims.controllers.secondary.ClientCardController">
    <children>
-      <VBox fx:id="cleanLeftPane" prefHeight="600.0" prefWidth="232.0" styleClass="left-side" stylesheets="@../css/styles.css">
+      <VBox fx:id="cleanLeftPane" prefHeight="600.0" prefWidth="174.0" styleClass="left-side" stylesheets="@../css/styles.css">
          <children>
             <Button fx:id="backBtn" mnemonicParsing="false" onAction="#handleClicks" styleClass="home-btn" stylesheets="@../css/styles.css" text="BACK" underline="true">
                <VBox.margin>
@@ -29,27 +29,29 @@
             </Button>
          </children>
       </VBox>
-      <AnchorPane fx:id="regPane" layoutX="232.0" prefHeight="600.0" prefWidth="669.0" style="-fx-background-color: #ccc;">
+      <AnchorPane fx:id="regPane" layoutX="174.0" prefHeight="600.0" prefWidth="727.0" style="-fx-background-color: #ccc;">
          <children>
             <Label alignment="CENTER" layoutX="182.0" layoutY="10.0" prefHeight="27.0" prefWidth="291.0" style="-fx-text-fill: rgb(79, 163, 211);" styleClass="left-side-header" stylesheets="@../css/styles.css" text="CLIENT'S CARD" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <Label fx:id="clientName" layoutX="14.0" layoutY="118.0" prefHeight="35.0" prefWidth="329.0" stylesheets="@../css/styles.css" textFill="#5b5b5b">
+            <Label fx:id="clientName" layoutX="10.0" layoutY="114.0" prefHeight="37.0" prefWidth="329.0" stylesheets="@../css/styles.css" textFill="#5b5b5b">
                <font>
                   <Font name="Roboto Light" size="21.0" />
                </font>
             </Label>
-            <TableView fx:id="clientsProductsTable" layoutX="14.0" layoutY="154.0" prefHeight="368.0" prefWidth="641.0">
+            <TableView fx:id="clientsProductsTable" layoutX="9.0" layoutY="154.0" prefHeight="382.0" prefWidth="710.0">
               <columns>
-                <TableColumn fx:id="productColumn" prefWidth="230.0" text="Product" />
-                <TableColumn fx:id="invNumberColumn" prefWidth="165.0" text="Inv. number" />
-                  <TableColumn fx:id="givenByColumn" prefWidth="139.0" text="Given by" />
-                  <TableColumn fx:id="givenOnColumn" prefWidth="106.0" text="Given on" />
+                <TableColumn fx:id="productColumn" prefWidth="155.0" text="Product" />
+                <TableColumn fx:id="invNumberColumn" prefWidth="186.0" text="Inv. number" />
+                  <TableColumn fx:id="givenByColumn" prefWidth="116.0" text="Given by" />
+                  <TableColumn fx:id="givenOnColumn" prefWidth="85.0" text="Given on" />
+                  <TableColumn fx:id="statusColumn" prefWidth="66.0" text="Status" />
+                  <TableColumn fx:id="buttonColumn" prefWidth="100.0" />
               </columns>
             </TableView>
-            <Button fx:id="removeSelectedBtn" layoutX="382.0" layoutY="544.0" mnemonicParsing="false" onAction="#removeSelectedProductFromCard" prefHeight="37.0" prefWidth="113.0" style="-fx-background-color: red;" text="Remove selected" textFill="WHITE">
+            <Button fx:id="removeSelectedBtn" layoutX="417.0" layoutY="549.0" mnemonicParsing="false" onAction="#removeSelectedProductFromCard" prefHeight="37.0" prefWidth="113.0" style="-fx-background-color: red;" text="Remove selected" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -57,7 +59,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="addAnotherBtn" layoutX="162.0" layoutY="544.0" mnemonicParsing="false" onAction="#addAnotherProductToCard" prefHeight="37.0" prefWidth="113.0" style="-fx-background-color: green;" text="Add another" textFill="WHITE">
+            <Button fx:id="addAnotherBtn" layoutX="197.0" layoutY="549.0" mnemonicParsing="false" onAction="#addAnotherProductToCard" prefHeight="37.0" prefWidth="113.0" style="-fx-background-color: green;" text="Add another" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -65,30 +67,36 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <TextField fx:id="egnField" layoutX="14.0" layoutY="67.0" prefHeight="37.0" prefWidth="193.0" promptText="9706095566" />
-            <Label alignment="CENTER" layoutY="40.0" prefHeight="27.0" prefWidth="106.0" stylesheets="@../css/styles.css" text="Client's EGN:" textFill="#7c7c7c">
+            <TextField fx:id="egnField" layoutX="9.0" layoutY="77.0" prefHeight="37.0" prefWidth="213.0" promptText="9706095566" />
+            <Label alignment="CENTER" layoutX="-7.0" layoutY="50.0" prefHeight="27.0" prefWidth="106.0" stylesheets="@../css/styles.css" text="Client's EGN:" textFill="#7c7c7c">
                <font>
                   <Font size="13.0" />
                </font>
             </Label>
-            <Button fx:id="searchBtn" layoutX="147.0" layoutY="69.0" mnemonicParsing="false" onAction="#searchByEgn" prefHeight="33.0" prefWidth="58.0" text="Search">
+            <Button fx:id="searchBtn" layoutX="162.0" layoutY="79.0" mnemonicParsing="false" onAction="#searchByEgn" prefHeight="33.0" prefWidth="58.0" text="Search">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
             <Label fx:id="egnMsg" layoutX="14.0" layoutY="105.0" prefHeight="17.0" prefWidth="250.0" textFill="#ff1a1a" />
-            <DatePicker fx:id="startDate" layoutX="480.0" layoutY="68.0" onAction="#searchByEgn" prefHeight="35.0" prefWidth="174.0" />
-            <Label alignment="CENTER" layoutX="424.0" layoutY="72.0" prefHeight="27.0" prefWidth="71.0" stylesheets="@../css/styles.css" text="From:" textFill="#7c7c7c">
+            <DatePicker fx:id="startDate" layoutX="356.0" layoutY="76.0" onAction="#searchByEgn" prefHeight="35.0" prefWidth="174.0">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></DatePicker>
+            <Label alignment="CENTER" layoutX="339.0" layoutY="50.0" prefHeight="27.0" prefWidth="71.0" stylesheets="@../css/styles.css" text="From:" textFill="#7c7c7c">
                <font>
                   <Font size="13.0" />
                </font>
             </Label>
-            <Label alignment="CENTER" layoutX="418.0" layoutY="121.0" prefHeight="27.0" prefWidth="71.0" stylesheets="@../css/styles.css" text="To:" textFill="#7c7c7c">
+            <Label alignment="CENTER" layoutX="519.0" layoutY="50.0" prefHeight="27.0" prefWidth="71.0" stylesheets="@../css/styles.css" text="To:" textFill="#7c7c7c">
                <font>
                   <Font size="13.0" />
                </font>
             </Label>
-            <DatePicker fx:id="endDate" layoutX="480.0" layoutY="113.0" onAction="#searchByEgn" prefHeight="35.0" prefWidth="174.0" />
+            <DatePicker fx:id="endDate" layoutX="545.0" layoutY="76.0" onAction="#searchByEgn" prefHeight="35.0" prefWidth="174.0">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></DatePicker>
          </children>
       </AnchorPane>
    </children>

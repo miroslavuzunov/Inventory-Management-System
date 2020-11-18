@@ -43,6 +43,12 @@ public abstract class ClientCardControllerResources extends AbstractController i
     protected TableColumn<String, String> givenOnColumn;
 
     @FXML
+    protected TableColumn<String, String> statusColumn;
+
+    @FXML
+    protected TableColumn<String, Button> buttonColumn;
+
+    @FXML
     protected Button removeSelectedBtn;
 
     @FXML

@@ -9,6 +9,7 @@ public class Product extends BaseEntity{
     private String inventoryNumber;
     private LocalDate registeredOn;
     private boolean available;
+    private boolean existing;
     private ProductDetails productDetails;
 
     public Product() {
@@ -39,6 +40,15 @@ public class Product extends BaseEntity{
 
     public void setAvailable(boolean available) {
         this.available = available;
+    }
+
+    @Column(name = "existing")
+    public boolean isExisting() {
+        return existing;
+    }
+
+    public void setExisting(boolean existing) {
+        this.existing = existing;
     }
 
     @ManyToOne(targetEntity = ProductDetails.class, cascade = CascadeType.ALL)

@@ -12,6 +12,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
@@ -26,12 +28,17 @@ import java.util.function.Predicate;
 
 public class ClientCardController extends ClientCardControllerResources implements Initializable {
     private CardService cardService;
+    List<TableProduct> tableProducts;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         AbstractDao.newEntityManager();
         cardService = new CardService();
+        tableProducts = new ArrayList<>();
+
         initializeScenes();
+
+        customizeTable();
         endDate.setValue(LocalDate.now());  //Default period
         startDate.setValue(endDate.getValue().minusYears(1));
     }
@@ -61,7 +68,6 @@ public class ClientCardController extends ClientCardControllerResources implemen
 
         noEmptyFields = handleEmptyFields();
         //noForbiddenChars = handleForbiddenChars(inputFields);
-        List<TableProduct> tableProducts = new ArrayList<>();
         StringBuilder clientsName = new StringBuilder();
 
         if (noEmptyFields && noForbiddenChars)
@@ -89,7 +95,7 @@ public class ClientCardController extends ClientCardControllerResources implemen
         dialog.setResizable(false);
 
         Optional<ButtonType> clickedButton = dialog.showAndWait();
-        if(clickedButton.get() == ButtonType.OK){
+        if (clickedButton.get() == ButtonType.OK) {
             System.out.println("test");
             //cardService.addAnotherProductToCard();
         }
@@ -114,11 +120,14 @@ public class ClientCardController extends ClientCardControllerResources implemen
         invNumberColumn.setCellValueFactory(new PropertyValueFactory<>("invNum"));
         givenByColumn.setCellValueFactory(new PropertyValueFactory<>("givenBy"));
         givenOnColumn.setCellValueFactory(new PropertyValueFactory<>("givenOn"));
+        statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+        buttonColumn.setCellValueFactory(new PropertyValueFactory<>("button"));
     }
 
     private void fillTable(List<TableProduct> tableProducts) {
         clientsProductsTable.getItems().clear();
         for (TableProduct product : tableProducts) {
+            product.setButton(getChangeStatusButton());
             clientsProductsTable.getItems().add(product);
         }
     }
@@ -128,4 +137,52 @@ public class ClientCardController extends ClientCardControllerResources implemen
         egnMsg.setText(fieldsByName.get(EGN_FIELD_NAME).getMessage());
         egnField.setStyle(fieldsByName.get(EGN_FIELD_NAME).getStyle());
     }
+
+    private void customizeTable() {
+        clientsProductsTable.getColumns().forEach(tableProductTableColumn -> {
+            tableProductTableColumn.setResizable(false);
+            tableProductTableColumn.setStyle("-fx-alignment: CENTER;");
+        });
+    }
+
+    private Button getChangeStatusButton() {
+        Button button = new Button();
+
+        button.setText("Change status");
+        button.setCursor(Cursor.HAND);
+
+        button.setOnAction((event -> {
+            handleChangeStatusButton();
+        }));
+
+
+        return button;
+    }
+
+    private void handleChangeStatusButton() {
+        TableProduct selectedRow = getSelectedRow();
+
+        if (selectedRow != null) {
+            if (selectedRow.getStatus().equals("Existing")) {
+                selectedRow.setStatus("Missing");
+                fillTable(tableProducts);
+                cardService.changeProductStatus(selectedRow.getProduct(), false);
+            }
+            else {
+                fillTable(tableProducts);
+                selectedRow.setStatus("Existing");
+                cardService.changeProductStatus(selectedRow.getProduct(), true);
+            }
+        }
+    }
+
+    private TableProduct getSelectedRow() {
+        for (TableProduct tableProduct : clientsProductsTable.getItems()) {
+            if (tableProduct.getButton().isFocused())
+                return tableProduct;
+        }
+
+        return null;
+    }
+
 }

@@ -1,6 +1,8 @@
 package ims.entities;
 
 
+import ims.enums.RecordStatus;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -11,6 +13,7 @@ public class ProductClient extends BaseEntity {
     private User client;
     private User mrt;
     private LocalDate givenOn;
+    private RecordStatus status;
 
     public ProductClient() {
     }
@@ -52,5 +55,15 @@ public class ProductClient extends BaseEntity {
 
     public void setGivenOn(LocalDate givenOn) {
         this.givenOn = givenOn;
+    }
+
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    public RecordStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(RecordStatus status) {
+        this.status = status;
     }
 }

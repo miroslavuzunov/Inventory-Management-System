@@ -24,7 +24,7 @@ public class ProductDetailsDao  extends AbstractDao<ProductDetails>{
         CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
         CriteriaQuery<ProductDetails> criteriaQuery = criteriaBuilder.createQuery(ProductDetails.class);
         Root<ProductDetails> recordRoot = criteriaQuery.from(ProductDetails.class);
-        criteriaQuery.where(criteriaBuilder.equal(recordRoot.get("brandModel"), brandModel));
+        criteriaQuery.where(criteriaBuilder.equal(recordRoot.get("brandAndModel"), brandModel));
         List<ProductDetails> records = manager.createQuery(criteriaQuery).getResultList();
 
         if (!records.isEmpty())

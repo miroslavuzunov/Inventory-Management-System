@@ -41,7 +41,7 @@ public class PersonInfo extends BaseEntity {
         this.egn = egn;
     }
 
-    @ManyToOne(targetEntity = Address.class, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = Address.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     public Address getAddress() {
         return address;

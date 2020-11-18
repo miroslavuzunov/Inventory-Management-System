@@ -2,8 +2,11 @@ package ims.services;
 
 import ims.daos.*;
 import ims.entities.*;
+import ims.enums.RecordStatus;
 import ims.enums.Role;
 import ims.supporting.TableProduct;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -18,6 +21,7 @@ public class CardService {
     private final ProductDao productDao;
     private final PersonInfoDao personInfoDao;
     private User client;
+    List<ProductClient> transactions;
 
     public CardService() {
         userDao = new UserDao();
@@ -25,28 +29,41 @@ public class CardService {
         productDetailsDao = new ProductDetailsDao();
         productDao = new ProductDao();
         personInfoDao = new PersonInfoDao();
+        transactions = new ArrayList<>();
     }
 
     public List<TableProduct> getClientsProductsByEgnAndPeriod(String egn, StringBuilder clientsName, LocalDate startDate, LocalDate endDate) { //StringBuilder used because of passing string by reference
         List<TableProduct> tableProducts = new ArrayList<>();
-        List<ProductClient> transactions = new ArrayList<>();
 
         PersonInfo personInfo = personInfoDao.getRecordByEgn(egn);
         client = personInfo.getUser();
 
         if (client != null && client.getRole().equals(Role.CLIENT)) {
             clientsName.append("client: " + personInfo.getFirstName() + " " + personInfo.getLastName());
-            transactions = client.getProductClientTransactions();
+            String status = "";
 
-            transactions.forEach(productClient -> {
-                if (startDate.datesUntil(endDate.plusDays(1)).collect(Collectors.toList()).contains(productClient.getGivenOn())) // Checks if the transaction date is in the specified period (inclusive)
+            if (transactions.isEmpty())
+                transactions = client.getProductClientTransactions();
+
+
+            for (ProductClient productClient : transactions) {
+                if (startDate.datesUntil(endDate.plusDays(1)).collect(Collectors.toList()).contains(productClient.getGivenOn()) && // Checks if the transaction date is in the specified period (inclusive)
+                        productClient.getStatus().equals(RecordStatus.ENABLED)) {
+
+                    if (productClient.getProduct().isExisting())
+                        status = "Existing";
+                    else
+                        status = "Missing";
+
                     tableProducts.add(new TableProduct(
-                            productClient.getProduct().getProductDetails().getBrandModel(),
+                            productClient.getProduct().getProductDetails().getBrandAndModel(),
                             productClient.getProduct().getInventoryNumber(),
                             productClient.getMrt().getPersonInfo().getFirstName() + " " + productClient.getMrt().getPersonInfo().getLastName(),
-                            productClient.getGivenOn().toString(), productClient.getProduct()
+                            productClient.getGivenOn().toString(), productClient.getProduct(),
+                            status
                     ));
-            });
+                }
+            }
         } else {
             clientsName.append("Client not found");
         }
@@ -60,6 +77,7 @@ public class CardService {
 //        productClient.setMrt(mrt);
 //        productClient.setClient(client);
 //        productClient.setGivenOn(LocalDate.now());
+//        productClient.setStatus(RecordStatus.ENABLED);
 //
 //        productClientDao.saveRecord(productClient);
 
@@ -69,7 +87,7 @@ public class CardService {
     public void removeSelectedProduct(Product product) {
         client.getProductClientTransactions().forEach(transaction -> {
             if (transaction.getProduct().getInventoryNumber().equals(product.getInventoryNumber())) {
-                productClientDao.deleteRecord(transaction);
+                transaction.setStatus(RecordStatus.DISABLED);
             }
         });
 
@@ -87,5 +105,11 @@ public class CardService {
 
     public List<ProductDetails> getAllProductsDetails() {
         return productDetailsDao.getAll();
+    }
+
+    public void changeProductStatus(Product product, boolean status) {
+        product.setExisting(status);
+
+        productDao.updateRecord(product);
     }
 }

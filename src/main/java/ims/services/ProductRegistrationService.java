@@ -12,8 +12,6 @@ import ims.enums.State;
 import ims.supporting.CustomField;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +60,7 @@ public class ProductRegistrationService {
 
         ProductDetails productDetails = productDetailsDao.getProductDetailsByBrandAndModel(inputBrandAndModel);
 
-        if (inputBrandAndModel.equalsIgnoreCase(productDetails.getBrandModel())) {
+        if (inputBrandAndModel.equalsIgnoreCase(productDetails.getBrandAndModel())) {
             customFieldsByName.get(BRAND_FIELD_NAME).setState(State.INVALID);
             customFieldsByName.get(MODEL_FIELD_NAME).setState(State.INVALID);
             customFieldsByName.get(MODEL_FIELD_NAME).setMessage(BRAND_MODEL_EXISTS);
@@ -82,7 +80,7 @@ public class ProductRegistrationService {
         int count = productDetails.getQuantity();
         int lastProductID = getIDFromInventoryNumber(productDao.getLastRecord().getInventoryNumber());
 
-        String productCategory = "X";
+        String productCategory = "TA";
         if(productDetails.getDepreciationDegree() != null)
          productCategory = productDetails.getDepreciationDegree().getCategory();
 
@@ -91,6 +89,7 @@ public class ProductRegistrationService {
             product.setProductDetails(productDetails);
             product.setRegisteredOn(LocalDate.now());
             product.setAvailable(true);
+            product.setExisting(true);
             product.setInventoryNumber(generateUniqueInventoryNumber(customFieldsByName,
                     count,
                     productCategory
@@ -137,7 +136,7 @@ public class ProductRegistrationService {
             productDetails.setDepreciationDegree(productDetailsDao.getDepreciationDegreeReference(getDepreciationDegreeId(depreciationDegree)));
         }
         setProductType(customFieldsByName, productDetails);
-        productDetails.setBrandModel(
+        productDetails.setBrandAndModel(
                 customFieldsByName.get(BRAND_FIELD_NAME).getFieldValue() + " " +
                         customFieldsByName.get(MODEL_FIELD_NAME).getFieldValue()
         );

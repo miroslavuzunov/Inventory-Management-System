@@ -18,13 +18,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 
 public class AdminController extends AdminControllerResources implements Initializable {
-    private static User loggedUser;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        userStatus.setText("Status: " + loggedUser.getRole());
+        userStatus.setText("Status: " + LoginController.getLoggedUser().getRole());
         todaysDate.setText("Today's date: " + LocalDate.now().toString());
-        nameLabel.setText("Hello, " + loggedUser.getPersonInfo().getFirstName() + "!");
+        nameLabel.setText("Hello, " + LoginController.getLoggedUser().getPersonInfo().getFirstName() + "!");
 
         AbstractDao.closeEntityManager();
 
@@ -53,9 +52,5 @@ public class AdminController extends AdminControllerResources implements Initial
         }
         else
             SceneController.switchSceneByButton((Button) event.getSource());
-    }
-
-    public static void passUser(User passedUser) {
-        loggedUser = passedUser;
     }
 }

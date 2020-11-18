@@ -3,7 +3,6 @@ package ims.controllers.resources;
 import ims.controllers.contracts.ControllerConfig;
 import ims.controllers.primary.SceneController;
 import ims.controllers.secondary.AbstractController;
-import ims.entities.Product;
 import ims.supporting.TableProduct;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;

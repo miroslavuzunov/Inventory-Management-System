@@ -12,10 +12,6 @@ public abstract class AbstractDao<T> {
     private Class<T> classType;
     protected static EntityManager manager;
 
-    static {
-        manager = EntityFactory.getFactory().createEntityManager();
-    }
-
     protected AbstractDao(Class<T> classType) {
         if (isEntity(classType))
             this.classType = classType;

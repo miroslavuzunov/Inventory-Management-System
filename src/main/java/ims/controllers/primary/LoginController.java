@@ -29,7 +29,7 @@ public class LoginController implements Initializable {
     private Button loginBtn;
 
     private UserService userService;
-    private User user;
+    private static User loggedUser;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -43,15 +43,14 @@ public class LoginController implements Initializable {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
-        user = userService.getUserByUsername(username);
+        loggedUser = userService.getUserByUsername(username);
 
-        if(user == null)
+        if(loggedUser == null)
             messageLabel.setText("Invalid username! Try again!");
         else
-            if(user.getPassword().equals(password)) {
-                switch (user.getRole()) {
+            if(loggedUser.getPassword().equals(password)) {
+                switch (loggedUser.getRole()) {
                     case ADMIN:
-                        AdminController.passUser(user);
                         App.setScene("/view/Admin");
                         break;
                     case MRT:
@@ -64,4 +63,7 @@ public class LoginController implements Initializable {
                 messageLabel.setText("Wrong password! Try again!");
     }
 
+    public static User getLoggedUser() {
+        return loggedUser;
+    }
 }

@@ -2,7 +2,8 @@
 
 <?import javafx.scene.control.ButtonType?>
 <?import javafx.scene.control.DialogPane?>
-<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <DialogPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ims.controllers.secondary.AddProductController">
@@ -13,7 +14,14 @@
       <ButtonType fx:constant="OK" />
       <ButtonType fx:constant="CANCEL" />
    </buttonTypes>
-   <content>
-      <ListView fx:id="listOfProductsAvailable" prefHeight="403.0" prefWidth="587.0" />
-   </content>
+   <header>
+      <TableView fx:id="listOfProductsAvailable" prefHeight="452.0" prefWidth="700.0">
+        <columns>
+          <TableColumn fx:id="brandAndModelColumn" prefWidth="245.0" text="Brand and model" />
+          <TableColumn fx:id="productTypeColumn" minWidth="0.0" prefWidth="170.0" text="Product type" />
+            <TableColumn fx:id="totalQuantityColumn" prefWidth="131.0" text="Total quantity" />
+            <TableColumn fx:id="availableQuantityColumn" prefWidth="153.0" text="Available quantity" />
+        </columns>
+      </TableView>
+   </header>
 </DialogPane>

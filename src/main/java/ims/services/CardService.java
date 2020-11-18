@@ -1,12 +1,11 @@
 package ims.services;
 
+import ims.controllers.primary.LoginController;
 import ims.daos.*;
 import ims.entities.*;
 import ims.enums.RecordStatus;
 import ims.enums.Role;
 import ims.supporting.TableProduct;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -40,7 +39,7 @@ public class CardService {
 
         if (client != null && client.getRole().equals(Role.CLIENT)) {
             clientsName.append("client: " + personInfo.getFirstName() + " " + personInfo.getLastName());
-            String status = "";
+            String productStatus = "";
 
             if (transactions.isEmpty())
                 transactions = client.getProductClientTransactions();
@@ -51,35 +50,23 @@ public class CardService {
                         productClient.getStatus().equals(RecordStatus.ENABLED)) {
 
                     if (productClient.getProduct().isExisting())
-                        status = "Existing";
+                        productStatus = "Existing";
                     else
-                        status = "Missing";
+                        productStatus = "Missing";
 
                     tableProducts.add(new TableProduct(
                             productClient.getProduct().getProductDetails().getBrandAndModel(),
                             productClient.getProduct().getInventoryNumber(),
                             productClient.getMrt().getPersonInfo().getFirstName() + " " + productClient.getMrt().getPersonInfo().getLastName(),
-                            productClient.getGivenOn().toString(), productClient.getProduct(),
-                            status
+                            productClient.getGivenOn().toString(),
+                            productStatus,
+                            productClient.getProduct()
                     ));
                 }
             }
         } else {
             clientsName.append("Client not found");
         }
-
-//        ProductClient productClient = new ProductClient();
-//        PersonInfo personInfo2 = personInfoDao.getRecordByEgn("9910115768");
-//        User mrt = personInfo2.getUser();
-//        Product product = productDao.getLastRecord();
-//
-//        productClient.setProduct(product);
-//        productClient.setMrt(mrt);
-//        productClient.setClient(client);
-//        productClient.setGivenOn(LocalDate.now());
-//        productClient.setStatus(RecordStatus.ENABLED);
-//
-//        productClientDao.saveRecord(productClient);
 
         return tableProducts;
     }
@@ -111,5 +98,35 @@ public class CardService {
         product.setExisting(status);
 
         productDao.updateRecord(product);
+    }
+
+    public void addAnotherProductToCard(TableProduct selectedProduct) {
+        ProductClient productClient = new ProductClient();
+        List<Product> allProducts = new ArrayList<>();
+        Product firstAvailable = new Product();
+        User mrt = LoginController.getLoggedUser();
+
+        allProducts = productDao.getAll();
+
+        for (Product product : allProducts) {
+            if (product.getProductDetails().getBrandAndModel().equals(selectedProduct.getBrand()) &&
+                    product.isAvailable() && product.isExisting()) {
+                firstAvailable = product;
+                break;
+            }
+        }
+
+        firstAvailable.setAvailable(false);
+
+        productClient.setProduct(firstAvailable);
+        productClient.setMrt(mrt);
+        productClient.setClient(client);
+        productClient.setGivenOn(LocalDate.now());
+        productClient.setStatus(RecordStatus.ENABLED);
+
+        productDao.updateRecord(firstAvailable);
+        productClientDao.saveRecord(productClient);
+        client.getProductClientTransactions().add(productClient);
+        userDao.updateRecord(client); //Updates product client transactions
     }
 }

@@ -12,7 +12,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -39,6 +38,8 @@ public class ClientCardController extends ClientCardControllerResources implemen
         initializeScenes();
 
         customizeTable();
+        addAnotherBtn.setDisable(true);
+        removeSelectedBtn.setDisable(true);
         endDate.setValue(LocalDate.now());  //Default period
         startDate.setValue(endDate.getValue().minusYears(1));
     }
@@ -79,6 +80,8 @@ public class ClientCardController extends ClientCardControllerResources implemen
             );
 
         clientName.setText(String.valueOf(clientsName));
+        addAnotherBtn.setDisable(tableProducts.isEmpty());
+        removeSelectedBtn.setDisable(tableProducts.isEmpty());
         setTableColumns();
         fillTable(tableProducts);
     }
@@ -96,8 +99,8 @@ public class ClientCardController extends ClientCardControllerResources implemen
 
         Optional<ButtonType> clickedButton = dialog.showAndWait();
         if (clickedButton.get() == ButtonType.OK) {
-            System.out.println("test");
-            //cardService.addAnotherProductToCard();
+            cardService.addAnotherProductToCard(AddProductController.getSelectedProduct());
+            searchByEgn(); //Refreshes the table
         }
     }
 
@@ -109,6 +112,13 @@ public class ClientCardController extends ClientCardControllerResources implemen
             @Override
             public boolean test(TableProduct tableProduct) {
                 return tableProduct.getInvNum().equals(selectedProduct.getInventoryNumber());
+            }
+        });
+
+        tableProducts.removeIf(new Predicate<TableProduct>() {
+            @Override
+            public boolean test(TableProduct tableProduct) {
+                return tableProduct.getProduct().equals(selectedProduct);
             }
         });
 
@@ -126,6 +136,7 @@ public class ClientCardController extends ClientCardControllerResources implemen
 
     private void fillTable(List<TableProduct> tableProducts) {
         clientsProductsTable.getItems().clear();
+
         for (TableProduct product : tableProducts) {
             product.setButton(getChangeStatusButton());
             clientsProductsTable.getItems().add(product);
@@ -155,7 +166,6 @@ public class ClientCardController extends ClientCardControllerResources implemen
             handleChangeStatusButton();
         }));
 
-
         return button;
     }
 
@@ -165,12 +175,11 @@ public class ClientCardController extends ClientCardControllerResources implemen
         if (selectedRow != null) {
             if (selectedRow.getStatus().equals("Existing")) {
                 selectedRow.setStatus("Missing");
-                fillTable(tableProducts);
+                fillTable(tableProducts); //Refreshes the table
                 cardService.changeProductStatus(selectedRow.getProduct(), false);
-            }
-            else {
-                fillTable(tableProducts);
+            } else {
                 selectedRow.setStatus("Existing");
+                fillTable(tableProducts);
                 cardService.changeProductStatus(selectedRow.getProduct(), true);
             }
         }

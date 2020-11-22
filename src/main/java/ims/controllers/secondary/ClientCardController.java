@@ -4,6 +4,7 @@ import ims.controllers.primary.SceneController;
 import ims.controllers.resources.ClientCardControllerResources;
 import ims.daos.AbstractDao;
 import ims.dialogs.ConfirmationDialog;
+import ims.dialogs.CustomDialog;
 import ims.entities.Product;
 import ims.services.CardService;
 import ims.supporting.CustomField;
@@ -24,6 +25,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class ClientCardController extends ClientCardControllerResources implements Initializable {
     private CardService cardService;
@@ -69,35 +71,35 @@ public class ClientCardController extends ClientCardControllerResources implemen
 
         noEmptyFields = handleEmptyFields();
         //noForbiddenChars = handleForbiddenChars(inputFields);
-        StringBuilder clientsName = new StringBuilder();
+        StringBuilder clientName = new StringBuilder();
 
         if (noEmptyFields && noForbiddenChars)
             tableProducts = cardService.getClientsProductsByEgnAndPeriod(
                     egnField.getText(),
-                    clientsName,
+                    clientName,
                     startDate.getValue(),
                     endDate.getValue()
             );
 
-        clientName.setText(String.valueOf(clientsName));
-        addAnotherBtn.setDisable(tableProducts.isEmpty());
+        this.clientName.setText(String.valueOf(clientName));
+
+        addAnotherBtn.setDisable(clientName.toString().equals("Client not found"));
+        if(!cardService.isDateInPeriod(startDate.getValue(), endDate.getValue(), LocalDate.now()))
+            addAnotherBtn.setDisable(true);
         removeSelectedBtn.setDisable(tableProducts.isEmpty());
+
         setTableColumns();
         fillTable(tableProducts);
     }
 
     @FXML
     private void addAnotherProductToCard() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("/view/AddProduct.fxml"));
-        DialogPane chooseProductDialog = fxmlLoader.load();
-        Dialog<ButtonType> dialog = new Dialog<>();
+        CustomDialog customDialog = new CustomDialog("AddProduct.fxml");
+        customDialog.setTitle("Adding new product to the card");
+        customDialog.setResizable(false);
 
-        dialog.setDialogPane(chooseProductDialog);
-        dialog.setTitle("Adding new product to the card");
-        dialog.setResizable(false);
+        Optional<ButtonType> clickedButton = customDialog.showAndWait();
 
-        Optional<ButtonType> clickedButton = dialog.showAndWait();
         if (clickedButton.get() == ButtonType.OK) {
             cardService.addAnotherProductToCard(AddProductController.getSelectedProduct());
             searchByEgn(); //Refreshes the table
@@ -123,6 +125,7 @@ public class ClientCardController extends ClientCardControllerResources implemen
         });
 
         cardService.removeSelectedProduct(selectedProduct);
+        removeSelectedBtn.setDisable(tableProducts.isEmpty());
     }
 
     private void setTableColumns() {  //Mapping with TableProduct fields

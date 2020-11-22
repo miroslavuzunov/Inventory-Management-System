@@ -5,7 +5,9 @@ import ims.controllers.primary.SceneController;
 import ims.controllers.resources.RegisterProductControllerResources;
 import ims.daos.AbstractDao;
 import ims.dialogs.ConfirmationDialog;
+import ims.dialogs.CustomDialog;
 import ims.dialogs.SuccessDialog;
+import ims.entities.ProductDetails;
 import ims.enums.PriceCurrency;
 import ims.services.ProductRegistrationService;
 import ims.supporting.Cache;
@@ -22,6 +24,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class RegisterProductController extends RegisterProductControllerResources implements Initializable {
@@ -121,7 +124,10 @@ public class RegisterProductController extends RegisterProductControllerResource
         if (noEmptyFields && noForbiddenChars)
             noBusyData = handleBusyData(customFieldsByName);
 
-        if(noEmptyFields && noBusyData){
+        if (!noBusyData)
+            addProductQuantity();
+
+        if (noEmptyFields && noBusyData) {
             ButtonType result = ConfirmationDialog.askForConfirmation("Are you sure you want to add new product to the system?");
 
             if (result == ButtonType.YES) {
@@ -132,9 +138,32 @@ public class RegisterProductController extends RegisterProductControllerResource
         }
     }
 
+    private void addProductQuantity() throws IOException {
+        CustomDialog customDialog = new CustomDialog("AddProductQuantity.fxml");
+        customDialog.setTitle("Adding quantity to existing product");
+        customDialog.setResizable(false);
+
+        Optional<ButtonType> clickedButton = customDialog.showAndWait();
+
+        if (clickedButton.get() == ButtonType.OK) {
+            ProductDetails productDetails = AddProductQuantityController.getSelectedProduct();
+            int quantity = AddProductQuantityController.getNewQuantity();
+
+            ButtonType result = ConfirmationDialog.askForConfirmation("Are you sure you want to add new quantity to the same product?");
+
+            if (result == ButtonType.YES) {
+                customFieldsByName.get(QUANTITY_FIELD_NAME).setFieldValue(String.valueOf(quantity));
+                productRegistrationService.generateProductsByDetails(customFieldsByName, productDetails, quantity);
+                productRegistrationService.updateProductQuantity(productDetails, quantity);
+
+                SuccessDialog.success("Done! New quantity added to the product!");
+                App.setScene("/view/RegisterProduct"); //reloading same scene to clean the fields
+            }
+        }
+    }
+
     private boolean handleBusyData(Map<String, CustomField> fieldsByName) {
-        boolean handlingResult = true;
-        handlingResult = productRegistrationService.validateData(fieldsByName);
+        boolean handlingResult = productRegistrationService.validateData(fieldsByName);
 
         for (CustomField field : fieldsByName.values())
             handleField(field, field.getState(), field.getMessage());

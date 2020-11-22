@@ -3,6 +3,7 @@ package ims.services;
 import ims.controllers.primary.LoginController;
 import ims.daos.*;
 import ims.entities.*;
+import ims.enums.ProductType;
 import ims.enums.RecordStatus;
 import ims.enums.Role;
 import ims.supporting.TableProduct;
@@ -46,7 +47,7 @@ public class CardService {
 
 
             for (ProductClient productClient : transactions) {
-                if (startDate.datesUntil(endDate.plusDays(1)).collect(Collectors.toList()).contains(productClient.getGivenOn()) && // Checks if the transaction date is in the specified period (inclusive)
+                if (isDateInPeriod(startDate, endDate, productClient.getGivenOn()) &&
                         productClient.getStatus().equals(RecordStatus.ENABLED)) {
 
                     if (productClient.getProduct().isExisting())
@@ -71,6 +72,10 @@ public class CardService {
         return tableProducts;
     }
 
+    public boolean isDateInPeriod(LocalDate startDate, LocalDate endDate, LocalDate givenOn){
+        return startDate.datesUntil(endDate.plusDays(1)).collect(Collectors.toList()).contains(givenOn); // Checks if the transaction date is in the specified period (inclusive)
+    }
+
     public void removeSelectedProduct(Product product) {
         client.getProductClientTransactions().forEach(transaction -> {
             if (transaction.getProduct().getInventoryNumber().equals(product.getInventoryNumber())) {
@@ -85,7 +90,10 @@ public class CardService {
             }
         });
 
-        product.setAvailable(true);
+        if (!product.getProductDetails().getProductType().equals(ProductType.TA)) {
+            product.setStatus(RecordStatus.ENABLED);
+            product.setAvailable(true);
+        }
         productDao.updateRecord(product);
         userDao.updateRecord(client);
     }
@@ -104,14 +112,19 @@ public class CardService {
         ProductClient productClient = new ProductClient();
         List<Product> allProducts = new ArrayList<>();
         Product firstAvailable = new Product();
-        User mrt = LoginController.getLoggedUser();
+        User loggedUser = LoginController.getLoggedUser();
 
         allProducts = productDao.getAll();
 
         for (Product product : allProducts) {
-            if (product.getProductDetails().getBrandAndModel().equals(selectedProduct.getBrand()) &&
-                    product.isAvailable() && product.isExisting()) {
+            if (product.getProductDetails().getBrandAndModel().equals(selectedProduct.getBrand()) && //Checking by brand and model because the field is always unique
+                    product.isAvailable() &&
+                    product.isExisting() &&
+                    product.getStatus().equals(RecordStatus.ENABLED)) {
                 firstAvailable = product;
+
+                if (product.getProductDetails().getProductType().equals(ProductType.TA))
+                    product.setStatus(RecordStatus.DISABLED); //TA should not be returned anymore
                 break;
             }
         }
@@ -119,8 +132,10 @@ public class CardService {
         firstAvailable.setAvailable(false);
 
         productClient.setProduct(firstAvailable);
-        productClient.setMrt(mrt);
-        productClient.setClient(client);
+        if (loggedUser.getRole().equals(Role.MRT) || loggedUser.getRole().equals(Role.ADMIN))
+            productClient.setMrt(loggedUser);
+        if (client.getRole().equals(Role.CLIENT))
+            productClient.setClient(client);
         productClient.setGivenOn(LocalDate.now());
         productClient.setStatus(RecordStatus.ENABLED);
 

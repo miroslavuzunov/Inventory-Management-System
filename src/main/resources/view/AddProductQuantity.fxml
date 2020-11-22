@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ButtonType?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<DialogPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="390.0" prefWidth="600.0" style="-fx-background-color: #ccc;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ims.controllers.secondary.AddProductQuantityController">
+   <expandableContent>
+      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="320.0" />
+   </expandableContent>
+   <buttonTypes>
+      <ButtonType fx:constant="OK" />
+      <ButtonType fx:constant="CANCEL" />
+   </buttonTypes>
+   <content>
+      <VBox prefHeight="335.0" prefWidth="635.0">
+         <children>
+            <Label alignment="CENTER" prefHeight="27.0" prefWidth="106.0" stylesheets="@../css/styles.css" text="Brand and model:" textFill="#7c7c7c">
+               <font>
+                  <Font size="13.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="140.0" top="50.0" />
+               </VBox.margin>
+            </Label>
+            <ComboBox fx:id="brandModelComboBox" onAction="#setSelectedItem" prefHeight="40.0" prefWidth="298.0">
+               <VBox.margin>
+                  <Insets left="140.0" right="140.0" />
+               </VBox.margin>
+            </ComboBox>
+            <Label alignment="CENTER" prefHeight="27.0" prefWidth="54.0" stylesheets="@../css/styles.css" text="Quantity:" textFill="#7c7c7c">
+               <font>
+                  <Font size="13.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="140.0" top="50.0" />
+               </VBox.margin>
+            </Label>
+            <TextField fx:id="productQuantity" prefHeight="40.0">
+               <VBox.margin>
+                  <Insets left="140.0" right="140.0" />
+               </VBox.margin>
+            </TextField>
+         </children>
+      </VBox>
+   </content>
+</DialogPane>

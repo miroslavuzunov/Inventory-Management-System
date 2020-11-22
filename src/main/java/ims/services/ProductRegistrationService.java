@@ -8,6 +8,7 @@ import ims.entities.Product;
 import ims.entities.ProductDetails;
 import ims.enums.PriceCurrency;
 import ims.enums.ProductType;
+import ims.enums.RecordStatus;
 import ims.enums.State;
 import ims.supporting.CustomField;
 
@@ -55,8 +56,9 @@ public class ProductRegistrationService {
     public boolean validateData(Map<String, CustomField> customFieldsByName) {
         boolean handlingResult = true;
         String inputBrandAndModel =
-                customFieldsByName.get(BRAND_FIELD_NAME).getFieldValue() + " " +
+                customFieldsByName.get(BRAND_FIELD_NAME).getFieldValue() +
                         customFieldsByName.get(MODEL_FIELD_NAME).getFieldValue();
+        inputBrandAndModel = inputBrandAndModel.replaceAll("\\s", "");
 
         ProductDetails productDetails = productDetailsDao.getProductDetailsByBrandAndModel(inputBrandAndModel);
 
@@ -73,16 +75,16 @@ public class ProductRegistrationService {
     public void createProduct(Map<String, CustomField> customFieldsByName) {
         ProductDetails productDetails = new ProductDetails();
         setProductDetails(customFieldsByName, productDetails);
-        generateProductsByDetails(customFieldsByName, productDetails);
+        generateProductsByDetails(customFieldsByName, productDetails, productDetails.getQuantity()); // Separating quantity because of reusability
     }
 
-    private void generateProductsByDetails(Map<String, CustomField> customFieldsByName, ProductDetails productDetails) {
-        int count = productDetails.getQuantity();
+    public void generateProductsByDetails(Map<String, CustomField> customFieldsByName, ProductDetails productDetails, int quantity) {
+        int count = quantity;
         int lastProductID = getIDFromInventoryNumber(productDao.getLastRecord().getInventoryNumber());
 
         String productCategory = "TA";
-        if(productDetails.getDepreciationDegree() != null)
-         productCategory = productDetails.getDepreciationDegree().getCategory();
+        if (productDetails.getDepreciationDegree() != null)
+            productCategory = productDetails.getDepreciationDegree().getCategory();
 
         while (count != 0) {
             Product product = new Product();
@@ -91,11 +93,13 @@ public class ProductRegistrationService {
             product.setAvailable(true);
             product.setExisting(true);
             product.setInventoryNumber(generateUniqueInventoryNumber(customFieldsByName,
-                    count,
+                    productDetails.getQuantity() - count,
                     productCategory
                     ,
                     lastProductID)
             );
+            product.setStatus(RecordStatus.ENABLED);
+
             productDao.saveRecord(product);
             count--;
         }
@@ -113,13 +117,15 @@ public class ProductRegistrationService {
 
     private String generateUniqueInventoryNumber(Map<String, CustomField> customFieldsByName, int currentNum, String category, int lastProductID) {
         String invNumber = "";
+        String halfNano = String.valueOf(System.nanoTime()); //Provides uniqueness
+        halfNano = halfNano.substring(halfNano.length() / 2); //Shortening
 
         invNumber += customFieldsByName.get(BRAND_FIELD_NAME).getFieldValue().substring(0, 1).toUpperCase();
         invNumber += customFieldsByName.get(MODEL_FIELD_NAME).getFieldValue().substring(0, 1).toUpperCase();
         invNumber += "-";
         invNumber += category;
         invNumber += "-";
-        invNumber += System.nanoTime();
+        invNumber += halfNano;
         invNumber += "-";
         invNumber += lastProductID;
         invNumber += "-";
@@ -131,15 +137,19 @@ public class ProductRegistrationService {
     private void setProductDetails(Map<String, CustomField> customFieldsByName, ProductDetails productDetails) {
         DepreciationDegree depreciationDegree = new DepreciationDegree();
 
-        if(customFieldsByName.get(DEPRECIATION_DEGREE_FIELD_NAME).getFieldValue() != null) {
+        if (customFieldsByName.get(DEPRECIATION_DEGREE_FIELD_NAME).getFieldValue() != null) {
             setProductDepreciationDegree(customFieldsByName, depreciationDegree);
             productDetails.setDepreciationDegree(productDetailsDao.getDepreciationDegreeReference(getDepreciationDegreeId(depreciationDegree)));
         }
         setProductType(customFieldsByName, productDetails);
-        productDetails.setBrandAndModel(
-                customFieldsByName.get(BRAND_FIELD_NAME).getFieldValue() + " " +
-                        customFieldsByName.get(MODEL_FIELD_NAME).getFieldValue()
-        );
+
+        String brand = customFieldsByName.get(BRAND_FIELD_NAME).getFieldValue();
+        String model = customFieldsByName.get(MODEL_FIELD_NAME).getFieldValue();
+        brand = brand.replaceAll("\\s", "");
+        model = model.replaceAll("\\s", "");
+
+        productDetails.setBrandAndModel(brand + model);
+
         setProductPriceCurrency(customFieldsByName, productDetails);
         productDetails.setDescription(customFieldsByName.get(DESCRIPTION_FIELD_NAME).getFieldValue());
         productDetails.setInitialPrice(new BigDecimal(customFieldsByName.get(UNIT_PRICE_FIELD_NAME).getFieldValue()));
@@ -172,4 +182,17 @@ public class ProductRegistrationService {
             productDetails.setPriceCurrency(PriceCurrency.EUR);
     }
 
+    public List<ProductDetails> getAllProductsDetails(){
+       return productDetailsDao.getAll();
+    }
+
+    public ProductDetails getProductDetailsByBrandAndModel(String brandAndModel){
+        return productDetailsDao.getProductDetailsByBrandAndModel(brandAndModel);
+    }
+
+    public void updateProductQuantity(ProductDetails productDetails, int newQuantity) {
+        productDetails.setQuantity(productDetails.getQuantity() + newQuantity);
+
+        productDetailsDao.updateRecord(productDetails);
+    }
 }

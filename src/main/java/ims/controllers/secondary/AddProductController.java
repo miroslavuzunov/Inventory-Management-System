@@ -37,13 +37,14 @@ public class AddProductController implements Initializable {
         setTableColumns();
 
         cardService.getAllProductsDetails().forEach(productDetails -> {
-            listOfProductsAvailable.getItems().add(new TableProduct(
-                    productDetails.getBrandAndModel(),
-                    productDetails.getProductType().toString(),
-                    productDetails.getQuantity().toString(),
-                    getProductAvailableQuantity(productDetails).toString()
-                    )
-            );
+            TableProduct tableProduct = new TableProduct();
+
+            tableProduct.setBrand(productDetails.getBrandAndModel());
+            tableProduct.setProductType(productDetails.getProductType().toString());
+            tableProduct.setTotalQuantity(productDetails.getQuantity().toString());
+            tableProduct.setAvailableQuantity(getProductAvailableQuantity(productDetails).toString());
+
+            listOfProductsAvailable.getItems().add(tableProduct);
         });
 
         listOfProductsAvailable.getSelectionModel().selectedItemProperty().addListener((action) -> {

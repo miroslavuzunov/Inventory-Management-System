@@ -55,14 +55,16 @@ public class CardService {
                     else
                         productStatus = "Missing";
 
-                    tableProducts.add(new TableProduct(
-                            productClient.getProduct().getProductDetails().getBrandAndModel(),
-                            productClient.getProduct().getInventoryNumber(),
-                            productClient.getMrt().getPersonInfo().getFirstName() + " " + productClient.getMrt().getPersonInfo().getLastName(),
-                            productClient.getGivenOn().toString(),
-                            productStatus,
-                            productClient.getProduct()
-                    ));
+                    TableProduct tableProduct = new TableProduct();
+
+                    tableProduct.setBrand(productClient.getProduct().getProductDetails().getBrandAndModel());
+                    tableProduct.setInvNum(productClient.getProduct().getInventoryNumber());
+                    tableProduct.setGivenBy(productClient.getMrt().getPersonInfo().getFirstName() + " " + productClient.getMrt().getPersonInfo().getLastName());
+                    tableProduct.setGivenOn(productClient.getGivenOn().toString());
+                    tableProduct.setStatus(productStatus);
+                    tableProduct.setProduct(productClient.getProduct());
+
+                    tableProducts.add(tableProduct);
                 }
             }
         } else {
@@ -72,7 +74,7 @@ public class CardService {
         return tableProducts;
     }
 
-    public boolean isDateInPeriod(LocalDate startDate, LocalDate endDate, LocalDate givenOn){
+    public boolean isDateInPeriod(LocalDate startDate, LocalDate endDate, LocalDate givenOn) {
         return startDate.datesUntil(endDate.plusDays(1)).collect(Collectors.toList()).contains(givenOn); // Checks if the transaction date is in the specified period (inclusive)
     }
 

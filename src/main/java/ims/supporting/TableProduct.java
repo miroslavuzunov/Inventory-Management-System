@@ -24,29 +24,11 @@ public class TableProduct {
     public TableProduct() {
     }
 
-    public TableProduct(String brand, String invNum, String givenBy, String givenOn, String status, Product product) {
-        this.brand = brand;
-        this.invNum = invNum;
-        this.givenBy = givenBy;
-        this.givenOn = givenOn;
-        this.status = status;
-        this.product = product;
-    }
-
     public TableProduct(String brand, String productType, String totalQuantity, String availableQuantity) {
         this.brand = brand;
         this.productType = productType;
         this.totalQuantity = totalQuantity;
         this.availableQuantity = availableQuantity;
-    }
-
-    public TableProduct(String brand, String invNum, String status, String initialPrice, String currentPrice, String productType) {
-        this.brand = brand;
-        this.invNum = invNum;
-        this.status = status;
-        this.initialPrice = initialPrice;
-        this.currentPrice = currentPrice;
-        this.productType = productType;
     }
 
     public String getBrand() {
@@ -123,5 +105,25 @@ public class TableProduct {
 
     public void setProductType(String productType) {
         this.productType = productType;
+    }
+
+    public void setGivenBy(String givenBy) {
+        this.givenBy = givenBy;
+    }
+
+    public void setGivenOn(String givenOn) {
+        this.givenOn = givenOn;
+    }
+
+    public void setTotalQuantity(String totalQuantity) {
+        this.totalQuantity = totalQuantity;
+    }
+
+    public void setAvailableQuantity(String availableQuantity) {
+        this.availableQuantity = availableQuantity;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 }

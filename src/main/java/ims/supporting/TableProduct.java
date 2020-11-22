@@ -11,6 +11,8 @@ public class TableProduct {
     private String givenBy;
     private String givenOn;
     private String status;
+    private String initialPrice;
+    private String currentPrice;
     private Button button;
     private String productType;
     private String totalQuantity;
@@ -18,6 +20,9 @@ public class TableProduct {
 
     @Transient
     private Product product;
+
+    public TableProduct() {
+    }
 
     public TableProduct(String brand, String invNum, String givenBy, String givenOn, String status, Product product) {
         this.brand = brand;
@@ -33,6 +38,15 @@ public class TableProduct {
         this.productType = productType;
         this.totalQuantity = totalQuantity;
         this.availableQuantity = availableQuantity;
+    }
+
+    public TableProduct(String brand, String invNum, String status, String initialPrice, String currentPrice, String productType) {
+        this.brand = brand;
+        this.invNum = invNum;
+        this.status = status;
+        this.initialPrice = initialPrice;
+        this.currentPrice = currentPrice;
+        this.productType = productType;
     }
 
     public String getBrand() {
@@ -81,5 +95,33 @@ public class TableProduct {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getInitialPrice() {
+        return initialPrice;
+    }
+
+    public String getCurrentPrice() {
+        return currentPrice;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public void setInvNum(String invNum) {
+        this.invNum = invNum;
+    }
+
+    public void setInitialPrice(String initialPrice) {
+        this.initialPrice = initialPrice;
+    }
+
+    public void setCurrentPrice(String currentPrice) {
+        this.currentPrice = currentPrice;
+    }
+
+    public void setProductType(String productType) {
+        this.productType = productType;
     }
 }

@@ -32,10 +32,6 @@ public class AdminController extends AdminControllerResources implements Initial
 
     @FXML
     private void handleClicks(ActionEvent event) throws IOException {
-        if (event.getSource() == genRefBtn) {
-            fadeMain.toFront();
-            genRefPane.toFront();
-        }
         if (event.getSource() == clientManipBtn) {
             fadeMain.toFront();
             clientManipPane.toFront();

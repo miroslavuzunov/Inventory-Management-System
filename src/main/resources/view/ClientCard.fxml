@@ -67,33 +67,33 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <TextField fx:id="egnField" layoutX="9.0" layoutY="77.0" prefHeight="37.0" prefWidth="213.0" promptText="9706095566" />
-            <Label alignment="CENTER" layoutX="-7.0" layoutY="50.0" prefHeight="27.0" prefWidth="106.0" stylesheets="@../css/styles.css" text="Client's EGN:" textFill="#7c7c7c">
+            <TextField fx:id="egnField" layoutX="9.0" layoutY="67.0" prefHeight="37.0" prefWidth="213.0" promptText="9706095566" />
+            <Label alignment="CENTER" layoutX="-7.0" layoutY="44.0" prefHeight="27.0" prefWidth="106.0" stylesheets="@../css/styles.css" text="Client's EGN:" textFill="#7c7c7c">
                <font>
                   <Font size="13.0" />
                </font>
             </Label>
-            <Button fx:id="searchBtn" layoutX="162.0" layoutY="79.0" mnemonicParsing="false" onAction="#searchByEgn" prefHeight="33.0" prefWidth="58.0" text="Search">
+            <Button fx:id="searchBtn" layoutX="162.0" layoutY="69.0" mnemonicParsing="false" onAction="#searchByEgn" prefHeight="33.0" prefWidth="58.0" text="Search">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
             <Label fx:id="egnMsg" layoutX="14.0" layoutY="105.0" prefHeight="17.0" prefWidth="250.0" textFill="#ff1a1a" />
-            <DatePicker fx:id="startDate" layoutX="356.0" layoutY="76.0" onAction="#searchByEgn" prefHeight="35.0" prefWidth="174.0">
+            <DatePicker fx:id="startDate" layoutX="356.0" layoutY="68.0" onAction="#searchByEgn" prefHeight="35.0" prefWidth="174.0">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></DatePicker>
-            <Label alignment="CENTER" layoutX="339.0" layoutY="50.0" prefHeight="27.0" prefWidth="71.0" stylesheets="@../css/styles.css" text="From:" textFill="#7c7c7c">
+            <Label alignment="CENTER" layoutX="339.0" layoutY="45.0" prefHeight="27.0" prefWidth="71.0" stylesheets="@../css/styles.css" text="From:" textFill="#7c7c7c">
                <font>
                   <Font size="13.0" />
                </font>
             </Label>
-            <Label alignment="CENTER" layoutX="519.0" layoutY="50.0" prefHeight="27.0" prefWidth="71.0" stylesheets="@../css/styles.css" text="To:" textFill="#7c7c7c">
+            <Label alignment="CENTER" layoutX="519.0" layoutY="45.0" prefHeight="27.0" prefWidth="71.0" stylesheets="@../css/styles.css" text="To:" textFill="#7c7c7c">
                <font>
                   <Font size="13.0" />
                </font>
             </Label>
-            <DatePicker fx:id="endDate" layoutX="545.0" layoutY="76.0" onAction="#searchByEgn" prefHeight="35.0" prefWidth="174.0">
+            <DatePicker fx:id="endDate" layoutX="545.0" layoutY="68.0" onAction="#searchByEgn" prefHeight="35.0" prefWidth="174.0">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></DatePicker>

@@ -84,7 +84,8 @@ public class ClientCardController extends ClientCardControllerResources implemen
         this.clientName.setText(String.valueOf(clientName));
 
         addAnotherBtn.setDisable(clientName.toString().equals("Client not found"));
-        if(!cardService.isDateInPeriod(startDate.getValue(), endDate.getValue(), LocalDate.now()))
+        if(!cardService.isDateInPeriod(startDate.getValue(), endDate.getValue(), LocalDate.now()) ||
+            !noEmptyFields)
             addAnotherBtn.setDisable(true);
         removeSelectedBtn.setDisable(tableProducts.isEmpty());
 

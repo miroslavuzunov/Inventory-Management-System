@@ -39,7 +39,7 @@ public class LoginController implements Initializable {
     }
 
     @FXML
-    private void login() throws IOException {
+    private void login() throws IOException, NoSuchFieldException {
         String username = usernameField.getText();
         String password = passwordField.getText();
 

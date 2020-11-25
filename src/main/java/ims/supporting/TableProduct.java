@@ -24,13 +24,6 @@ public class TableProduct {
     public TableProduct() {
     }
 
-    public TableProduct(String brand, String productType, String totalQuantity, String availableQuantity) {
-        this.brand = brand;
-        this.productType = productType;
-        this.totalQuantity = totalQuantity;
-        this.availableQuantity = availableQuantity;
-    }
-
     public String getBrand() {
         return brand;
     }

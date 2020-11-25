@@ -65,7 +65,7 @@ public class ClientCardController extends ClientCardControllerResources implemen
     }
 
     @FXML
-    private void searchByEgn() {
+    private void searchByEgn() throws NoSuchFieldException {
         boolean noEmptyFields = true;
         boolean noForbiddenChars = true;
 
@@ -94,7 +94,7 @@ public class ClientCardController extends ClientCardControllerResources implemen
     }
 
     @FXML
-    private void addAnotherProductToCard() throws IOException {
+    private void addAnotherProductToCard() throws IOException, NoSuchFieldException {
         CustomDialog customDialog = new CustomDialog("AddProduct.fxml");
         customDialog.setTitle("Adding new product to the card");
         customDialog.setResizable(false);

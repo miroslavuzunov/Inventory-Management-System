@@ -12,7 +12,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.IOException;
@@ -31,15 +30,15 @@ public class ReferencesController extends ReferencesControllerResources implemen
     public void initialize(URL url, ResourceBundle resourceBundle) {
         AbstractDao.newEntityManager();
         initializeScenes();
+        referencesService = new ReferencesService();
         filterChoices = new HashMap<>();
         updateFilterChoices();
         customizeTable();
 
-        referencesService = new ReferencesService();
-
         endDate.setValue(LocalDate.now());  //Default period
         startDate.setValue(endDate.getValue().minusYears(1));
         selectDefaultBoxes();
+        handleCheckedBoxes(new ActionEvent());
     }
 
     private void updateFilterChoices() {
@@ -78,7 +77,7 @@ public class ReferencesController extends ReferencesControllerResources implemen
     }
 
     private void selectDefaultBoxes() {
-        taCheckBox.setSelected(false);
+        taCheckBox.setSelected(true);
         lttaCheckBox.setSelected(true);
         scrappedCheckBox.setSelected(true);
         availableCheckBox.setSelected(true);

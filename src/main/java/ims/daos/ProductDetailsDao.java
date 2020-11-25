@@ -1,6 +1,7 @@
 package ims.daos;
 
 import ims.entities.DepreciationDegree;
+import ims.entities.PersonInfo;
 import ims.entities.ProductDetails;
 import ims.enums.ProductType;
 
@@ -8,6 +9,7 @@ import javax.management.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.lang.reflect.Field;
 import java.util.List;
 
 public class ProductDetailsDao  extends AbstractDao<ProductDetails>{
@@ -21,24 +23,13 @@ public class ProductDetailsDao  extends AbstractDao<ProductDetails>{
         return reference;
     }
 
-    public ProductDetails getProductDetailsByBrandAndModel(String brandModel) {
-        CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
-        CriteriaQuery<ProductDetails> criteriaQuery = criteriaBuilder.createQuery(ProductDetails.class);
-        Root<ProductDetails> recordRoot = criteriaQuery.from(ProductDetails.class);
-        criteriaQuery.where(criteriaBuilder.equal(recordRoot.get("brandAndModel"), brandModel));
-        List<ProductDetails> records = manager.createQuery(criteriaQuery).getResultList();
+    public ProductDetails getProductDetailsByBrandAndModel(String brandModel) throws NoSuchFieldException {
+        Field field = ProductDetails.class.getDeclaredField("brandAndModel");
+        ProductDetails productDetails =
+                getRecordByAttribute(field, brandModel);
 
-        if (!records.isEmpty())
-            return records.get(0);
+        if (productDetails != null)
+            return productDetails;
         return new ProductDetails();
-    }
-
-    public List<ProductDetails> getAllTaProducts() {
-        CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
-        CriteriaQuery<ProductDetails> criteriaQuery = criteriaBuilder.createQuery(ProductDetails.class);
-        Root<ProductDetails> recordRoot = criteriaQuery.from(ProductDetails.class);
-        criteriaQuery.where(criteriaBuilder.equal(recordRoot.get("productType"), ProductType.TA));
-
-        return manager.createQuery(criteriaQuery).getResultList();
     }
 }

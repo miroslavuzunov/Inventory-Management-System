@@ -53,7 +53,7 @@ public class UserRegistrationService {
         return controllerCities;
     }
 
-    public boolean validateData(Map<String, CustomField> customFieldsByName) {
+    public boolean validateData(Map<String, CustomField> customFieldsByName) throws NoSuchFieldException {
         boolean handlingResult = true;
         String inputUsername = customFieldsByName.get(USERNAME_FIELD_NAME).getFieldValue();
         String inputEmail = customFieldsByName.get(EMAIL_FIELD_NAME).getFieldValue();
@@ -80,7 +80,7 @@ public class UserRegistrationService {
         return handlingResult;
     }
 
-    public Map<String, User> requestData(String username, String email, String egn) {
+    public Map<String, User> requestData(String username, String email, String egn) throws NoSuchFieldException {
         Map<String, User> users = new HashMap<>();
 
         User userWithSameNick = new User();

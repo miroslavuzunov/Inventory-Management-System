@@ -44,7 +44,7 @@ public class ProductRegistrationService {
         return controllerDegrees;
     }
 
-    public Integer getDepreciationDegreeId(DepreciationDegree depreciationDegree) {
+    public Integer getDepreciationDegreeId(DepreciationDegree depreciationDegree) throws NoSuchFieldException {
         DepreciationDegree tempDepreciationDegree = depreciationDegreeDao.getRecordByCategory(depreciationDegree.getCategory());
 
         if (tempDepreciationDegree == null)
@@ -53,7 +53,7 @@ public class ProductRegistrationService {
         return tempDepreciationDegree.getId();
     }
 
-    public boolean validateData(Map<String, CustomField> customFieldsByName) {
+    public boolean validateData(Map<String, CustomField> customFieldsByName) throws NoSuchFieldException {
         boolean handlingResult = true;
         String inputBrandAndModel =
                 customFieldsByName.get(BRAND_FIELD_NAME).getFieldValue() +
@@ -72,7 +72,7 @@ public class ProductRegistrationService {
         return handlingResult;
     }
 
-    public void createProduct(Map<String, CustomField> customFieldsByName) {
+    public void createProduct(Map<String, CustomField> customFieldsByName) throws NoSuchFieldException {
         ProductDetails productDetails = new ProductDetails();
         setProductDetails(customFieldsByName, productDetails);
         generateProductsByDetails(customFieldsByName, productDetails, productDetails.getQuantity()); // Separating quantity because of reusability
@@ -134,7 +134,7 @@ public class ProductRegistrationService {
         return invNumber;
     }
 
-    private void setProductDetails(Map<String, CustomField> customFieldsByName, ProductDetails productDetails) {
+    private void setProductDetails(Map<String, CustomField> customFieldsByName, ProductDetails productDetails) throws NoSuchFieldException {
         DepreciationDegree depreciationDegree = new DepreciationDegree();
 
         if (customFieldsByName.get(DEPRECIATION_DEGREE_FIELD_NAME).getFieldValue() != null) {
@@ -186,7 +186,7 @@ public class ProductRegistrationService {
        return productDetailsDao.getAll();
     }
 
-    public ProductDetails getProductDetailsByBrandAndModel(String brandAndModel){
+    public ProductDetails getProductDetailsByBrandAndModel(String brandAndModel) throws NoSuchFieldException {
         return productDetailsDao.getProductDetailsByBrandAndModel(brandAndModel);
     }
 

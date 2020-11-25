@@ -43,7 +43,7 @@ public class RegisterProductController extends RegisterProductControllerResource
     }
 
     @FXML
-    private void handleClicks(ActionEvent event) throws IOException {
+    private void handleClicks(ActionEvent event) throws IOException, NoSuchFieldException {
         if (event.getSource() == addProductBtn)
             addProduct();
         if (event.getSource() == backBtn) {
@@ -113,7 +113,7 @@ public class RegisterProductController extends RegisterProductControllerResource
         lttaPanel.setDisable(true);
     }
 
-    private void addProduct() throws IOException {
+    private void addProduct() throws IOException, NoSuchFieldException {
         boolean noEmptyFields = true;
         boolean noBusyData = true;
         boolean noForbiddenChars = true;
@@ -138,7 +138,7 @@ public class RegisterProductController extends RegisterProductControllerResource
         }
     }
 
-    private void addProductQuantity() throws IOException {
+    private void addProductQuantity() throws IOException, NoSuchFieldException {
         CustomDialog customDialog = new CustomDialog("AddProductQuantity.fxml");
         customDialog.setTitle("Adding quantity to existing product");
         customDialog.setResizable(false);
@@ -162,7 +162,7 @@ public class RegisterProductController extends RegisterProductControllerResource
         }
     }
 
-    private boolean handleBusyData(Map<String, CustomField> fieldsByName) {
+    private boolean handleBusyData(Map<String, CustomField> fieldsByName) throws NoSuchFieldException {
         boolean handlingResult = productRegistrationService.validateData(fieldsByName);
 
         for (CustomField field : fieldsByName.values())

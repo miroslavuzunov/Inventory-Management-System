@@ -10,7 +10,7 @@ public class UserService {
         userDao = new UserDao();
     }
 
-    public User getUserByUsername(String username){
+    public User getUserByUsername(String username) throws NoSuchFieldException {
         return userDao.getUserByUsername(username);
     }
 

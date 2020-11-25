@@ -38,7 +38,7 @@ public class RegisterUserController extends RegisterUserControllerResources impl
     }
 
     @FXML
-    private void handleClicks(ActionEvent event) throws IOException {
+    private void handleClicks(ActionEvent event) throws IOException, NoSuchFieldException {
         if (event.getSource() == signUpBtn)
             signUp();
         if (event.getSource() == backBtn) {
@@ -103,7 +103,7 @@ public class RegisterUserController extends RegisterUserControllerResources impl
         });
     }
 
-    public void signUp() throws IOException {
+    public void signUp() throws IOException, NoSuchFieldException {
         boolean noEmptyFields = true;
         boolean passwordsMatch = true;
         boolean noBusyData = true;
@@ -150,7 +150,7 @@ public class RegisterUserController extends RegisterUserControllerResources impl
         return handlingResult;
     }
 
-    private boolean handleBusyData(Map<String, CustomField> fieldsByName) {
+    private boolean handleBusyData(Map<String, CustomField> fieldsByName) throws NoSuchFieldException {
         boolean handlingResult = true;
         handlingResult = userRegistrationService.validateData(fieldsByName);
 

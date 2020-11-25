@@ -32,7 +32,7 @@ public class CardService {
         transactions = new ArrayList<>();
     }
 
-    public List<TableProduct> getClientsProductsByEgnAndPeriod(String egn, StringBuilder clientsName, LocalDate startDate, LocalDate endDate) { //StringBuilder used because of passing string by reference
+    public List<TableProduct> getClientsProductsByEgnAndPeriod(String egn, StringBuilder clientsName, LocalDate startDate, LocalDate endDate) throws NoSuchFieldException { //StringBuilder used because of passing string by reference
         List<TableProduct> tableProducts = new ArrayList<>();
 
         PersonInfo personInfo = personInfoDao.getRecordByEgn(egn);

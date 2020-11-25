@@ -44,7 +44,7 @@ public class AddProductQuantityController implements Initializable {
         quantity = Integer.parseInt(productQuantity.getText());
     }
 
-    public static ProductDetails getSelectedProduct(){   // TODO validation
+    public static ProductDetails getSelectedProduct() throws NoSuchFieldException {   // TODO validation
        return productRegistrationService.getProductDetailsByBrandAndModel(selectedItem);
     }
 

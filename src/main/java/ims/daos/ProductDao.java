@@ -2,11 +2,13 @@ package ims.daos;
 
 import ims.entities.DepreciationDegree;
 import ims.entities.Product;
+import ims.entities.ProductDetails;
 
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.lang.reflect.Field;
 import java.util.List;
 
 
@@ -16,9 +18,13 @@ public class ProductDao extends AbstractDao<Product> {
     }
 
     public Product getLastRecord() {
-        Query query = manager.createQuery("SELECT row FROM Product row ORDER BY row.id DESC");
+        CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
+        CriteriaQuery<Product> criteriaQuery = criteriaBuilder.createQuery(Product.class);
+        Root<Product> recordRoot = criteriaQuery.from(Product.class);
+        criteriaQuery.select(recordRoot);
+        criteriaQuery.orderBy(criteriaBuilder.desc(recordRoot.get("id")));
 
-        List<Product> products = query.getResultList();
+        List<Product> products = manager.createQuery(criteriaQuery).getResultList();
 
         if (!products.isEmpty())
             return products.get(0);

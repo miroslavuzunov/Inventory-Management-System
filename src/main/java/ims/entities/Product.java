@@ -54,7 +54,7 @@ public class Product extends BaseEntity{
         this.existing = existing;
     }
 
-    @ManyToOne(targetEntity = ProductDetails.class, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = ProductDetails.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "product_details_id", referencedColumnName = "id")
     public ProductDetails getProductDetails() {
         return productDetails;

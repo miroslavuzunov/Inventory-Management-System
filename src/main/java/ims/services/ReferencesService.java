@@ -15,6 +15,7 @@ public class ReferencesService {
     private final ProductDao productDao;
     private final ProductDetailsDao productDetailsDao;
     private List<Product> allProducts;
+    private Map<FilterChoice, Boolean> filterChoices;
 
     public ReferencesService() {
         productDao = new ProductDao();
@@ -22,39 +23,150 @@ public class ReferencesService {
         allProducts = productDao.getAll();
     }
 
-    public List<TableProduct> loadChecked(Map<FilterChoice, Boolean> filterChoices) {
+    public List<TableProduct> loadAll() {
         Set<TableProduct> tableProducts = new HashSet<>();
 
         for (Product product : allProducts) {
-            tableProducts.add(getTableProduct(product));
+            tableProducts.add(generateTableProduct(product));
         }
-
-        List<TableProduct> toBeDeleted = new ArrayList<>();
-
-        for (TableProduct tableProduct : tableProducts) {
-            if (!filterChoices.get(FilterChoice.TA))
-                if (tableProduct.getProduct().getProductDetails().getProductType().equals(ProductType.TA))
-                    toBeDeleted.add(tableProduct);
-            if (!filterChoices.get(FilterChoice.LTTA))
-                if (tableProduct.getProduct().getProductDetails().getProductType().equals(ProductType.LTTA))
-                    toBeDeleted.add(tableProduct);
-            if (!filterChoices.get(FilterChoice.AVAILABLE))
-                if (tableProduct.getProduct().isAvailable() && tableProduct.getProduct().isExisting())
-                    toBeDeleted.add(tableProduct);
-            if (!filterChoices.get(FilterChoice.BUSY))
-                if (!tableProduct.getProduct().isAvailable() && tableProduct.getProduct().isExisting())
-                    toBeDeleted.add(tableProduct);
-            if (!filterChoices.get(FilterChoice.MISSING))
-                if (!tableProduct.getProduct().isExisting())
-                    toBeDeleted.add(tableProduct);
-            //TODO SCRAPPED FILTER
-        }
-        tableProducts.removeAll(toBeDeleted);
 
         return new ArrayList<>(tableProducts);
     }
 
-    private TableProduct getTableProduct(Product product) {
+    public List<TableProduct> loadChecked(Map<FilterChoice, Boolean> filterChoices) {
+        this.filterChoices = filterChoices;
+        Set<TableProduct> tableProducts = new HashSet<>();
+        List<Product> filteredProducts = new ArrayList<>();
+
+        if (!getTypeBasedProducts().isEmpty() && !getStatusBasedProducts().isEmpty())
+            filteredProducts = intersection(getTypeBasedProducts(), getStatusBasedProducts());
+        else {
+            if (!getTypeBasedProducts().isEmpty())
+                filteredProducts = union(filteredProducts, getTypeBasedProducts());
+            if(!getStatusBasedProducts().isEmpty())
+                filteredProducts = union(filteredProducts, getStatusBasedProducts());
+        }
+
+        for (Product product : filteredProducts) {
+            tableProducts.add(generateTableProduct(product));
+        }
+
+        return new ArrayList<>(tableProducts);
+    }
+
+    private List<Product> getTypeBasedProducts() {
+        List<Product> typeBasedProducts = new ArrayList<>();
+
+        if (filterChoices.get(FilterChoice.TA))
+            typeBasedProducts = union(typeBasedProducts, getTaProducts());
+        if (filterChoices.get(FilterChoice.LTTA))
+            typeBasedProducts = union(typeBasedProducts, getLttaProducts());
+
+        return typeBasedProducts;
+    }
+
+    private List<Product> getTaProducts() {
+        List<Product> taProducts = new ArrayList<>();
+
+        for (Product product : allProducts) {
+            if (product.getProductDetails().getProductType().equals(ProductType.TA))
+                taProducts.add(product);
+        }
+
+        return taProducts;
+    }
+
+    private List<Product> getLttaProducts() {
+        List<Product> lttaProducts = new ArrayList<>();
+
+        for (Product product : allProducts) {
+            if (product.getProductDetails().getProductType().equals(ProductType.LTTA))
+                lttaProducts.add(product);
+        }
+
+        return lttaProducts;
+    }
+
+    private List<Product> getStatusBasedProducts() {
+        List<Product> statusBasedProducts = new ArrayList<>();
+
+        if (filterChoices.get(FilterChoice.BUSY))
+            statusBasedProducts = union(statusBasedProducts, getBusyProducts());
+        if (filterChoices.get(FilterChoice.AVAILABLE))
+            statusBasedProducts = union(statusBasedProducts, getAvailableProducts());
+        if (filterChoices.get(FilterChoice.MISSING))
+            statusBasedProducts = union(statusBasedProducts, getMissingProducts());
+
+        //TODO SCRAPPED PRODUCTS
+
+        return statusBasedProducts;
+    }
+
+    private List<Product> getBusyProducts() {
+        List<Product> busyProducts = new ArrayList<>();
+
+        for (Product product : allProducts) {
+            if (!product.isAvailable() && product.isExisting())
+                busyProducts.add(product);
+        }
+
+        return busyProducts;
+    }
+
+    private List<Product> getAvailableProducts() {
+        List<Product> availableProducts = new ArrayList<>();
+
+        for (Product product : allProducts) {
+            if (product.isAvailable())
+                availableProducts.add(product);
+        }
+
+        return availableProducts;
+    }
+
+    private List<Product> getMissingProducts() {
+        List<Product> missingProducts = new ArrayList<>();
+
+        for (Product product : allProducts) {
+            if (!product.isExisting())
+                missingProducts.add(product);
+        }
+
+        return missingProducts;
+    }
+
+//    private List<Product> getScrappedProducts(){
+//        List<Product> scrappedProducts = new ArrayList<>();
+//
+//        for(Product product : getScrappedProductsFromDb(){
+//                scrappedProducts.add(product);
+//        }
+//
+//        return scrappedProducts;
+//    }
+
+    private List<Product> union(List<Product> list1, List<Product> list2) {
+        Set<Product> set = new HashSet<>();
+
+        set.addAll(list1);
+        set.addAll(list2);
+
+        return new ArrayList<>(set);
+    }
+
+    private List<Product> intersection(List<Product> list1, List<Product> list2) {
+        List<Product> list = new ArrayList<>();
+
+        for (Product product : list1) {
+            if (list2.contains(product)) {
+                list.add(product);
+            }
+        }
+
+        return list;
+    }
+
+    private TableProduct generateTableProduct(Product product) {
         TableProduct tableProduct = new TableProduct();
         ProductDetails productDetails = product.getProductDetails();
 
@@ -79,8 +191,6 @@ public class ReferencesService {
                     tableProduct.setStatus("Busy");
             }
         }
-
         return tableProduct;
     }
-
 }

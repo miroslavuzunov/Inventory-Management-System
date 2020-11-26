@@ -71,13 +71,11 @@ public abstract class AbstractDao<T> {
     }
 
     public List<T> getAll() {
-
         CriteriaQuery<T> criteria = manager.getCriteriaBuilder().createQuery(classType);
         criteria.select(criteria.from(classType));
         List<T> records = manager.createQuery(criteria).getResultList();
 
         return records;
-
     }
 
     protected T getRecordByAttribute(Field field, String value){

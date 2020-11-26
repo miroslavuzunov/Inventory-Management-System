@@ -89,7 +89,7 @@ public class ProductDetails extends BaseEntity {
         this.productType = productType;
     }
 
-    @ManyToOne(targetEntity = DepreciationDegree.class, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = DepreciationDegree.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "depreciation_dg_id", referencedColumnName = "id")
     public DepreciationDegree getDepreciationDegree() {
         return depreciationDegree;

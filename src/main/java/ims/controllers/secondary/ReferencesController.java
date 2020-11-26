@@ -17,10 +17,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class ReferencesController extends ReferencesControllerResources implements Initializable {
     private ReferencesService referencesService;
@@ -37,20 +34,7 @@ public class ReferencesController extends ReferencesControllerResources implemen
 
         endDate.setValue(LocalDate.now());  //Default period
         startDate.setValue(endDate.getValue().minusYears(1));
-        selectDefaultBoxes();
         handleCheckedBoxes(new ActionEvent());
-    }
-
-    private void updateFilterChoices() {
-        if (!filterChoices.isEmpty())
-            filterChoices.clear();
-
-        filterChoices.put(FilterChoice.TA, taCheckBox.isSelected());
-        filterChoices.put(FilterChoice.LTTA, lttaCheckBox.isSelected());
-        filterChoices.put(FilterChoice.SCRAPPED, scrappedCheckBox.isSelected());
-        filterChoices.put(FilterChoice.AVAILABLE, availableCheckBox.isSelected());
-        filterChoices.put(FilterChoice.BUSY, busyCheckBox.isSelected());
-        filterChoices.put(FilterChoice.MISSING, missingCheckBox.isSelected());
     }
 
     @FXML
@@ -69,20 +53,35 @@ public class ReferencesController extends ReferencesControllerResources implemen
     @FXML
     private void handleCheckedBoxes(ActionEvent event) {
         updateFilterChoices();
+        List<TableProduct> productsFromDb = new ArrayList<>();
 
-        List<TableProduct> productsFromDb = referencesService.loadChecked(filterChoices);
+        if (isFilterUsed())
+            productsFromDb = referencesService.loadChecked(filterChoices);
+        else
+            productsFromDb = referencesService.loadAll();
 
         setTableColumns();
         fillTable(productsFromDb);
     }
 
-    private void selectDefaultBoxes() {
-        taCheckBox.setSelected(true);
-        lttaCheckBox.setSelected(true);
-        scrappedCheckBox.setSelected(true);
-        availableCheckBox.setSelected(true);
-        busyCheckBox.setSelected(true);
-        missingCheckBox.setSelected(true);
+    private void updateFilterChoices() {
+        if (!filterChoices.isEmpty())
+            filterChoices.clear();
+
+        filterChoices.put(FilterChoice.TA, taCheckBox.isSelected());
+        filterChoices.put(FilterChoice.LTTA, lttaCheckBox.isSelected());
+        filterChoices.put(FilterChoice.SCRAPPED, scrappedCheckBox.isSelected());
+        filterChoices.put(FilterChoice.AVAILABLE, availableCheckBox.isSelected());
+        filterChoices.put(FilterChoice.BUSY, busyCheckBox.isSelected());
+        filterChoices.put(FilterChoice.MISSING, missingCheckBox.isSelected());
+    }
+
+    private boolean isFilterUsed() {
+        for (boolean isChecked : filterChoices.values()) {
+            if (isChecked)
+                return true;
+        }
+        return false;
     }
 
     private void setTableColumns() {  //Mapping with TableProduct fields

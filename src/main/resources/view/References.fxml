@@ -66,17 +66,44 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </DatePicker>
-            <CheckBox fx:id="taCheckBox" layoutX="11.0" layoutY="89.0" mnemonicParsing="false" onAction="#handleCheckedBoxes" prefHeight="17.0" prefWidth="64.0" text="TA" />
-            <CheckBox fx:id="lttaCheckBox" layoutX="97.0" layoutY="89.0" mnemonicParsing="false" onAction="#handleCheckedBoxes" prefHeight="17.0" prefWidth="52.0" text="LTTA" />
-            <CheckBox fx:id="scrappedCheckBox" layoutX="174.0" layoutY="89.0" mnemonicParsing="false" onAction="#handleCheckedBoxes" prefHeight="17.0" prefWidth="86.0" text="Scrapped" />
+            <CheckBox fx:id="taCheckBox" layoutX="11.0" layoutY="89.0" mnemonicParsing="false" onAction="#handleCheckedBoxes" prefHeight="17.0" prefWidth="64.0" text="TA">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></CheckBox>
+            <CheckBox fx:id="lttaCheckBox" layoutX="97.0" layoutY="89.0" mnemonicParsing="false" onAction="#handleCheckedBoxes" prefHeight="17.0" prefWidth="52.0" text="LTTA">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></CheckBox>
+            <CheckBox fx:id="scrappedCheckBox" layoutX="174.0" layoutY="89.0" mnemonicParsing="false" onAction="#handleCheckedBoxes" prefHeight="17.0" prefWidth="86.0" text="Scrapped">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></CheckBox>
             <Label alignment="CENTER" layoutX="8.0" layoutY="57.0" prefHeight="27.0" prefWidth="77.0" stylesheets="@../css/styles.css" text="Search filter:" textFill="#7c7c7c">
                <font>
                   <Font size="13.0" />
                </font>
             </Label>
-            <CheckBox fx:id="availableCheckBox" layoutX="11.0" layoutY="115.0" mnemonicParsing="false" onAction="#handleCheckedBoxes" prefHeight="17.0" prefWidth="86.0" text="Available" />
-            <CheckBox fx:id="busyCheckBox" layoutX="97.0" layoutY="115.0" mnemonicParsing="false" onAction="#handleCheckedBoxes" prefHeight="17.0" prefWidth="86.0" text="Busy" />
-            <CheckBox fx:id="missingCheckBox" layoutX="174.0" layoutY="115.0" mnemonicParsing="false" onAction="#handleCheckedBoxes" prefHeight="17.0" prefWidth="86.0" text="Missing" />
+            <CheckBox fx:id="availableCheckBox" layoutX="11.0" layoutY="115.0" mnemonicParsing="false" onAction="#handleCheckedBoxes" prefHeight="17.0" prefWidth="86.0" text="Available">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></CheckBox>
+            <CheckBox fx:id="busyCheckBox" layoutX="97.0" layoutY="115.0" mnemonicParsing="false" onAction="#handleCheckedBoxes" prefHeight="17.0" prefWidth="86.0" text="Busy">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></CheckBox>
+            <CheckBox fx:id="missingCheckBox" layoutX="174.0" layoutY="115.0" mnemonicParsing="false" onAction="#handleCheckedBoxes" prefHeight="17.0" prefWidth="86.0" text="Missing">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></CheckBox>
+            <Button alignment="CENTER" ellipsisString="" layoutX="260.0" layoutY="89.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#clearFilter" prefHeight="17.0" prefWidth="17.0" text="X" textAlignment="CENTER">
+               <font>
+                  <Font size="8.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Label layoutX="283.0" layoutY="89.0" text="Clear" />
          </children>
       </AnchorPane>
    </children>

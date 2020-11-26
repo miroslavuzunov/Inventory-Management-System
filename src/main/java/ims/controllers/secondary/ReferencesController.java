@@ -34,7 +34,7 @@ public class ReferencesController extends ReferencesControllerResources implemen
 
         endDate.setValue(LocalDate.now());  //Default period
         startDate.setValue(endDate.getValue().minusYears(1));
-        handleCheckedBoxes(new ActionEvent());
+        handleCheckedBoxes();
     }
 
     @FXML
@@ -51,7 +51,7 @@ public class ReferencesController extends ReferencesControllerResources implemen
     }
 
     @FXML
-    private void handleCheckedBoxes(ActionEvent event) {
+    private void handleCheckedBoxes() {
         updateFilterChoices();
         List<TableProduct> productsFromDb = new ArrayList<>();
 
@@ -62,6 +62,18 @@ public class ReferencesController extends ReferencesControllerResources implemen
 
         setTableColumns();
         fillTable(productsFromDb);
+    }
+
+    @FXML
+    private void clearFilter(ActionEvent event){
+        taCheckBox.setSelected(false);
+        lttaCheckBox.setSelected(false);
+        scrappedCheckBox.setSelected(false);
+        availableCheckBox.setSelected(false);
+        busyCheckBox.setSelected(false);
+        missingCheckBox.setSelected(false);
+
+        handleCheckedBoxes();
     }
 
     private void updateFilterChoices() {

@@ -32,7 +32,7 @@ public class ClientCardService {
         clientsAllTransactions = new ArrayList<>();
     }
 
-    public List<TableProduct> getClientsProductsByEgnAndPeriod(String egn, StringBuilder clientsName, LocalDate startDate, LocalDate endDate) throws NoSuchFieldException { //StringBuilder used because of passing string by reference
+    public List<TableProduct> getClientsProductsByEgnAndPeriod(String egn, StringBuilder clientName) throws NoSuchFieldException { //StringBuilder used because of passing string by reference
         List<TableProduct> tableProducts = new ArrayList<>();
 
         PersonInfo personInfo = personInfoDao.getRecordByEgn(egn);
@@ -42,42 +42,36 @@ public class ClientCardService {
         List<ProductDetails> clientsAllProductDetails = productDetailsDao.getAll(); //Requests optimization
 
         if (client != null && client.getRole().equals(Role.CLIENT)) {
-            clientsName.append("client: " + personInfo.getFirstName() + " " + personInfo.getLastName());
+            clientName.delete(0,clientName.length());
+            clientName.append("client: " + personInfo.getFirstName() + " " + personInfo.getLastName());
             String productStatus;
 
-            if (clientsAllTransactions.isEmpty())
-                clientsAllTransactions = client.getProductClientTransactions();
+            clientsAllTransactions = client.getProductClientTransactions();
 
-                for (ProductClient productClient : clientsAllTransactions) {
-                    if (isDateInPeriod(startDate, endDate, productClient.getGivenOn()) &&
-                            productClient.getStatus().equals(RecordStatus.ENABLED)) {
+            for (ProductClient productClient : clientsAllTransactions) {
+                if (productClient.getStatus().equals(RecordStatus.ENABLED)) {
+                    if (productClient.getProduct().isExisting())
+                        productStatus = "Existing";
+                    else
+                        productStatus = "Missing";
 
-                        if (productClient.getProduct().isExisting())
-                            productStatus = "Existing";
-                        else
-                            productStatus = "Missing";
+                    TableProduct tableProduct = new TableProduct();
 
-                        TableProduct tableProduct = new TableProduct();
+                    tableProduct.setBrand(productClient.getProduct().getProductDetails().getBrandAndModel());
+                    tableProduct.setInvNum(productClient.getProduct().getInventoryNumber());
+                    tableProduct.setGivenBy(productClient.getMrt().getPersonInfo().getFirstName() + " " + productClient.getMrt().getPersonInfo().getLastName());
+                    tableProduct.setGivenOn(productClient.getGivenOn().toString());
+                    tableProduct.setStatus(productStatus);
+                    tableProduct.setProduct(productClient.getProduct());
 
-                        tableProduct.setBrand(productClient.getProduct().getProductDetails().getBrandAndModel());
-                        tableProduct.setInvNum(productClient.getProduct().getInventoryNumber());
-                        tableProduct.setGivenBy(productClient.getMrt().getPersonInfo().getFirstName() + " " + productClient.getMrt().getPersonInfo().getLastName());
-                        tableProduct.setGivenOn(productClient.getGivenOn().toString());
-                        tableProduct.setStatus(productStatus);
-                        tableProduct.setProduct(productClient.getProduct());
-
-                        tableProducts.add(tableProduct);
-                    }
+                    tableProducts.add(tableProduct);
                 }
+            }
         } else {
-            clientsName.append("Client not found");
+            clientName.append("Client not found");
         }
 
         return tableProducts;
-    }
-
-    public boolean isDateInPeriod(LocalDate startDate, LocalDate endDate, LocalDate givenOn) {
-        return startDate.datesUntil(endDate.plusDays(1)).collect(Collectors.toList()).contains(givenOn); // Checks if the transaction date is in the specified period (inclusive)
     }
 
     public void removeSelectedProduct(Product product) {
@@ -109,7 +103,7 @@ public class ClientCardService {
     }
 
     public void addAnotherProductToCard(TableProduct selectedProduct) {
-        if(selectedProduct!= null) {
+        if (selectedProduct != null) {
             ProductClient productClient = new ProductClient();
             List<Product> allProducts = new ArrayList<>();
             Product firstAvailable = new Product();

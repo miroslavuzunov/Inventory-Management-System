@@ -2,19 +2,12 @@ package ims.supporting;
 
 import ims.enums.State;
 
-public class CustomField {
+public class CustomField{
     private State state;
     private String fieldValue;
     private String message;
     private String style;
     private boolean nullable;
-
-    public CustomField() {
-        this.fieldValue = "";
-        this.state = State.VALID;
-        this.message = "";
-        this.nullable = false;
-    }
 
     public CustomField(String fieldValue){
         this.fieldValue = fieldValue;

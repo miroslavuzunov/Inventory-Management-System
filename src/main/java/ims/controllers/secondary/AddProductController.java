@@ -5,6 +5,7 @@ import ims.entities.Product;
 import ims.entities.ProductDetails;
 import ims.services.AddProductService;
 import ims.services.ClientCardService;
+import ims.supporting.Cache;
 import ims.supporting.TableProduct;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -28,13 +29,24 @@ public class AddProductController implements Initializable {
     private TableColumn<String, String> availableQuantityColumn;
 
     private AddProductService addProductService;
+    private List<TableProduct> tableProducts;
     private static TableProduct selectedProduct;
+    private static String cacheKey = "";
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         addProductService = new AddProductService();
+
+        tableProducts = (List<TableProduct>) Cache.getCachedFields(cacheKey);
+
+        if(tableProducts == null){
+            tableProducts = addProductService.getAllProducts();
+
+            cacheKey = Cache.cacheCollection(tableProducts);
+        }
+
         setTableColumns();
-        fillTable(addProductService.getAllProducts());
+        fillTable(tableProducts);
 
         listOfProductsAvailable.getSelectionModel().selectedItemProperty().addListener((action) -> {
             selectedProduct = listOfProductsAvailable.getSelectionModel().getSelectedItem();

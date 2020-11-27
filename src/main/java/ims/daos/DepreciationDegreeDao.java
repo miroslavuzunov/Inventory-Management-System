@@ -1,6 +1,7 @@
 package ims.daos;
 
 import ims.entities.DepreciationDegree;
+import ims.entities.User;
 
 import java.lang.reflect.Field;
 
@@ -12,11 +13,9 @@ public class DepreciationDegreeDao extends AbstractDao<DepreciationDegree> {
 
     public DepreciationDegree getRecordByCategory(String category) throws NoSuchFieldException {
         Field field = DepreciationDegree.class.getDeclaredField("category");
-        DepreciationDegree depreciationDegree =
-                getRecordsByAttribute(field, category).get(0);
 
-        if (depreciationDegree != null)
-            return depreciationDegree;
+        if(!getRecordsByAttribute(field, category).isEmpty())
+            return getRecordsByAttribute(field, category).get(0);
         return new DepreciationDegree();
     }
 }

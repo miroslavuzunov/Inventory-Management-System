@@ -1,6 +1,7 @@
 package ims.daos;
 
 import ims.entities.PersonInfo;
+import ims.entities.User;
 
 import java.lang.reflect.Field;
 
@@ -12,11 +13,9 @@ public class PersonInfoDao extends AbstractDao<PersonInfo> {
 
     public PersonInfo getRecordByEgn(String egn) throws NoSuchFieldException {
         Field field = PersonInfo.class.getDeclaredField("egn");
-        PersonInfo personInfo =
-                getRecordsByAttribute(field, egn).get(0);
 
-        if (personInfo != null)
-            return personInfo;
+        if(!getRecordsByAttribute(field, egn).isEmpty())
+            return getRecordsByAttribute(field, egn).get(0);
         return new PersonInfo();
     }
 }

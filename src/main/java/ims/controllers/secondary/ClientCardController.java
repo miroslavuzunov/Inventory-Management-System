@@ -23,10 +23,11 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class ClientCardController extends ClientCardControllerResources implements Initializable {
     private ClientCardService clientCardService;
-    List<TableProduct> tableProducts;
+    private List<TableProduct> tableProducts;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -63,31 +64,41 @@ public class ClientCardController extends ClientCardControllerResources implemen
 
     @FXML
     private void searchByEgn() throws NoSuchFieldException {
-            boolean noEmptyFields = true;
-            boolean noForbiddenChars = true;
+        boolean noEmptyFields = true;
+        boolean noForbiddenChars = true;
 
-            noEmptyFields = handleEmptyFields();
-            //noForbiddenChars = handleForbiddenChars(inputFields);
-            StringBuilder clientName = new StringBuilder();
+        tableProducts = (List<TableProduct>) Cache.getCachedFields(egnField.getText());
+
+        noEmptyFields = handleEmptyFields();
+        //noForbiddenChars = handleForbiddenChars(inputFields);
+
+        if (tableProducts == null) {
+            StringBuilder clientName = new StringBuilder(); //TODO name refreshing correctly!
 
             if (noEmptyFields && noForbiddenChars)
                 tableProducts = clientCardService.getClientsProductsByEgnAndPeriod(
                         egnField.getText(),
-                        clientName,
-                        startDate.getValue(),
-                        endDate.getValue()
+                        clientName
                 );
+            else
+                tableProducts = new ArrayList<>();
 
-            this.clientName.setText(String.valueOf(clientName));
+            this.clientNameLabel.setText(String.valueOf(clientName));
 
-            addAnotherBtn.setDisable(clientName.toString().equals("Client not found"));
-            if (!clientCardService.isDateInPeriod(startDate.getValue(), endDate.getValue(), LocalDate.now()) ||
-                    !noEmptyFields)
-                addAnotherBtn.setDisable(true);
-            removeSelectedBtn.setDisable(tableProducts.isEmpty());
+            Cache.cacheCollectionByCustomKey(egnField.getText(), tableProducts);
+        }
 
+        handleButtonsStatus(noEmptyFields);
         setTableColumns();
         fillTable(tableProducts);
+    }
+
+    private void handleButtonsStatus(boolean status) {
+        addAnotherBtn.setDisable(clientNameLabel.toString().equals("Client not found"));
+        if (!isDateInPeriod(startDate.getValue(), endDate.getValue(), LocalDate.now()) ||
+                !status)
+            addAnotherBtn.setDisable(true);
+        removeSelectedBtn.setDisable(tableProducts.isEmpty());
     }
 
     @FXML
@@ -139,9 +150,15 @@ public class ClientCardController extends ClientCardControllerResources implemen
         clientsProductsTable.getItems().clear();
 
         for (TableProduct product : tableProducts) {
-            product.setButton(getChangeStatusButton());
-            clientsProductsTable.getItems().add(product);
+            if (isDateInPeriod(startDate.getValue(), endDate.getValue(), LocalDate.parse(product.getGivenOn()))) {
+                product.setButton(getChangeStatusButton());
+                clientsProductsTable.getItems().add(product);
+            }
         }
+    }
+
+    public boolean isDateInPeriod(LocalDate startDate, LocalDate endDate, LocalDate givenOn) {
+        return startDate.datesUntil(endDate.plusDays(1)).collect(Collectors.toList()).contains(givenOn); // Checks if the transaction date is in the specified period (inclusive)
     }
 
     @Override

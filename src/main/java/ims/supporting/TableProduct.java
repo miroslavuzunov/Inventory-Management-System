@@ -5,7 +5,7 @@ import javafx.scene.control.Button;
 
 import javax.persistence.Transient;
 
-public class TableProduct {
+public class TableProduct{
     private String brand;
     private String invNum;
     private String givenBy;

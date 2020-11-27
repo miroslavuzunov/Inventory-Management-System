@@ -25,6 +25,8 @@ public class RegisterUserController extends RegisterUserControllerResources impl
     private UserRegistrationService userRegistrationService;
     private ToggleGroup toggleGroup;
     private static Role role;
+    private static String citiesCacheKey = "";
+    private static String countriesCacheKey = "";
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -74,11 +76,11 @@ public class RegisterUserController extends RegisterUserControllerResources impl
     }
 
     private void initializeCountries() {
-        List<CustomField> countriesFromDb = Cache.getCachedFields("Countries");
+        List<CustomField> countriesFromDb = (List<CustomField>) Cache.getCachedFields(countriesCacheKey);
 
         if (countriesFromDb == null) {
             countriesFromDb = userRegistrationService.initializeCountries();
-            Cache.cacheList("Countries", countriesFromDb);
+            countriesCacheKey = Cache.cacheCollection(countriesFromDb);
         }
 
         countriesFromDb.forEach(field -> {
@@ -89,13 +91,12 @@ public class RegisterUserController extends RegisterUserControllerResources impl
     @FXML
     private void initializeCities() {
         cityComboBox.getItems().clear(); //Prevents data duplicating
-
         String chosenCountry = countryComboBox.getSelectionModel().getSelectedItem();
-        List<CustomField> citiesFromDb = Cache.getCachedFields(chosenCountry);
+        List<CustomField> citiesFromDb = (List<CustomField>) Cache.getCachedFields(citiesCacheKey);
 
         if (citiesFromDb == null) {
             citiesFromDb = userRegistrationService.initializeCitiesAccordingCountry(chosenCountry);
-            Cache.cacheList(chosenCountry, citiesFromDb);
+            citiesCacheKey = Cache.cacheCollection(citiesFromDb);
         }
 
         citiesFromDb.forEach(field -> {

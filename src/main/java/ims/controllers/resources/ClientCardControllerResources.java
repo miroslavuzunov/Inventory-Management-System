@@ -24,7 +24,7 @@ public abstract class ClientCardControllerResources extends AbstractController i
     protected AnchorPane regPane;
 
     @FXML
-    protected Label clientName;
+    protected Label clientNameLabel;
 
     @FXML
     protected TableView<TableProduct> clientsProductsTable;

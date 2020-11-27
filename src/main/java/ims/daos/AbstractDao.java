@@ -1,14 +1,9 @@
 package ims.daos;
 
-import ims.entities.City;
-import ims.entities.DepreciationDegree;
 import ims.supporting.EntityFactory;
 
 import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import javax.persistence.metamodel.EntityType;
 import java.lang.reflect.Field;
 import java.util.*;
@@ -78,20 +73,20 @@ public abstract class AbstractDao<T> {
         return records;
     }
 
-    protected T getRecordByAttribute(Field field, String value){
+    protected List<T> getRecordsByAttribute(Field field, String value){
         if (Arrays.stream(classType.getDeclaredFields()).anyMatch(f -> f.getName().equals(field.getName()))) { //Checks if the field is in classType
             CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
             CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(classType);
             Root<T> recordRoot = criteriaQuery.from(classType);
             criteriaQuery.where(criteriaBuilder.equal(recordRoot.get(field.getName()), value));
             List<T> records = manager.createQuery(criteriaQuery).getResultList();
-            if (!records.isEmpty())
-                return records.get(0);
+
+            return records;
         }
         return null;
     }
 
-//    public T getRecordsByMultipleAttributes(Map<String, String> valuesByColumns) {
+//    public T getRecordByMultipleAttributes(Map<String, String> valuesByColumns) {
 //
 //        CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
 //        CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(classType);

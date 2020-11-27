@@ -13,7 +13,7 @@ public class DepreciationDegreeDao extends AbstractDao<DepreciationDegree> {
     public DepreciationDegree getRecordByCategory(String category) throws NoSuchFieldException {
         Field field = DepreciationDegree.class.getDeclaredField("category");
         DepreciationDegree depreciationDegree =
-                getRecordByAttribute(field, category);
+                getRecordsByAttribute(field, category).get(0);
 
         if (depreciationDegree != null)
             return depreciationDegree;

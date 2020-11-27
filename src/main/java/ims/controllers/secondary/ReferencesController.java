@@ -29,11 +29,11 @@ public class ReferencesController extends ReferencesControllerResources implemen
         initializeScenes();
         referencesService = new ReferencesService();
         filterChoices = new HashMap<>();
-        updateFilterChoices();
-        customizeTable();
-
         endDate.setValue(LocalDate.now());  //Default period
         startDate.setValue(endDate.getValue().minusYears(1));
+
+        customizeTable();
+        updateFilterChoices();
         handleCheckedBoxes();
     }
 
@@ -55,12 +55,13 @@ public class ReferencesController extends ReferencesControllerResources implemen
         updateFilterChoices();
         List<TableProduct> productsFromDb = new ArrayList<>();
 
+        //TODO PAGINATION
+
         if (isFilterUsed())
             productsFromDb = referencesService.loadChecked(filterChoices);
         else
             productsFromDb = referencesService.loadAll();
 
-        setTableColumns();
         fillTable(productsFromDb);
     }
 
@@ -114,6 +115,8 @@ public class ReferencesController extends ReferencesControllerResources implemen
     }
 
     private void customizeTable() {
+        setTableColumns();
+
         productsTable.getColumns().forEach(tableProductTableColumn -> {
             tableProductTableColumn.setResizable(false);
             tableProductTableColumn.setStyle("-fx-alignment: CENTER;");

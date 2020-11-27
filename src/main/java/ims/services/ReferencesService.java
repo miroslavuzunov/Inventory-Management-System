@@ -14,6 +14,7 @@ import java.util.*;
 public class ReferencesService {
     private final ProductDao productDao;
     private final ProductDetailsDao productDetailsDao;
+    private List<ProductDetails> allProductDetails;
     private List<Product> allProducts;
     private Map<FilterChoice, Boolean> filterChoices;
 
@@ -21,10 +22,11 @@ public class ReferencesService {
         productDao = new ProductDao();
         productDetailsDao = new ProductDetailsDao();
         allProducts = productDao.getAll();
+        allProductDetails = productDetailsDao.getAll();
     }
 
     public List<TableProduct> loadAll() {
-        Set<TableProduct> tableProducts = new HashSet<>();
+        Set<TableProduct> tableProducts = new LinkedHashSet<>(); //Keeps insertion order
 
         for (Product product : allProducts) {
             tableProducts.add(generateTableProduct(product));
@@ -35,7 +37,7 @@ public class ReferencesService {
 
     public List<TableProduct> loadChecked(Map<FilterChoice, Boolean> filterChoices) {
         this.filterChoices = filterChoices;
-        Set<TableProduct> tableProducts = new HashSet<>();
+        Set<TableProduct> tableProducts = new LinkedHashSet<>();
         List<Product> filteredProducts = new ArrayList<>();
 
         if (!getTypeBasedProducts().isEmpty() && !getStatusBasedProducts().isEmpty())
@@ -43,7 +45,7 @@ public class ReferencesService {
         else {
             if (!getTypeBasedProducts().isEmpty())
                 filteredProducts = union(filteredProducts, getTypeBasedProducts());
-            if(!getStatusBasedProducts().isEmpty())
+            if (!getStatusBasedProducts().isEmpty())
                 filteredProducts = union(filteredProducts, getStatusBasedProducts());
         }
 
@@ -146,7 +148,7 @@ public class ReferencesService {
 //    }
 
     private List<Product> union(List<Product> list1, List<Product> list2) {
-        Set<Product> set = new HashSet<>();
+        Set<Product> set = new LinkedHashSet<>();
 
         set.addAll(list1);
         set.addAll(list2);
@@ -173,8 +175,8 @@ public class ReferencesService {
         tableProduct.setBrand(productDetails.getBrandAndModel());
         tableProduct.setInvNum(product.getInventoryNumber());
         tableProduct.setProductType(productDetails.getProductType().toString());
-        tableProduct.setInitialPrice(productDetails.getInitialPrice().toString());
-        tableProduct.setCurrentPrice(productDetails.getCurrentPrice().toString());
+        tableProduct.setInitialPrice(productDetails.getInitialPrice().toString() + " " + productDetails.getPriceCurrency().toString());
+        tableProduct.setCurrentPrice(productDetails.getCurrentPrice().toString() + " " + productDetails.getPriceCurrency().toString());
         tableProduct.setProduct(product);
 
         if (!product.isAvailable() && product.isExisting()

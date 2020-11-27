@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Cache {
+public class Cache{
     private static Map<String, List<CustomField>> cachedFieldsByName = new HashMap<>();
 
     public static void cacheList(String name, List<CustomField> loadedFields){

@@ -6,18 +6,16 @@ import ims.daos.AbstractDao;
 import ims.dialogs.ConfirmationDialog;
 import ims.dialogs.CustomDialog;
 import ims.entities.Product;
-import ims.services.CardService;
+import ims.services.ClientCardService;
+import ims.supporting.Cache;
 import ims.supporting.CustomField;
 import ims.supporting.TableProduct;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.DialogPane;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.IOException;
@@ -25,16 +23,15 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public class ClientCardController extends ClientCardControllerResources implements Initializable {
-    private CardService cardService;
+    private ClientCardService clientCardService;
     List<TableProduct> tableProducts;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         AbstractDao.newEntityManager();
-        cardService = new CardService();
+        clientCardService = new ClientCardService();
         tableProducts = new ArrayList<>();
 
         initializeScenes();
@@ -66,28 +63,28 @@ public class ClientCardController extends ClientCardControllerResources implemen
 
     @FXML
     private void searchByEgn() throws NoSuchFieldException {
-        boolean noEmptyFields = true;
-        boolean noForbiddenChars = true;
+            boolean noEmptyFields = true;
+            boolean noForbiddenChars = true;
 
-        noEmptyFields = handleEmptyFields();
-        //noForbiddenChars = handleForbiddenChars(inputFields);
-        StringBuilder clientName = new StringBuilder();
+            noEmptyFields = handleEmptyFields();
+            //noForbiddenChars = handleForbiddenChars(inputFields);
+            StringBuilder clientName = new StringBuilder();
 
-        if (noEmptyFields && noForbiddenChars)
-            tableProducts = cardService.getClientsProductsByEgnAndPeriod(
-                    egnField.getText(),
-                    clientName,
-                    startDate.getValue(),
-                    endDate.getValue()
-            );
+            if (noEmptyFields && noForbiddenChars)
+                tableProducts = clientCardService.getClientsProductsByEgnAndPeriod(
+                        egnField.getText(),
+                        clientName,
+                        startDate.getValue(),
+                        endDate.getValue()
+                );
 
-        this.clientName.setText(String.valueOf(clientName));
+            this.clientName.setText(String.valueOf(clientName));
 
-        addAnotherBtn.setDisable(clientName.toString().equals("Client not found"));
-        if(!cardService.isDateInPeriod(startDate.getValue(), endDate.getValue(), LocalDate.now()) ||
-            !noEmptyFields)
-            addAnotherBtn.setDisable(true);
-        removeSelectedBtn.setDisable(tableProducts.isEmpty());
+            addAnotherBtn.setDisable(clientName.toString().equals("Client not found"));
+            if (!clientCardService.isDateInPeriod(startDate.getValue(), endDate.getValue(), LocalDate.now()) ||
+                    !noEmptyFields)
+                addAnotherBtn.setDisable(true);
+            removeSelectedBtn.setDisable(tableProducts.isEmpty());
 
         setTableColumns();
         fillTable(tableProducts);
@@ -102,7 +99,7 @@ public class ClientCardController extends ClientCardControllerResources implemen
         Optional<ButtonType> clickedButton = customDialog.showAndWait();
 
         if (clickedButton.get() == ButtonType.OK) {
-            cardService.addAnotherProductToCard(AddProductController.getSelectedProduct());
+            clientCardService.addAnotherProductToCard(AddProductController.getSelectedProduct());
             searchByEgn(); //Refreshes the table
         }
     }
@@ -125,7 +122,7 @@ public class ClientCardController extends ClientCardControllerResources implemen
             }
         });
 
-        cardService.removeSelectedProduct(selectedProduct);
+        clientCardService.removeSelectedProduct(selectedProduct);
         removeSelectedBtn.setDisable(tableProducts.isEmpty());
     }
 
@@ -180,11 +177,11 @@ public class ClientCardController extends ClientCardControllerResources implemen
             if (selectedRow.getStatus().equals("Existing")) {
                 selectedRow.setStatus("Missing");
                 fillTable(tableProducts); //Refreshes the table
-                cardService.changeProductStatus(selectedRow.getProduct(), false);
+                clientCardService.changeProductStatus(selectedRow.getProduct(), false);
             } else {
                 selectedRow.setStatus("Existing");
                 fillTable(tableProducts);
-                cardService.changeProductStatus(selectedRow.getProduct(), true);
+                clientCardService.changeProductStatus(selectedRow.getProduct(), true);
             }
         }
     }

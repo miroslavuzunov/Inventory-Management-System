@@ -1,10 +1,6 @@
 package ims.controllers.secondary;
 
-import ims.daos.AbstractDao;
-import ims.entities.Product;
-import ims.entities.ProductDetails;
 import ims.services.AddProductService;
-import ims.services.ClientCardService;
 import ims.supporting.Cache;
 import ims.supporting.TableProduct;
 import javafx.fxml.FXML;
@@ -31,18 +27,17 @@ public class AddProductController implements Initializable {
     private AddProductService addProductService;
     private List<TableProduct> tableProducts;
     private static TableProduct selectedProduct;
-    private static String cacheKey = "";
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         addProductService = new AddProductService();
 
-        tableProducts = (List<TableProduct>) Cache.getCachedFields(cacheKey);
+        tableProducts = (List<TableProduct>) Cache.getCachedCollection(listOfProductsAvailable);
 
-        if(tableProducts == null){
+        if (tableProducts == null) {
             tableProducts = addProductService.getAllProducts();
 
-            cacheKey = Cache.cacheCollection(tableProducts);
+            Cache.cacheCollection(listOfProductsAvailable, tableProducts);
         }
 
         setTableColumns();
@@ -69,6 +64,8 @@ public class AddProductController implements Initializable {
     }
 
     public static TableProduct getSelectedProduct() {
-        return selectedProduct;
+        if (Integer.parseInt(selectedProduct.getAvailableQuantity()) > 0)
+            return selectedProduct;
+        return null;
     }
 }

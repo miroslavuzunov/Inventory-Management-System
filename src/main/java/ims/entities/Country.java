@@ -27,7 +27,7 @@ public class Country extends BaseEntity{
         this.name = name;
     }
 
-    @OneToMany(mappedBy = "country", targetEntity = City.class, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "country", targetEntity = City.class, fetch = FetchType.LAZY)
     public Set<City> getCities() {
         return cities;
     }

@@ -4,24 +4,28 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Cache{
-    private static Map<String, Collection> cachedFieldsByKey = new HashMap<>();
+public class Cache {
+    private static Map<Object, Collection> cachedCollectionsByKey = new HashMap<>();
+    private static Map<Object, Object> cachedObjectsByKey = new HashMap<>();
 
-    public static String cacheCollection(Collection loadedFields){
-        String key = String.valueOf(System.nanoTime());
-        cachedFieldsByKey.put(key, loadedFields);
-
-        return key;
+    public static void cacheCollection(Object key, Collection loadedFields) {
+        cachedCollectionsByKey.put(key, loadedFields);
     }
 
-    public static void cacheCollectionByCustomKey(String key, Collection loadedFields) {
-        cachedFieldsByKey.put(key, loadedFields);
+    public static void cacheObject(Object key, Object loadedFields) {
+        cachedObjectsByKey.put(key, loadedFields);
     }
 
-    public static Collection getCachedFields(String key){
-        if(cachedFieldsByKey.isEmpty())
+    public static Collection getCachedCollection(Object key) {
+        if (cachedCollectionsByKey.isEmpty())
             return null;
-        return cachedFieldsByKey.get(key);
+        return cachedCollectionsByKey.get(key);
+    }
+
+    public static Object getCachedObject(Object key) {
+        if (cachedObjectsByKey.isEmpty())
+            return null;
+        return cachedObjectsByKey.get(key);
     }
 
 }

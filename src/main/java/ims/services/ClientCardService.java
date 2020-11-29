@@ -12,7 +12,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public class ClientCardService {
     private final UserDao userDao;
@@ -32,7 +31,7 @@ public class ClientCardService {
         clientsAllTransactions = new ArrayList<>();
     }
 
-    public List<TableProduct> getClientsProductsByEgnAndPeriod(String egn, StringBuilder clientName) throws NoSuchFieldException { //StringBuilder used because of passing string by reference
+    public List<TableProduct> getClientsProductsByEgn(String egn, StringBuilder clientName) throws NoSuchFieldException { //StringBuilder used because of passing string by reference
         List<TableProduct> tableProducts = new ArrayList<>();
 
         PersonInfo personInfo = personInfoDao.getRecordByEgn(egn);
@@ -46,10 +45,9 @@ public class ClientCardService {
             clientName.append("client: " + personInfo.getFirstName() + " " + personInfo.getLastName());
             String productStatus;
 
-            clientsAllTransactions = client.getProductClientTransactions();
+            clientsAllTransactions = productClientDao.getTransactionsByClientAndStatus(client, RecordStatus.ENABLED);
 
             for (ProductClient productClient : clientsAllTransactions) {
-                if (productClient.getStatus().equals(RecordStatus.ENABLED)) {
                     if (productClient.getProduct().isExisting())
                         productStatus = "Existing";
                     else
@@ -65,7 +63,6 @@ public class ClientCardService {
                     tableProduct.setProduct(productClient.getProduct());
 
                     tableProducts.add(tableProduct);
-                }
             }
         } else {
             clientName.append("Client not found");

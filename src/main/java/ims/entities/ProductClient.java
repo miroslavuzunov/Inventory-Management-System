@@ -18,7 +18,7 @@ public class ProductClient extends BaseEntity {
     public ProductClient() {
     }
 
-    @ManyToOne(targetEntity = Product.class, fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = Product.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     public Product getProduct() {
         return product;
@@ -28,7 +28,7 @@ public class ProductClient extends BaseEntity {
         this.product = product;
     }
 
-    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id", referencedColumnName = "id")
     public User getClient() {
         return client;
@@ -38,7 +38,7 @@ public class ProductClient extends BaseEntity {
         this.client = client;
     }
 
-    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "mrt_id", referencedColumnName = "id")
     public User getMrt() {
         return mrt;

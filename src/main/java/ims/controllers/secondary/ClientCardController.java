@@ -5,6 +5,7 @@ import ims.controllers.resources.ClientCardControllerResources;
 import ims.daos.AbstractDao;
 import ims.dialogs.ConfirmationDialog;
 import ims.dialogs.CustomDialog;
+import ims.dialogs.ErrorDialog;
 import ims.entities.Product;
 import ims.services.ClientCardService;
 import ims.supporting.Cache;
@@ -66,27 +67,32 @@ public class ClientCardController extends ClientCardControllerResources implemen
     private void searchByEgn() throws NoSuchFieldException {
         boolean noEmptyFields = true;
         boolean noForbiddenChars = true;
+        StringBuilder clientName = new StringBuilder();
 
-        tableProducts = (List<TableProduct>) Cache.getCachedFields(egnField.getText());
+        tableProducts = (List<TableProduct>) Cache.getCachedCollection(egnField.getText());
 
         noEmptyFields = handleEmptyFields();
         //noForbiddenChars = handleForbiddenChars(inputFields);
 
         if (tableProducts == null) {
-            StringBuilder clientName = new StringBuilder(); //TODO name refreshing correctly!
+            //TODO name refreshing correctly!
 
             if (noEmptyFields && noForbiddenChars)
-                tableProducts = clientCardService.getClientsProductsByEgnAndPeriod(
+                tableProducts = clientCardService.getClientsProductsByEgn(
                         egnField.getText(),
                         clientName
                 );
             else
                 tableProducts = new ArrayList<>();
 
-            this.clientNameLabel.setText(String.valueOf(clientName));
+            Cache.cacheCollection(egnField.getText(), tableProducts);
+            Cache.cacheObject(egnField.getText(), clientName);
 
-            Cache.cacheCollectionByCustomKey(egnField.getText(), tableProducts);
+        } else {
+            clientName = (StringBuilder) Cache.getCachedObject(egnField.getText());
         }
+
+        this.clientNameLabel.setText(String.valueOf(clientName));
 
         handleButtonsStatus(noEmptyFields);
         setTableColumns();
@@ -96,7 +102,9 @@ public class ClientCardController extends ClientCardControllerResources implemen
     private void handleButtonsStatus(boolean status) {
         addAnotherBtn.setDisable(clientNameLabel.toString().equals("Client not found"));
         if (!isDateInPeriod(startDate.getValue(), endDate.getValue(), LocalDate.now()) ||
-                !status)
+                !status ||
+                tableProducts.isEmpty()
+        )
             addAnotherBtn.setDisable(true);
         removeSelectedBtn.setDisable(tableProducts.isEmpty());
     }
@@ -110,8 +118,11 @@ public class ClientCardController extends ClientCardControllerResources implemen
         Optional<ButtonType> clickedButton = customDialog.showAndWait();
 
         if (clickedButton.get() == ButtonType.OK) {
-            clientCardService.addAnotherProductToCard(AddProductController.getSelectedProduct());
-            searchByEgn(); //Refreshes the table
+            if (AddProductController.getSelectedProduct() != null) {
+                clientCardService.addAnotherProductToCard(AddProductController.getSelectedProduct());
+                searchByEgn(); //Refreshes the table
+            }else
+                ErrorDialog.callError("There is no available quantity of this product!");
         }
     }
 

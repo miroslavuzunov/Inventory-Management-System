@@ -13,6 +13,7 @@ import java.util.List;
 public class AddProductService {
     private ProductDetailsDao productDetailsDao;
     private ProductDao productDao;
+
     public AddProductService() {
         productDetailsDao = new ProductDetailsDao();
         productDao = new ProductDao();

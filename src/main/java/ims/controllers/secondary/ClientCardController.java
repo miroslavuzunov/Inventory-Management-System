@@ -92,9 +92,9 @@ public class ClientCardController extends ClientCardControllerResources implemen
 
         this.clientNameLabel.setText(String.valueOf(clientName));
 
-        handleButtonsStatus(noEmptyFields);
         setTableColumns();
         fillTable(tableProducts);
+        handleButtonsStatus(noEmptyFields);
     }
 
     @FXML
@@ -137,13 +137,13 @@ public class ClientCardController extends ClientCardControllerResources implemen
         removeSelectedBtn.setDisable(tableProducts.isEmpty());
     }
 
-    private void handleButtonsStatus(boolean isEmpty) {
+    private void handleButtonsStatus(boolean status) {
         boolean isDateInPeriod = isDateInPeriod(startDate.getValue(), endDate.getValue(), LocalDate.now());
 
+        addAnotherBtn.setDisable(clientNameLabel.getText().equals("Client not found") || !status);
         if (!isDateInPeriod)
             addAnotherBtn.setDisable(true);
-        addAnotherBtn.setDisable(clientNameLabel.getText().equals("Client not found") || !isEmpty);
-        removeSelectedBtn.setDisable(tableProducts.isEmpty());
+        removeSelectedBtn.setDisable(clientsProductsTable.getItems().isEmpty());
     }
 
     private void setTableColumns() {  //Mapping with TableProduct fields
@@ -160,7 +160,7 @@ public class ClientCardController extends ClientCardControllerResources implemen
 
         for (TableProduct product : tableProducts) {
             if (isDateInPeriod(startDate.getValue(), endDate.getValue(), LocalDate.parse(product.getGivenOn()))) {
-                product.setButton(getChangeStatusButton());
+                product.setButton(getStatusButton());
                 clientsProductsTable.getItems().add(product);
             }
         }
@@ -183,7 +183,7 @@ public class ClientCardController extends ClientCardControllerResources implemen
         });
     }
 
-    private Button getChangeStatusButton() {
+    private Button getStatusButton() {
         Button button = new Button();
 
         button.setText("Change status");

@@ -146,6 +146,7 @@ public class ClientCardService {
         client.getProductClientTransactions().forEach(transaction -> {
             if (transaction.getProduct().getInventoryNumber().equals(product.getInventoryNumber())) {
                 transaction.setStatus(RecordStatus.DISABLED);
+                productClientDao.updateRecord(transaction);
             }
         });
 

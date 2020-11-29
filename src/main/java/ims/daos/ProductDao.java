@@ -30,5 +30,4 @@ public class ProductDao extends AbstractDao<Product> {
             return products.get(0);
         return new Product();
     }
-
 }

@@ -2,8 +2,10 @@ package ims.services;
 
 import ims.daos.ProductDao;
 import ims.daos.ProductDetailsDao;
+import ims.daos.ScrappedProductsDao;
 import ims.entities.Product;
 import ims.entities.ProductDetails;
+import ims.entities.ScrappedProducts;
 import ims.enums.FilterChoice;
 import ims.enums.ProductType;
 import ims.enums.RecordStatus;
@@ -14,6 +16,7 @@ import java.util.*;
 public class ReferencesService {
     private final ProductDao productDao;
     private final ProductDetailsDao productDetailsDao;
+    private final ScrappedProductsDao scrappedProductsDao;
     private List<ProductDetails> allProductDetails;
     private List<Product> allProducts;
     private Map<FilterChoice, Boolean> filterChoices;
@@ -21,9 +24,11 @@ public class ReferencesService {
     public ReferencesService() {
         productDao = new ProductDao();
         productDetailsDao = new ProductDetailsDao();
+        scrappedProductsDao = new ScrappedProductsDao();
         allProducts = productDao.getAll();
         allProductDetails = productDetailsDao.getAll();
     }
+
 
     public List<TableProduct> loadAll() {
         Set<TableProduct> tableProducts = new LinkedHashSet<>(); //Keeps insertion order
@@ -98,8 +103,8 @@ public class ReferencesService {
             statusBasedProducts = union(statusBasedProducts, getAvailableProducts());
         if (filterChoices.get(FilterChoice.MISSING))
             statusBasedProducts = union(statusBasedProducts, getMissingProducts());
-
-        //TODO SCRAPPED PRODUCTS
+        if (filterChoices.get(FilterChoice.SCRAPPED))
+            statusBasedProducts = union(statusBasedProducts, getScrappedProducts());
 
         return statusBasedProducts;
     }
@@ -137,15 +142,18 @@ public class ReferencesService {
         return missingProducts;
     }
 
-//    private List<Product> getScrappedProducts(){
-//        List<Product> scrappedProducts = new ArrayList<>();
-//
-//        for(Product product : getScrappedProductsFromDb(){
-//                scrappedProducts.add(product);
-//        }
-//
-//        return scrappedProducts;
-//    }
+    private List<Product> getScrappedProducts() {
+        List<Product> scrappedProducts = new ArrayList<>();
+
+        for (Product product : allProducts) {
+            if (!product.isAvailable() && product.isExisting()
+                    && product.getStatus().equals(RecordStatus.DISABLED)
+                    && product.getProductDetails().getProductType().equals(ProductType.LTTA))
+                scrappedProducts.add(product);
+        }
+
+        return scrappedProducts;
+    }
 
     private List<Product> union(List<Product> list1, List<Product> list2) {
         Set<Product> set = new LinkedHashSet<>();

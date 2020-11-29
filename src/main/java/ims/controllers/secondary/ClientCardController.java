@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 public class ClientCardController extends ClientCardControllerResources implements Initializable {
     private ClientCardService clientCardService;
     private List<TableProduct> tableProducts;
+    private static Cache cache = new Cache();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -69,14 +70,12 @@ public class ClientCardController extends ClientCardControllerResources implemen
         boolean noForbiddenChars = true;
         StringBuilder clientName = new StringBuilder();
 
-        tableProducts = (List<TableProduct>) Cache.getCachedCollection(egnField.getText());
+        tableProducts = (List<TableProduct>) cache.getCachedCollection(egnField.getText());
 
         noEmptyFields = handleEmptyFields();
         //noForbiddenChars = handleForbiddenChars(inputFields);
 
         if (tableProducts == null) {
-            //TODO name refreshing correctly!
-
             if (noEmptyFields && noForbiddenChars)
                 tableProducts = clientCardService.getClientsProductsByEgn(
                         egnField.getText(),
@@ -85,11 +84,10 @@ public class ClientCardController extends ClientCardControllerResources implemen
             else
                 tableProducts = new ArrayList<>();
 
-            Cache.cacheCollection(egnField.getText(), tableProducts);
-            Cache.cacheObject(egnField.getText(), clientName);
-
+            cache.cacheCollection(egnField.getText(), tableProducts);
+            cache.cacheObject(egnField.getText(), clientName);
         } else {
-            clientName = (StringBuilder) Cache.getCachedObject(egnField.getText());
+            clientName = (StringBuilder) cache.getCachedObject(egnField.getText());
         }
 
         this.clientNameLabel.setText(String.valueOf(clientName));
@@ -97,16 +95,6 @@ public class ClientCardController extends ClientCardControllerResources implemen
         handleButtonsStatus(noEmptyFields);
         setTableColumns();
         fillTable(tableProducts);
-    }
-
-    private void handleButtonsStatus(boolean status) {
-        addAnotherBtn.setDisable(clientNameLabel.toString().equals("Client not found"));
-        if (!isDateInPeriod(startDate.getValue(), endDate.getValue(), LocalDate.now()) ||
-                !status ||
-                tableProducts.isEmpty()
-        )
-            addAnotherBtn.setDisable(true);
-        removeSelectedBtn.setDisable(tableProducts.isEmpty());
     }
 
     @FXML
@@ -119,15 +107,16 @@ public class ClientCardController extends ClientCardControllerResources implemen
 
         if (clickedButton.get() == ButtonType.OK) {
             if (AddProductController.getSelectedProduct() != null) {
-                clientCardService.addAnotherProductToCard(AddProductController.getSelectedProduct());
+                clientCardService.addAnotherProductToCard(AddProductController.getSelectedProduct(), egnField.getText());
+                cache.clearCachedCollection(egnField.getText()); //Cache must be refreshed
                 searchByEgn(); //Refreshes the table
-            }else
+            } else
                 ErrorDialog.callError("There is no available quantity of this product!");
         }
     }
 
     @FXML
-    private void removeSelectedProductFromCard() {
+    private void removeSelectedProductFromCard() throws NoSuchFieldException {
         Product selectedProduct = clientsProductsTable.getSelectionModel().getSelectedItem().getProduct();
 
         clientsProductsTable.getItems().removeIf(new Predicate<TableProduct>() {
@@ -144,7 +133,16 @@ public class ClientCardController extends ClientCardControllerResources implemen
             }
         });
 
-        clientCardService.removeSelectedProduct(selectedProduct);
+        clientCardService.removeSelectedProduct(selectedProduct, egnField.getText());
+        removeSelectedBtn.setDisable(tableProducts.isEmpty());
+    }
+
+    private void handleButtonsStatus(boolean isEmpty) {
+        boolean isDateInPeriod = isDateInPeriod(startDate.getValue(), endDate.getValue(), LocalDate.now());
+
+        if (!isDateInPeriod)
+            addAnotherBtn.setDisable(true);
+        addAnotherBtn.setDisable(clientNameLabel.getText().equals("Client not found") || !isEmpty);
         removeSelectedBtn.setDisable(tableProducts.isEmpty());
     }
 

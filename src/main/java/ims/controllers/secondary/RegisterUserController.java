@@ -25,7 +25,7 @@ public class RegisterUserController extends RegisterUserControllerResources impl
     private UserRegistrationService userRegistrationService;
     private ToggleGroup toggleGroup;
     private static Role role;
-    private static String countriesCacheKey = "";
+    private static Cache cache = new Cache();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -75,11 +75,11 @@ public class RegisterUserController extends RegisterUserControllerResources impl
     }
 
     private void initializeCountries() {
-        List<CustomField> countriesFromDb = (List<CustomField>) Cache.getCachedCollection(countryComboBox.getSelectionModel().getSelectedItem());
+        List<CustomField> countriesFromDb = (List<CustomField>) cache.getCachedCollection(countryComboBox.getSelectionModel().getSelectedItem());
 
         if (countriesFromDb == null) {
             countriesFromDb = userRegistrationService.initializeCountries();
-            Cache.cacheCollection(countryComboBox.getSelectionModel().getSelectedItem(), countriesFromDb);
+            cache.cacheCollection(countryComboBox.getSelectionModel().getSelectedItem(), countriesFromDb);
         }
 
         countriesFromDb.forEach(field -> {
@@ -91,11 +91,11 @@ public class RegisterUserController extends RegisterUserControllerResources impl
     private void initializeCities() {
         cityComboBox.getItems().clear(); //Prevents data duplicating
         String chosenCountry = countryComboBox.getSelectionModel().getSelectedItem();
-        List<CustomField> citiesFromDb = (List<CustomField>) Cache.getCachedCollection(countryComboBox.getSelectionModel().getSelectedItem());
+        List<CustomField> citiesFromDb = (List<CustomField>) cache.getCachedCollection(countryComboBox.getSelectionModel().getSelectedItem());
 
         if (citiesFromDb == null) {
             citiesFromDb = userRegistrationService.initializeCitiesAccordingCountry(chosenCountry);
-            Cache.cacheCollection(countryComboBox.getSelectionModel().getSelectedItem(), citiesFromDb);
+            cache.cacheCollection(countryComboBox.getSelectionModel().getSelectedItem(), citiesFromDb);
         }
 
         citiesFromDb.forEach(field -> {

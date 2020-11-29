@@ -32,13 +32,7 @@ public class AddProductController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         addProductService = new AddProductService();
 
-        tableProducts = (List<TableProduct>) Cache.getCachedCollection(listOfProductsAvailable);
-
-        if (tableProducts == null) {
-            tableProducts = addProductService.getAllProducts();
-
-            Cache.cacheCollection(listOfProductsAvailable, tableProducts);
-        }
+        tableProducts = addProductService.getAllProducts();
 
         setTableColumns();
         fillTable(tableProducts);

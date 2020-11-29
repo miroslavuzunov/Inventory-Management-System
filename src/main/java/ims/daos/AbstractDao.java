@@ -73,7 +73,7 @@ public abstract class AbstractDao<T> {
         return records;
     }
 
-    protected List<T> getRecordsByAttribute(Field field, String value){
+    protected List<T> getRecordsByAttribute(Field field, Object value){
         if (Arrays.stream(classType.getDeclaredFields()).anyMatch(f -> f.getName().equals(field.getName()))) { //Checks if the field is in classType
             CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
             CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(classType);
@@ -86,22 +86,20 @@ public abstract class AbstractDao<T> {
         return null;
     }
 
-//    public T getRecordByMultipleAttributes(Map<String, String> valuesByColumns) {
-//
-//        CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
-//        CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(classType);
-//        Root<T> recordRoot = criteriaQuery.from(classType);
-//        List<Predicate> predicates = new ArrayList<>();
-//
-//        valuesByColumns.forEach((key, value) -> predicates.add(criteriaBuilder.like(recordRoot.get(key), value)));
-//
-//        criteriaQuery.select(recordRoot).where(predicates.toArray(new Predicate[]{}));
-//        List<T> records = manager.createQuery(criteriaQuery).getResultList();
-//
-//        if (!records.isEmpty())
-//            return records.get(0);
-//        return null;
-//    }
+    public List<T> getRecordsByMultipleAttributes(Map<Field, Object> valuesByColumns) {
+
+        CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
+        CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(classType);
+        Root<T> recordRoot = criteriaQuery.from(classType);
+        List<Predicate> predicates = new ArrayList<>();
+
+        valuesByColumns.forEach((key, value) -> predicates.add(criteriaBuilder.equal(recordRoot.get(key.getName()), value)));
+
+        criteriaQuery.select(recordRoot).where(predicates.toArray(new Predicate[]{}));
+        List<T> records = manager.createQuery(criteriaQuery).getResultList();
+
+        return records;
+    }
 
     private boolean isEntity(Class<?> clazz) { //Checks if given class type is entity (ensures type safety)
         boolean entityFound = false;

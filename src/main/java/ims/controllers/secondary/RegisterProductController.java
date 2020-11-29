@@ -30,6 +30,7 @@ import java.util.ResourceBundle;
 public class RegisterProductController extends RegisterProductControllerResources implements Initializable {
     private ProductRegistrationService productRegistrationService;
     private ToggleGroup toggleGroup;
+    private static Cache cache = new Cache();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -86,11 +87,11 @@ public class RegisterProductController extends RegisterProductControllerResource
     private void initializeDepreciationDegree() {
         depreciationDegreeComboBox.getItems().clear(); //Prevents data duplicating
 
-        List<CustomField> degreesFromDb = (List<CustomField>) Cache.getCachedCollection(depreciationDegreeComboBox.getSelectionModel().getSelectedItem());
+        List<CustomField> degreesFromDb = (List<CustomField>) cache.getCachedCollection(depreciationDegreeComboBox.getSelectionModel().getSelectedItem());
 
         if (degreesFromDb == null) {
             degreesFromDb = productRegistrationService.initializeDepreciationDegree();
-           Cache.cacheCollection(depreciationDegreeComboBox.getSelectionModel().getSelectedItem(), degreesFromDb);
+            cache.cacheCollection(depreciationDegreeComboBox.getSelectionModel().getSelectedItem(), degreesFromDb);
         }
 
         degreesFromDb.forEach(degree -> {

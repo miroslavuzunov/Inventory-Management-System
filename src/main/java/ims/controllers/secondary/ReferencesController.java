@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ReferencesController extends ReferencesControllerResources implements Initializable {
     private ReferencesService referencesService;
@@ -29,6 +30,7 @@ public class ReferencesController extends ReferencesControllerResources implemen
         initializeScenes();
         referencesService = new ReferencesService();
         filterChoices = new HashMap<>();
+
         endDate.setValue(LocalDate.now());  //Default period
         startDate.setValue(endDate.getValue().minusYears(1));
 
@@ -66,7 +68,7 @@ public class ReferencesController extends ReferencesControllerResources implemen
     }
 
     @FXML
-    private void clearFilter(ActionEvent event){
+    private void clearFilter(ActionEvent event) {
         taCheckBox.setSelected(false);
         lttaCheckBox.setSelected(false);
         scrappedCheckBox.setSelected(false);
@@ -89,29 +91,25 @@ public class ReferencesController extends ReferencesControllerResources implemen
         filterChoices.put(FilterChoice.MISSING, missingCheckBox.isSelected());
     }
 
+    private void fillTable(List<TableProduct> tableProducts) {
+        productsTable.getItems().clear();
+
+        for (TableProduct product : tableProducts) {
+            if (isDateInPeriod(startDate.getValue(), endDate.getValue(), LocalDate.parse(product.getRegisteredOn())))
+                productsTable.getItems().add(product);
+        }
+    }
+
+    public boolean isDateInPeriod(LocalDate startDate, LocalDate endDate, LocalDate givenOn) {
+        return startDate.datesUntil(endDate.plusDays(1)).collect(Collectors.toList()).contains(givenOn); // Checks if the transaction date is in the specified period (inclusive)
+    }
+
     private boolean isFilterUsed() {
         for (boolean isChecked : filterChoices.values()) {
             if (isChecked)
                 return true;
         }
         return false;
-    }
-
-    private void setTableColumns() {  //Mapping with TableProduct fields
-        productColumn.setCellValueFactory(new PropertyValueFactory<>("brand"));
-        invNumberColumn.setCellValueFactory(new PropertyValueFactory<>("invNum"));
-        productTypeColumn.setCellValueFactory(new PropertyValueFactory<>("productType"));
-        statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
-        initialPriceColumn.setCellValueFactory(new PropertyValueFactory<>("initialPrice"));
-        currentPriceColumn.setCellValueFactory(new PropertyValueFactory<>("currentPrice"));
-    }
-
-    private void fillTable(List<TableProduct> tableProducts) {
-        productsTable.getItems().clear();
-
-        for (TableProduct product : tableProducts) {
-            productsTable.getItems().add(product);
-        }
     }
 
     private void customizeTable() {
@@ -121,6 +119,16 @@ public class ReferencesController extends ReferencesControllerResources implemen
             tableProductTableColumn.setResizable(false);
             tableProductTableColumn.setStyle("-fx-alignment: CENTER;");
         });
+    }
+
+    private void setTableColumns() {  //Mapping with TableProduct fields
+        productColumn.setCellValueFactory(new PropertyValueFactory<>("brand"));
+        invNumberColumn.setCellValueFactory(new PropertyValueFactory<>("invNum"));
+        productTypeColumn.setCellValueFactory(new PropertyValueFactory<>("productType"));
+        statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+        initialPriceColumn.setCellValueFactory(new PropertyValueFactory<>("initialPrice"));
+        currentPriceColumn.setCellValueFactory(new PropertyValueFactory<>("currentPrice"));
+        registrationDateColumn.setCellValueFactory(new PropertyValueFactory<>("registeredOn"));
     }
 
 }

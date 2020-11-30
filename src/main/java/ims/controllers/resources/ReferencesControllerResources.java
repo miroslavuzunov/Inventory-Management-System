@@ -42,6 +42,9 @@ public abstract class ReferencesControllerResources implements ControllerConfig 
     protected TableColumn<String, String> currentPriceColumn;
 
     @FXML
+    protected TableColumn<String, String> registrationDateColumn;
+
+    @FXML
     protected DatePicker startDate;
 
     @FXML

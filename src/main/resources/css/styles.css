@@ -20,6 +20,7 @@
     -fx-border-color: rgb(79, 163, 211);
     -fx-text-fill: rgba(255, 255, 255, 1);
     -fx-label-padding: 0 0 0 20px;
+    -fx-background-color: #3d526d;
 }
 
 .exit-btn {

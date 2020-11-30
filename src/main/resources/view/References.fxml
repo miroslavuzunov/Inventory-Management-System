@@ -38,20 +38,21 @@
             </Label>
             <TableView fx:id="productsTable" layoutX="9.0" layoutY="154.0" prefHeight="436.0" prefWidth="710.0">
                <columns>
-                  <TableColumn fx:id="productColumn" prefWidth="155.0" text="Product" />
-                  <TableColumn fx:id="invNumberColumn" prefWidth="143.0" text="Inv. number" />
-                  <TableColumn fx:id="productTypeColumn" prefWidth="100.0" text="Product type" />
-                  <TableColumn fx:id="statusColumn" prefWidth="87.0" text="Status" />
-                  <TableColumn fx:id="initialPriceColumn" prefWidth="102.0" text="Initial price" />
-                  <TableColumn fx:id="currentPriceColumn" prefWidth="121.0" text="Current price" />
+                  <TableColumn fx:id="productColumn" prefWidth="131.0" text="Product" />
+                  <TableColumn fx:id="invNumberColumn" prefWidth="129.0" text="Inv. number" />
+                  <TableColumn fx:id="productTypeColumn" prefWidth="89.0" text="Product type" />
+                  <TableColumn fx:id="statusColumn" prefWidth="67.0" text="Status" />
+                  <TableColumn fx:id="initialPriceColumn" prefWidth="87.0" text="Initial price" />
+                  <TableColumn fx:id="currentPriceColumn" prefWidth="93.0" text="Current price" />
+                  <TableColumn fx:id="registrationDateColumn" prefWidth="113.0" text="Registered on" />
                </columns>
             </TableView>
-            <DatePicker fx:id="startDate" layoutX="350.0" layoutY="87.0" prefHeight="35.0" prefWidth="174.0">
+            <DatePicker fx:id="startDate" layoutX="350.0" layoutY="87.0" onAction="#handleCheckedBoxes" prefHeight="35.0" prefWidth="174.0">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </DatePicker>
-            <Label alignment="CENTER" layoutX="336.0" layoutY="57.0" prefHeight="27.0" prefWidth="71.0" stylesheets="@../css/styles.css" text="From:" textFill="#7c7c7c">
+            <Label alignment="CENTER" layoutX="331.0" layoutY="57.0" prefHeight="27.0" prefWidth="71.0" stylesheets="@../css/styles.css" text="From:" textFill="#7c7c7c">
                <font>
                   <Font size="13.0" />
                </font>
@@ -61,7 +62,7 @@
                   <Font size="13.0" />
                </font>
             </Label>
-            <DatePicker fx:id="endDate" layoutX="543.0" layoutY="87.0" prefHeight="35.0" prefWidth="174.0">
+            <DatePicker fx:id="endDate" layoutX="543.0" layoutY="87.0" onAction="#handleCheckedBoxes" prefHeight="35.0" prefWidth="174.0">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>

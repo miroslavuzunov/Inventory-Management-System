@@ -10,6 +10,7 @@ public class TableProduct{
     private String invNum;
     private String givenBy;
     private String givenOn;
+    private String registeredOn;
     private String status;
     private String initialPrice;
     private String currentPrice;
@@ -118,5 +119,13 @@ public class TableProduct{
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public String getRegisteredOn() {
+        return registeredOn;
+    }
+
+    public void setRegisteredOn(String registeredOn) {
+        this.registeredOn = registeredOn;
     }
 }

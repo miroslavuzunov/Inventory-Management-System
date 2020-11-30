@@ -113,7 +113,7 @@ public class ReferencesService {
         List<Product> busyProducts = new ArrayList<>();
 
         for (Product product : allProducts) {
-            if (!product.isAvailable() && product.isExisting())
+            if (!product.isAvailable() && product.isExisting() && product.getStatus()!=RecordStatus.DISABLED)
                 busyProducts.add(product);
         }
 
@@ -186,6 +186,7 @@ public class ReferencesService {
         tableProduct.setInitialPrice(productDetails.getInitialPrice().toString() + " " + productDetails.getPriceCurrency().toString());
         tableProduct.setCurrentPrice(productDetails.getCurrentPrice().toString() + " " + productDetails.getPriceCurrency().toString());
         tableProduct.setProduct(product);
+        tableProduct.setRegisteredOn(product.getRegisteredOn().toString());
 
         if (!product.isAvailable() && product.isExisting()
                 && product.getStatus().equals(RecordStatus.DISABLED)

@@ -29,7 +29,7 @@ public class ReferencesController extends ReferencesControllerResources implemen
         AbstractDao.newEntityManager();
         initializeScenes();
         referencesService = new ReferencesService();
-        filterChoices = new HashMap<>();
+        
 
         endDate.setValue(LocalDate.now());  //Default period
         startDate.setValue(endDate.getValue().minusYears(1));

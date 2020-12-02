@@ -1,5 +1,6 @@
 package ims.controllers.secondary;
 
+import ims.App;
 import ims.controllers.primary.SceneController;
 import ims.controllers.resources.ReferencesControllerResources;
 import ims.daos.AbstractDao;
@@ -14,8 +15,11 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.io.IOException;
@@ -120,8 +124,8 @@ public class ReferencesController extends ReferencesControllerResources implemen
                     @Override
                     public void handle(ActionEvent event) {
                         try {
-                            redirectToClientsCard();
-                        } catch (IOException | NoSuchFieldException e) {
+                            getCurrentProductHolderEgn();
+                        } catch (IOException e) {
                             e.printStackTrace();
                         }
                     }
@@ -138,12 +142,17 @@ public class ReferencesController extends ReferencesControllerResources implemen
         });
     }
 
-    private void redirectToClientsCard() throws IOException, NoSuchFieldException {
+    private void getCurrentProductHolderEgn() throws IOException {
         TableProduct product = productsTable.getSelectionModel().getSelectedItem();
         if (product != null)
             if (!(product.getProductType().equals("TA")) && (product.getStatus().equals("Busy") || product.getStatus().equals("Missing"))) {
                 String egn = referencesService.getProductHolderEgnByInvNumber(product.getInvNum());
-                InformationDialog.displayInformation("Current holder of this product is with EGN: " + egn + "\nYou can find him in the client's card section.");
+                //InformationDialog.displayInformation("Current holder of this product is with EGN: " + egn + "\nYou can find him in the client's card section.");
+                ClientCardController.setEgn(egn);
+                Scene scene = new Scene(App.loadFXML("/view/ClientCard").load(),900,600);  //TODO REQUESTS AND DIALOG OPTIMIZATIONS
+                Stage stage = new Stage();
+                stage.setScene(scene);
+                stage.show();
             } else
                 ErrorDialog.callError("The product you have selected is not occupied by anyone or it is not LTTA.");
     }

@@ -13,8 +13,10 @@ import ims.supporting.CustomField;
 import ims.supporting.TableProduct;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -30,6 +32,11 @@ public class ClientCardController extends ClientCardControllerResources implemen
     private ClientCardService clientCardService;
     private List<TableProduct> tableProducts;
     private static Cache cache = new Cache();
+    private static String staticEgn = "";
+
+    public static void setEgn(String egn){
+        staticEgn = egn;
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -44,6 +51,15 @@ public class ClientCardController extends ClientCardControllerResources implemen
         removeSelectedBtn.setDisable(true);
         endDate.setValue(LocalDate.now());  //Default period
         startDate.setValue(endDate.getValue().minusYears(1));
+
+        if(!staticEgn.isEmpty()) {
+            egnField.setText(staticEgn);
+            try {
+                searchByEgn();
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @FXML

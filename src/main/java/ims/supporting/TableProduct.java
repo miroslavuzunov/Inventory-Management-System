@@ -2,6 +2,7 @@ package ims.supporting;
 
 import ims.entities.Product;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
 
 import javax.persistence.Transient;
 

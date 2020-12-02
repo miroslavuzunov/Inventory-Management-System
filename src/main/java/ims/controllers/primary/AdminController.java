@@ -9,7 +9,6 @@ import ims.controllers.resources.AdminControllerResources;
 import ims.controllers.secondary.RegisterUserController;
 import ims.daos.AbstractDao;
 import ims.dialogs.ConfirmationDialog;
-import ims.entities.User;
 import ims.enums.Role;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -24,7 +23,6 @@ public class AdminController extends AdminControllerResources implements Initial
         userStatus.setText("Status: " + LoginController.getLoggedUser().getRole());
         todaysDate.setText("Today's date: " + LocalDate.now().toString());
         nameLabel.setText("Hello, " + LoginController.getLoggedUser().getPersonInfo().getFirstName() + "!");
-
         AbstractDao.closeEntityManager();
 
         initializeScenes();

@@ -5,7 +5,7 @@ import ims.controllers.primary.SceneController;
 import ims.controllers.resources.RegisterUserControllerResources;
 import ims.daos.AbstractDao;
 import ims.dialogs.ConfirmationDialog;
-import ims.dialogs.SuccessDialog;
+import ims.dialogs.InformationDialog;
 import ims.enums.Role;
 import ims.enums.State;
 import ims.services.UserRegistrationService;
@@ -123,7 +123,7 @@ public class RegisterUserController extends RegisterUserControllerResources impl
 
             if (result == ButtonType.YES) {
                 userRegistrationService.createUser(customFieldsByName, role);
-                SuccessDialog.success("Done! A new " + role.toString() + " has been signed up!");
+                InformationDialog.displayInformation("Done! A new " + role.toString() + " has been signed up!");
                 App.setScene("/view/RegisterUser"); //reloading same scene to clean the fields
             }
         }

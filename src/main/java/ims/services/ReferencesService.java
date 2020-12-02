@@ -1,11 +1,12 @@
 package ims.services;
 
+import ims.daos.ProductClientDao;
 import ims.daos.ProductDao;
 import ims.daos.ProductDetailsDao;
 import ims.daos.ScrappedProductsDao;
 import ims.entities.Product;
+import ims.entities.ProductClient;
 import ims.entities.ProductDetails;
-import ims.entities.ScrappedProducts;
 import ims.enums.FilterChoice;
 import ims.enums.ProductType;
 import ims.enums.RecordStatus;
@@ -16,6 +17,7 @@ import java.util.*;
 public class ReferencesService {
     private final ProductDao productDao;
     private final ProductDetailsDao productDetailsDao;
+    private final ProductClientDao productClientDao;
     private final ScrappedProductsDao scrappedProductsDao;
     private List<ProductDetails> allProductDetails;
     private List<Product> allProducts;
@@ -25,6 +27,7 @@ public class ReferencesService {
         productDao = new ProductDao();
         productDetailsDao = new ProductDetailsDao();
         scrappedProductsDao = new ScrappedProductsDao();
+        productClientDao = new ProductClientDao();
         allProducts = productDao.getAll();
         allProductDetails = productDetailsDao.getAll();
     }
@@ -203,5 +206,16 @@ public class ReferencesService {
             }
         }
         return tableProduct;
+    }
+
+    public String getProductHolderEgnByInvNumber(String invNum) { //TODO REQUEST OPTIMIZATION
+        List<ProductClient> allTransactions = productClientDao.getAll();
+
+        for(ProductClient transaction : allTransactions){
+            if(transaction.getProduct().getInventoryNumber().equals(invNum))
+                return transaction.getClient().getPersonInfo().getEgn();
+        }
+
+        return "Not found!";
     }
 }

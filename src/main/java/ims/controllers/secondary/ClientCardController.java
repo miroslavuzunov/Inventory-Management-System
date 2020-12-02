@@ -47,7 +47,7 @@ public class ClientCardController extends ClientCardControllerResources implemen
     }
 
     @FXML
-    public void handleClicks(ActionEvent event) throws IOException {
+    private void handleClicks(ActionEvent event) throws IOException {
         if (event.getSource() == backBtn) {
             ButtonType result = ConfirmationDialog.askForConfirmation("Are you sure you want to get back?");
 
@@ -166,7 +166,7 @@ public class ClientCardController extends ClientCardControllerResources implemen
         }
     }
 
-    public boolean isDateInPeriod(LocalDate startDate, LocalDate endDate, LocalDate givenOn) {
+    private boolean isDateInPeriod(LocalDate startDate, LocalDate endDate, LocalDate givenOn) {
         return startDate.datesUntil(endDate.plusDays(1)).collect(Collectors.toList()).contains(givenOn); // Checks if the transaction date is in the specified period (inclusive)
     }
 

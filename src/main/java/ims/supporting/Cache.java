@@ -13,11 +13,11 @@ public class Cache {
         cachedObjectsByKey = new HashMap<>();
     }
 
-    public  void cacheCollection(Object key, Collection loadedFields) {
+    public void cacheCollection(Object key, Collection loadedFields) {
         cachedCollectionsByKey.put(key, loadedFields);
     }
 
-    public  void cacheObject(Object key, Object loadedFields) {
+    public void cacheObject(Object key, Object loadedFields) {
         cachedObjectsByKey.put(key, loadedFields);
     }
 

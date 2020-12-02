@@ -6,7 +6,7 @@ import ims.controllers.resources.RegisterProductControllerResources;
 import ims.daos.AbstractDao;
 import ims.dialogs.ConfirmationDialog;
 import ims.dialogs.CustomDialog;
-import ims.dialogs.SuccessDialog;
+import ims.dialogs.InformationDialog;
 import ims.entities.ProductDetails;
 import ims.enums.PriceCurrency;
 import ims.services.ProductRegistrationService;
@@ -133,7 +133,7 @@ public class RegisterProductController extends RegisterProductControllerResource
 
             if (result == ButtonType.YES) {
                 productRegistrationService.createProduct(customFieldsByName);
-                SuccessDialog.success("Done! New product added to the system!");
+                InformationDialog.displayInformation("Done! New product added to the system!");
                 App.setScene("/view/RegisterProduct"); //reloading same scene to clean the fields
             }
         }
@@ -157,7 +157,7 @@ public class RegisterProductController extends RegisterProductControllerResource
                 productRegistrationService.generateProductsByDetails(customFieldsByName, productDetails, quantity);
                 productRegistrationService.updateProductQuantity(productDetails, quantity);
 
-                SuccessDialog.success("Done! New quantity added to the product!");
+                InformationDialog.displayInformation("Done! New quantity added to the product!");
                 App.setScene("/view/RegisterProduct"); //reloading same scene to clean the fields
             }
         }

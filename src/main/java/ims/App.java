@@ -20,8 +20,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("/view/Login"),900,600);
-        //ArrayList<Scene>
+        scene = new Scene(loadFXML("/view/Login").load(),900,600);
         stage.setScene(scene);
         stage.setResizable(false);
         stage.setTitle("IMS - office edition");
@@ -30,12 +29,11 @@ public class App extends Application {
     }
 
     public static void setScene(String fxml) throws IOException {
-        scene.setRoot(loadFXML(fxml));
+        scene.setRoot(loadFXML(fxml).load());
     }
 
-    private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
-        return fxmlLoader.load();
+    public static FXMLLoader loadFXML(String fxml){
+        return new FXMLLoader(App.class.getResource(fxml + ".fxml"));
     }
 
     @Override

@@ -4,15 +4,19 @@ import ims.controllers.primary.SceneController;
 import ims.controllers.resources.ReferencesControllerResources;
 import ims.daos.AbstractDao;
 import ims.dialogs.ConfirmationDialog;
+import ims.dialogs.ErrorDialog;
+import ims.dialogs.InformationDialog;
 import ims.enums.FilterChoice;
 import ims.services.ReferencesService;
 import ims.supporting.TableProduct;
+import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Callback;
 
 import java.io.IOException;
 import java.net.URL;
@@ -95,9 +99,53 @@ public class ReferencesController extends ReferencesControllerResources implemen
         productsTable.getItems().clear();
 
         for (TableProduct product : tableProducts) {
-            if (isDateInPeriod(startDate.getValue(), endDate.getValue(), LocalDate.parse(product.getRegisteredOn())))
+            if (isDateInPeriod(startDate.getValue(), endDate.getValue(), LocalDate.parse(product.getRegisteredOn()))) {
                 productsTable.getItems().add(product);
+            }
         }
+
+        if (!productsTable.getItems().isEmpty())
+            addTableContextMenu(productsTable);
+    }
+
+    private void addTableContextMenu(TableView<TableProduct> productsTable) {
+        productsTable.setRowFactory(new Callback<TableView<TableProduct>, TableRow<TableProduct>>() {
+            @Override
+            public TableRow<TableProduct> call(TableView<TableProduct> tableView) {
+                final TableRow<TableProduct> row = new TableRow<>();
+                ContextMenu contextMenu = new ContextMenu();
+                MenuItem checkProduct = new MenuItem("Check current product holder");
+
+                checkProduct.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        try {
+                            redirectToClientsCard();
+                        } catch (IOException | NoSuchFieldException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                contextMenu.getItems().add(checkProduct);
+
+                row.contextMenuProperty().bind( // Prevents empty rows context menu
+                        Bindings.when(row.emptyProperty())
+                                .then((ContextMenu) null)
+                                .otherwise(contextMenu)
+                );
+                return row;
+            }
+        });
+    }
+
+    private void redirectToClientsCard() throws IOException, NoSuchFieldException {
+        TableProduct product = productsTable.getSelectionModel().getSelectedItem();
+        if (product != null)
+            if (!(product.getProductType().equals("TA")) && (product.getStatus().equals("Busy") || product.getStatus().equals("Missing"))) {
+                String egn = referencesService.getProductHolderEgnByInvNumber(product.getInvNum());
+                InformationDialog.displayInformation("Current holder of this product is with EGN: " + egn + "\nYou can find him in the client's card section.");
+            } else
+                ErrorDialog.callError("The product you have selected is not occupied by anyone or it is not LTTA.");
     }
 
     public boolean isDateInPeriod(LocalDate startDate, LocalDate endDate, LocalDate givenOn) {

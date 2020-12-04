@@ -5,18 +5,18 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "scrapped_products")
-public class ScrappedProducts extends BaseEntity{
-    private Product scrappedProduct;
+public class ScrappedProduct extends BaseEntity{
+    private Product product;
     private LocalDate scrapDate;
 
     @OneToOne(targetEntity = Product.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", referencedColumnName = "id")
-    public Product getScrappedProduct() {
-        return scrappedProduct;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setScrappedProduct(Product scrappedProduct) {
-        this.scrappedProduct = scrappedProduct;
+    public void setProduct(Product scrappedProduct) {
+        this.product = scrappedProduct;
     }
 
     @Column(name = "scrap_date")

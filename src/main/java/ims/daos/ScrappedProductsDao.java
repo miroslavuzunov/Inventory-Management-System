@@ -1,9 +1,9 @@
 package ims.daos;
 
-import ims.entities.ScrappedProducts;
+import ims.entities.ScrappedProduct;
 
-public class ScrappedProductsDao extends AbstractDao<ScrappedProducts> {
+public class ScrappedProductsDao extends AbstractDao<ScrappedProduct> {
     public ScrappedProductsDao() {
-        super(ScrappedProducts.class);
+        super(ScrappedProduct.class);
     }
 }

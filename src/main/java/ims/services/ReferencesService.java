@@ -7,6 +7,7 @@ import ims.daos.ScrappedProductsDao;
 import ims.entities.Product;
 import ims.entities.ProductClient;
 import ims.entities.ProductDetails;
+import ims.entities.ScrappedProduct;
 import ims.enums.FilterChoice;
 import ims.enums.ProductType;
 import ims.enums.RecordStatus;
@@ -20,24 +21,30 @@ public class ReferencesService {
     private final ProductClientDao productClientDao;
     private final ScrappedProductsDao scrappedProductsDao;
     private List<ProductDetails> allProductDetails;
-    private List<Product> allProducts;
+    private List<Product> allNonScrappedProducts;
+    private List<ScrappedProduct> allScrappedProducts;
     private Map<FilterChoice, Boolean> filterChoices;
 
-    public ReferencesService() {
+    public ReferencesService() throws NoSuchFieldException {
         productDao = new ProductDao();
         productDetailsDao = new ProductDetailsDao();
         scrappedProductsDao = new ScrappedProductsDao();
         productClientDao = new ProductClientDao();
-        allProducts = productDao.getAll();
+        allNonScrappedProducts = productDao.getAllEnabled();
         allProductDetails = productDetailsDao.getAll();
+        allScrappedProducts = scrappedProductsDao.getAll();
     }
 
 
     public List<TableProduct> loadAll() {
         Set<TableProduct> tableProducts = new LinkedHashSet<>(); //Keeps insertion order
 
-        for (Product product : allProducts) {
+        for (Product product : allNonScrappedProducts) {
             tableProducts.add(generateTableProduct(product));
+        }
+
+        for(ScrappedProduct scrappedProduct : allScrappedProducts){
+            tableProducts.add(generateTableProduct(scrappedProduct.getProduct()));
         }
 
         return new ArrayList<>(tableProducts);
@@ -78,7 +85,7 @@ public class ReferencesService {
     private List<Product> getTaProducts() {
         List<Product> taProducts = new ArrayList<>();
 
-        for (Product product : allProducts) {
+        for (Product product : allNonScrappedProducts) {
             if (product.getProductDetails().getProductType().equals(ProductType.TA))
                 taProducts.add(product);
         }
@@ -89,9 +96,13 @@ public class ReferencesService {
     private List<Product> getLttaProducts() {
         List<Product> lttaProducts = new ArrayList<>();
 
-        for (Product product : allProducts) {
+        for (Product product : allNonScrappedProducts) {
             if (product.getProductDetails().getProductType().equals(ProductType.LTTA))
                 lttaProducts.add(product);
+        }
+
+        for(ScrappedProduct scrappedProduct : allScrappedProducts){ // All scrapped products are LTTA
+            lttaProducts.add(scrappedProduct.getProduct());
         }
 
         return lttaProducts;
@@ -115,8 +126,8 @@ public class ReferencesService {
     private List<Product> getBusyProducts() {
         List<Product> busyProducts = new ArrayList<>();
 
-        for (Product product : allProducts) {
-            if (!product.isAvailable() && product.isExisting() && product.getStatus()!=RecordStatus.DISABLED)
+        for (Product product : allNonScrappedProducts) {
+            if (!product.isAvailable() && product.isExisting())
                 busyProducts.add(product);
         }
 
@@ -126,7 +137,7 @@ public class ReferencesService {
     private List<Product> getAvailableProducts() {
         List<Product> availableProducts = new ArrayList<>();
 
-        for (Product product : allProducts) {
+        for (Product product : allNonScrappedProducts) {
             if (product.isAvailable())
                 availableProducts.add(product);
         }
@@ -137,7 +148,7 @@ public class ReferencesService {
     private List<Product> getMissingProducts() {
         List<Product> missingProducts = new ArrayList<>();
 
-        for (Product product : allProducts) {
+        for (Product product : allNonScrappedProducts) {
             if (!product.isExisting())
                 missingProducts.add(product);
         }
@@ -148,7 +159,9 @@ public class ReferencesService {
     private List<Product> getScrappedProducts() {
         List<Product> scrappedProducts = new ArrayList<>();
 
-        for (Product product : allProducts) {
+        for (ScrappedProduct scrappedProduct : allScrappedProducts) {
+            Product product = scrappedProduct.getProduct();
+
             if (!product.isAvailable() && product.isExisting()
                     && product.getStatus().equals(RecordStatus.DISABLED)
                     && product.getProductDetails().getProductType().equals(ProductType.LTTA))

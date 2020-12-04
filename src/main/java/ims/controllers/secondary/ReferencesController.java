@@ -24,6 +24,7 @@ import javafx.util.Callback;
 
 import java.io.IOException;
 import java.net.URL;
+import java.security.cert.TrustAnchor;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -36,7 +37,11 @@ public class ReferencesController extends ReferencesControllerResources implemen
     public void initialize(URL url, ResourceBundle resourceBundle) {
         AbstractDao.newEntityManager();
         initializeScenes();
-        referencesService = new ReferencesService();
+        try {
+            referencesService = new ReferencesService();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
         filterChoices = new HashMap<>();
 
         endDate.setValue(LocalDate.now());  //Default period

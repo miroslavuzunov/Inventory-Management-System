@@ -101,8 +101,6 @@ public class ClientCardService {
                         product.getStatus().equals(RecordStatus.ENABLED)) {
                     firstAvailable = product;
 
-                    if (product.getProductDetails().getProductType().equals(ProductType.TA))
-                        product.setStatus(RecordStatus.DISABLED); //TA should not be returned anymore
                     break;
                 }
             }
@@ -160,7 +158,8 @@ public class ClientCardService {
         if (!product.getProductDetails().getProductType().equals(ProductType.TA)) {
             product.setStatus(RecordStatus.ENABLED);
             product.setAvailable(true);
-        }
+        }else
+            product.setStatus(RecordStatus.DISABLED); //TA should not be given anymore
         productDao.updateRecord(product);
         userDao.updateRecord(client);
     }

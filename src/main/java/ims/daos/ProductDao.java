@@ -1,8 +1,10 @@
 package ims.daos;
 
 import ims.entities.DepreciationDegree;
+import ims.entities.PersonInfo;
 import ims.entities.Product;
 import ims.entities.ProductDetails;
+import ims.enums.RecordStatus;
 
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -29,5 +31,11 @@ public class ProductDao extends AbstractDao<Product> {
         if (!products.isEmpty())
             return products.get(0);
         return new Product();
+    }
+
+    public List<Product> getAllEnabled() throws NoSuchFieldException {
+        Field field = Product.class.getDeclaredField("status");
+
+        return getRecordsByAttribute(field, RecordStatus.ENABLED);
     }
 }

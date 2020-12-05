@@ -132,7 +132,7 @@ public class ClientCardService {
 
         if (areClientAndMrtValid(client, mrt)) {
             initializeProductClientTransaction(productClient, mrt, client, firstAvailable);
-            saveToDatabase(productClient, client, firstAvailable);
+            saveChangesToDatabase(productClient, client, firstAvailable);
             updateClientChangesForController(client, productClient);
         }
     }
@@ -153,7 +153,7 @@ public class ClientCardService {
         productClient.setStatus(RecordStatus.ENABLED);
     }
 
-    private void saveToDatabase(ProductClient productClient, User client, Product firstAvailable) {
+    private void saveChangesToDatabase(ProductClient productClient, User client, Product firstAvailable) {
         productDao.updateRecord(firstAvailable);
         productClientDao.saveRecord(productClient);
         userDao.updateRecord(client);
@@ -164,6 +164,7 @@ public class ClientCardService {
     }
 
     public void removeSelectedProduct(Product product, String egn) throws NoSuchFieldException {
+        //TODO: HANDLE REMOVING MISSING PRODUCT! REFACTOR THE CODE!
         User client;
 
         client = (User) cache.getCachedObject(egn);

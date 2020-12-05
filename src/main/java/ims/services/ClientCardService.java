@@ -79,56 +79,88 @@ public class ClientCardService {
         return tableProducts;
     }
 
-    public User getClientByEgn(String egn) throws NoSuchFieldException {
-        PersonInfo personInfo = personInfoDao.getRecordByEgn(egn);
-
-        return personInfo.getUser();
-    }
-
     public void addAnotherProductToCard(TableProduct selectedProduct, String egn) throws NoSuchFieldException {
         if (selectedProduct != null) {
-            ProductClient productClient = new ProductClient();
             List<Product> allProducts = new ArrayList<>();
-            Product firstAvailable = new Product();
-            User loggedUser = LoginController.getLoggedUser();
-
-            allProducts = productDao.getAll();
-
-            for (Product product : allProducts) {
-                if (product.getProductDetails().getBrandAndModel().equals(selectedProduct.getBrand()) && //Checking by brand and model because the field is always unique
-                        product.isAvailable() &&
-                        product.isExisting() &&
-                        product.getStatus().equals(RecordStatus.ENABLED)) {
-                    firstAvailable = product;
-
-                    break;
-                }
-            }
-
+            Product firstAvailableProduct = new Product();
             User client;
 
-            client = (User) cache.getCachedObject(egn);
+            allProducts = productDao.getAll();
+            firstAvailableProduct = getFirstAvailable(allProducts, selectedProduct);
+            client = getClientByEgn(egn);
 
-            if (client == null) {
-                client = getClientByEgn(egn);
-                cache.cacheObject(egn, client);
-            }
-
-            firstAvailable.setAvailable(false);
-
-            productClient.setProduct(firstAvailable);
-            if (loggedUser.getRole().equals(Role.MRT) || loggedUser.getRole().equals(Role.ADMIN))
-                productClient.setMrt(loggedUser);
-            if (client.getRole().equals(Role.CLIENT))
-                productClient.setClient(client);
-            productClient.setGivenOn(LocalDate.now());
-            productClient.setStatus(RecordStatus.ENABLED);
-
-            productDao.updateRecord(firstAvailable);
-            productClientDao.saveRecord(productClient);
-            client.getProductClientTransactions().add(productClient);
-            userDao.updateRecord(client); //Updates product client transactions
+            if (firstAvailableProduct != null)
+                addFirstAvailableToClientCard(firstAvailableProduct, client);
         }
+    }
+
+    private Product getFirstAvailable(List<Product> allProducts, TableProduct selectedProduct) {
+        for (Product product : allProducts) {
+            if (isProductFromDbEqualToSelected(product, selectedProduct))
+                if (isProductAvailable(product))
+                    return product;
+        }
+        return null;
+    }
+
+    private boolean isProductFromDbEqualToSelected(Product product, TableProduct selectedProduct) {
+       return product.getProductDetails().getBrandAndModel().equals(selectedProduct.getBrand()); //Checking by brand and model because the field is always unique
+    }
+
+    private boolean isProductAvailable(Product product) {
+        return  product.isAvailable() &&
+                product.isExisting() &&
+                product.getStatus().equals(RecordStatus.ENABLED);
+    }
+
+
+    public User getClientByEgn(String egn) throws NoSuchFieldException {
+        User client = (User) cache.getCachedObject(egn);
+
+        if (client == null) {
+            PersonInfo personInfo = personInfoDao.getRecordByEgn(egn);
+            client = personInfo.getUser();
+            cache.cacheObject(egn, client);
+        }
+
+        return client;
+    }
+
+    private void addFirstAvailableToClientCard(Product firstAvailable, User client) {
+        ProductClient productClient = new ProductClient();
+        User mrt = LoginController.getLoggedUser();
+
+        if (areClientAndMrtValid(client, mrt)) {
+            initializeProductClientTransaction(productClient, mrt, client, firstAvailable);
+            saveToDatabase(productClient, client, firstAvailable);
+            updateClientChangesForController(client, productClient);
+        }
+    }
+
+    private boolean areClientAndMrtValid(User client, User loggedUser) {
+        return (loggedUser.getRole().equals(Role.MRT) || loggedUser.getRole().equals(Role.ADMIN)) &&
+                (client.getRole().equals(Role.CLIENT));
+    }
+
+    private void initializeProductClientTransaction(ProductClient productClient, User mrt, User client, Product firstAvailable) {
+        firstAvailable.setAvailable(false);
+        productClient.setProduct(firstAvailable);
+        if (areClientAndMrtValid(client, mrt)) {
+            productClient.setMrt(mrt);
+            productClient.setClient(client);
+        }
+        productClient.setGivenOn(LocalDate.now());
+        productClient.setStatus(RecordStatus.ENABLED);
+    }
+
+    private void saveToDatabase(ProductClient productClient, User client, Product firstAvailable) {
+        productDao.updateRecord(firstAvailable);
+        productClientDao.saveRecord(productClient);
+        userDao.updateRecord(client);
+    }
+
+    private void updateClientChangesForController(User client, ProductClient productClient) {
+        client.getProductClientTransactions().add(productClient);
     }
 
     public void removeSelectedProduct(Product product, String egn) throws NoSuchFieldException {
@@ -158,7 +190,7 @@ public class ClientCardService {
         if (!product.getProductDetails().getProductType().equals(ProductType.TA)) {
             product.setStatus(RecordStatus.ENABLED);
             product.setAvailable(true);
-        }else
+        } else
             product.setStatus(RecordStatus.DISABLED); //TA should not be given anymore
         productDao.updateRecord(product);
         userDao.updateRecord(client);

@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ims.controllers.secondary.ClientCardController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ims.controllers.secondary.ClientCardController">
    <children>
       <VBox fx:id="cleanLeftPane" prefHeight="600.0" prefWidth="174.0" styleClass="left-side" stylesheets="@../css/styles.css">
          <children>
@@ -29,7 +29,7 @@
             </Button>
          </children>
       </VBox>
-      <AnchorPane fx:id="regPane" layoutX="174.0" prefHeight="600.0" prefWidth="727.0" style="-fx-background-color: #ccc;">
+      <AnchorPane fx:id="regPane" layoutX="174.0" prefHeight="600.0" prefWidth="727.0">
          <children>
             <Label alignment="CENTER" layoutX="182.0" layoutY="10.0" prefHeight="27.0" prefWidth="291.0" style="-fx-text-fill: rgb(79, 163, 211);" styleClass="left-side-header" stylesheets="@../css/styles.css" text="CLIENT'S CARD" textFill="WHITE">
                <font>

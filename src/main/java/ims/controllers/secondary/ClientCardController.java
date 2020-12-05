@@ -29,14 +29,9 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class ClientCardController extends ClientCardControllerResources implements Initializable {
-    private ClientCardService clientCardService;
-    private List<TableProduct> tableProducts;
+    protected ClientCardService clientCardService;
+    protected List<TableProduct> tableProducts;
     private static Cache cache = new Cache();
-    private static String staticEgn = "";
-
-    public static void setEgn(String egn){
-        staticEgn = egn;
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -51,15 +46,6 @@ public class ClientCardController extends ClientCardControllerResources implemen
         removeSelectedBtn.setDisable(true);
         endDate.setValue(LocalDate.now());  //Default period
         startDate.setValue(endDate.getValue().minusYears(1));
-
-        if(!staticEgn.isEmpty()) {
-            egnField.setText(staticEgn);
-            try {
-                searchByEgn();
-            } catch (NoSuchFieldException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     @FXML
@@ -81,7 +67,7 @@ public class ClientCardController extends ClientCardControllerResources implemen
     }
 
     @FXML
-    private void searchByEgn() throws NoSuchFieldException {
+    protected void searchByEgn() throws NoSuchFieldException {
         boolean noEmptyFields = true;
         boolean noForbiddenChars = true;
         StringBuilder clientName = new StringBuilder();
@@ -153,7 +139,7 @@ public class ClientCardController extends ClientCardControllerResources implemen
         removeSelectedBtn.setDisable(tableProducts.isEmpty());
     }
 
-    private void handleButtonsStatus(boolean status) {
+    protected void handleButtonsStatus(boolean status) {
         boolean isDateInPeriod = isDateInPeriod(startDate.getValue(), endDate.getValue(), LocalDate.now());
 
         addAnotherBtn.setDisable(clientNameLabel.getText().equals("Client not found") || !status);
@@ -162,7 +148,7 @@ public class ClientCardController extends ClientCardControllerResources implemen
         removeSelectedBtn.setDisable(clientsProductsTable.getItems().isEmpty());
     }
 
-    private void setTableColumns() {  //Mapping with TableProduct fields
+    protected void setTableColumns() {  //Mapping with TableProduct fields
         productColumn.setCellValueFactory(new PropertyValueFactory<>("brand"));
         invNumberColumn.setCellValueFactory(new PropertyValueFactory<>("invNum"));
         givenByColumn.setCellValueFactory(new PropertyValueFactory<>("givenBy"));
@@ -192,7 +178,7 @@ public class ClientCardController extends ClientCardControllerResources implemen
         egnField.setStyle(fieldsByName.get(EGN_FIELD_NAME).getStyle());
     }
 
-    private void customizeTable() {
+    protected void customizeTable() {
         clientsProductsTable.getColumns().forEach(tableProductTableColumn -> {
             tableProductTableColumn.setResizable(false);
             tableProductTableColumn.setStyle("-fx-alignment: CENTER;");

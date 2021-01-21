@@ -40,12 +40,15 @@ public class ReferencesController extends ReferencesControllerResources implemen
 
         filterChoices = new HashMap<>();
 
-        endDate.setValue(LocalDate.now());  //Default period
-        startDate.setValue(endDate.getValue().minusYears(1));
-
+        setDefaultPeriod();
         customizeTable();
         updateFilterChoices();
         handleCheckedBoxes();
+    }
+
+    private void setDefaultPeriod() {
+        endDate.setValue(LocalDate.now());
+        startDate.setValue(endDate.getValue().minusYears(1));
     }
 
     @FXML

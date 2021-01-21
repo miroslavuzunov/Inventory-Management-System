@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 public class TableNotification {
     private String notificationMessage;
-    private LocalDateTime dateAndTime;
+    private String dateAndTime;
 
     public TableNotification() {
     }
@@ -17,11 +17,11 @@ public class TableNotification {
         this.notificationMessage = notificationMessage;
     }
 
-    public LocalDateTime getDateAndTime() {
+    public String getDateAndTime() {
         return dateAndTime;
     }
 
-    public void setDateAndTime(LocalDateTime dateAndTime) {
+    public void setDateAndTime(String dateAndTime) {
         this.dateAndTime = dateAndTime;
     }
 }

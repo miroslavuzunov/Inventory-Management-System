@@ -13,10 +13,8 @@ import ims.supporting.CustomField;
 import ims.supporting.TableProduct;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -39,8 +37,6 @@ public class ClientCardController extends ClientCardControllerResources implemen
         clientCardService = new ClientCardService();
         tableProducts = new ArrayList<>();
 
-        initializeScenes();
-
         customizeTable();
         addAnotherBtn.setDisable(true);
         removeSelectedBtn.setDisable(true);
@@ -54,7 +50,7 @@ public class ClientCardController extends ClientCardControllerResources implemen
             ButtonType result = ConfirmationDialog.askForConfirmation("Are you sure you want to get back?");
 
             if (result == ButtonType.YES) {
-                SceneController.switchSceneByButton((Button) event.getSource());
+                SceneController.getBack();
                 AbstractDao.closeEntityManager();
             }
         } else
@@ -103,7 +99,6 @@ public class ClientCardController extends ClientCardControllerResources implemen
     private void addAnotherProductToCard() throws IOException, NoSuchFieldException {
         CustomDialog customDialog = new CustomDialog("AddProduct.fxml");
         customDialog.setTitle("Adding new product to the card");
-        customDialog.setResizable(false);
 
         Optional<ButtonType> clickedButton = customDialog.showAndWait();
 
@@ -119,6 +114,8 @@ public class ClientCardController extends ClientCardControllerResources implemen
 
     @FXML
     private void removeSelectedProductFromCard() throws NoSuchFieldException {
+        //TODO: MISSING PRODUCT RETURN SHOULD BE FORBIDDEN
+
         Product selectedProduct = clientsProductsTable.getSelectionModel().getSelectedItem().getProduct();
 
         clientsProductsTable.getItems().removeIf(new Predicate<TableProduct>() {

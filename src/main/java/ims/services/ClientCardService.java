@@ -188,17 +188,23 @@ public class ClientCardService {
             }
         });
 
-        if (!product.getProductDetails().getProductType().equals(ProductType.TA)) {
+        if (!product.getProductDetails().getProductType().equals(ProductType.TA) && product.isExisting()) {
             product.setStatus(RecordStatus.ENABLED);
             product.setAvailable(true);
         } else
             product.setStatus(RecordStatus.DISABLED); //TA should not be given anymore
+
         productDao.updateRecord(product);
         userDao.updateRecord(client);
     }
 
     public void changeProductStatus(Product product, boolean status) {
         product.setExisting(status);
+
+        if(status)
+            product.setStatus(RecordStatus.ENABLED);
+        else
+            product.setStatus(RecordStatus.DISABLED);
 
         productDao.updateRecord(product);
     }

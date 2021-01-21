@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class ClientCardReviewController extends ClientCardController{
+public class ClientCardReviewController extends ClientCardController {
     private static String staticEgn = "";
 
     @Override
@@ -31,7 +31,7 @@ public class ClientCardReviewController extends ClientCardController{
             }
         }
 
-        egnField.setDisable(true);
+        egnField.setEditable(false);
         startDate.setDisable(true);
         endDate.setDisable(true);
     }

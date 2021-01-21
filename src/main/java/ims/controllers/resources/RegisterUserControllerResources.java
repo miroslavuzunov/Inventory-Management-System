@@ -1,7 +1,7 @@
 package ims.controllers.resources;
 
 import ims.controllers.primary.SceneController;
-import ims.controllers.contracts.ControllerConfig;
+import ims.controllers.contracts.SceneControllerConfig;
 import ims.controllers.secondary.AbstractController;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -10,7 +10,7 @@ import javafx.scene.layout.VBox;
 
 import java.util.HashMap;
 
-public abstract class RegisterUserControllerResources extends AbstractController implements ControllerConfig {
+public abstract class RegisterUserControllerResources extends AbstractController{
     public static final String BUSY_USERNAME_MSG = "Username is already used!";
     public static final String PASSWORDS_DONT_MATCH_MSG = "Passwords don't match!";
     public static final String BUSY_EMAIL_MSG = "Email is already used!";
@@ -122,12 +122,5 @@ public abstract class RegisterUserControllerResources extends AbstractController
 
     @FXML
     protected Label header;
-
-    @Override
-    public void initializeScenes() {
-        SceneController.loadScenes(new HashMap<>() {{
-            put(backBtn, "Admin");
-        }});
-    }
 
 }

@@ -1,6 +1,5 @@
 package ims.controllers.secondary;
 
-import ims.App;
 import ims.controllers.primary.SceneController;
 import ims.controllers.resources.RegisterProductControllerResources;
 import ims.daos.AbstractDao;
@@ -38,7 +37,6 @@ public class RegisterProductController extends RegisterProductControllerResource
         productRegistrationService = new ProductRegistrationService();
 
         toggleGroup = GroupToggler.makeToggleGroup(List.of(lttaRadioBtn, taRadioBtn));
-        initializeScenes();
         initializeCurrencies();
         manipulateLttaPanel();
     }
@@ -51,7 +49,7 @@ public class RegisterProductController extends RegisterProductControllerResource
             ButtonType result = ConfirmationDialog.askForConfirmation("Input data will be lost. Are you sure you want to get back?");
 
             if (result == ButtonType.YES) {
-                SceneController.switchSceneByButton((Button) event.getSource());
+                SceneController.getBack();
                 AbstractDao.closeEntityManager();
             }
         } else
@@ -134,7 +132,7 @@ public class RegisterProductController extends RegisterProductControllerResource
             if (result == ButtonType.YES) {
                 productRegistrationService.createProduct(customFieldsByName);
                 InformationDialog.displayInformation("Done! New product added to the system!");
-                App.setScene("/view/RegisterProduct"); //reloading same scene to clean the fields
+                //App.setScene("/view/RegisterProduct"); //reloading same scene to clean the fields
             }
         }
     }
@@ -142,7 +140,6 @@ public class RegisterProductController extends RegisterProductControllerResource
     private void addProductQuantity() throws IOException, NoSuchFieldException {
         CustomDialog customDialog = new CustomDialog("AddProductQuantity.fxml");
         customDialog.setTitle("Adding quantity to existing product");
-        customDialog.setResizable(false);
 
         Optional<ButtonType> clickedButton = customDialog.showAndWait();
 
@@ -158,7 +155,7 @@ public class RegisterProductController extends RegisterProductControllerResource
                 productRegistrationService.updateProductQuantity(productDetails, quantity);
 
                 InformationDialog.displayInformation("Done! New quantity added to the product!");
-                App.setScene("/view/RegisterProduct"); //reloading same scene to clean the fields
+                //App.setScene("/view/RegisterProduct"); //reloading same scene to clean the fields
             }
         }
     }

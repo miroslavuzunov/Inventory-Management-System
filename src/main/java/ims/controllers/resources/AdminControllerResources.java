@@ -1,7 +1,8 @@
 package ims.controllers.resources;
 
 import ims.controllers.primary.SceneController;
-import ims.controllers.contracts.ControllerConfig;
+import ims.controllers.contracts.SceneControllerConfig;
+import ims.supporting.CustomScene;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
@@ -10,7 +11,7 @@ import javafx.scene.layout.VBox;
 
 import java.util.HashMap;
 
-public abstract class AdminControllerResources implements ControllerConfig {
+public abstract class AdminControllerResources implements SceneControllerConfig {
 
     @FXML
     protected Pane fadeMain;
@@ -28,28 +29,7 @@ public abstract class AdminControllerResources implements ControllerConfig {
     protected Button regCardBtn;
 
     @FXML
-    protected Button addProductBtn;
-
-    @FXML
-    protected Button removeProductBtn;
-
-    @FXML
     protected Button checkClientProductsBtn;
-
-    @FXML
-    protected VBox genRefPane;
-
-    @FXML
-    protected Button allProductsBtn;
-
-    @FXML
-    protected Button checkStatusBtn;
-
-    @FXML
-    protected Button productsByCategoryBtn;
-
-    @FXML
-    protected Button scrappedProductsBtn;
 
     @FXML
     protected VBox leftPane;
@@ -85,22 +65,21 @@ public abstract class AdminControllerResources implements ControllerConfig {
     protected Button getBackFromClientManipBtn;
 
     @FXML
-    protected Button getBackFromGenRefBtn;
+    protected Label homeLabel;
+
+    @FXML
+    protected Label clientManipLabel;
 
     @Override
-    public void initializeScenes(){
-        SceneController.loadScenes(new HashMap<>(){{
-            put(regMrtBtn, "RegisterUser");
-            put(regCardBtn, "RegisterUser");
-            put(referencesBtn, "References");
-            put(notificationBtn, "");
-            put(forcedScrapBtn, "");
-            put(regProductBtn, "");
-            put(exitBtn, "Login");
-            put(getBackFromClientManipBtn, "Admin");
-            put(getBackFromGenRefBtn, "Admin");
-            put(regProductBtn, "RegisterProduct");
-            put(checkClientProductsBtn, "ClientCard");
+    public void initializeScenes() {
+        SceneController.initializeScenes(new HashMap<>() {{
+            put(regMrtBtn, new CustomScene("RegisterUser"));
+            put(regCardBtn, new CustomScene("RegisterUser"));
+            put(referencesBtn, new CustomScene("References"));
+            put(notificationBtn, new CustomScene("Notifications"));
+            put(forcedScrapBtn, new CustomScene(""));
+            put(regProductBtn, new CustomScene("RegisterProduct"));
+            put(checkClientProductsBtn, new CustomScene("ClientCard"));
         }});
     }
 }

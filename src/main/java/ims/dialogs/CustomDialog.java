@@ -17,16 +17,13 @@ public class CustomDialog {
         fxmlLoader.setLocation(getClass().getResource("/view/" + fxmlFileName));
         dialogPane = fxmlLoader.load();
         dialog = new Dialog<>();
+        dialog.setResizable(false);
 
         dialog.setDialogPane(dialogPane);
     }
 
     public void setTitle(String title) {
         dialog.setTitle(title);
-    }
-
-    public void setResizable(boolean isResizable) {
-        dialog.setResizable(isResizable);
     }
 
     public Optional<ButtonType> showAndWait() {

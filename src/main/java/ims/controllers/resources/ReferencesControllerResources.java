@@ -1,6 +1,6 @@
 package ims.controllers.resources;
 
-import ims.controllers.contracts.ControllerConfig;
+import ims.controllers.contracts.SceneControllerConfig;
 import ims.controllers.primary.SceneController;
 import ims.supporting.TableProduct;
 import javafx.fxml.FXML;
@@ -10,7 +10,7 @@ import javafx.scene.layout.VBox;
 
 import java.util.HashMap;
 
-public abstract class ReferencesControllerResources implements ControllerConfig {
+public abstract class ReferencesControllerResources{
     @FXML
     protected VBox cleanLeftPane;
 
@@ -67,11 +67,4 @@ public abstract class ReferencesControllerResources implements ControllerConfig 
 
     @FXML
     protected CheckBox missingCheckBox;
-
-    @Override
-    public void initializeScenes() {
-        SceneController.loadScenes(new HashMap<>() {{
-            put(backBtn, "Admin");
-        }});
-    }
 }

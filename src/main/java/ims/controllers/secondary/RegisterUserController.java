@@ -34,7 +34,6 @@ public class RegisterUserController extends RegisterUserControllerResources impl
         header.setText(role.toString() + " REGISTRATION");
 
         toggleGroup = GroupToggler.makeToggleGroup(List.of(personalPhoneRadioBtn, officePhoneRadioBtn));
-        initializeScenes();
         initializeCountries();
     }
 
@@ -46,7 +45,8 @@ public class RegisterUserController extends RegisterUserControllerResources impl
             ButtonType result = ConfirmationDialog.askForConfirmation("Input data will be lost. Are you sure you want to get back?");
 
             if (result == ButtonType.YES) {
-                SceneController.switchSceneByButton((Button) event.getSource());
+                //SceneController.switchSceneByButton((Button) event.getSource());
+                SceneController.getBack();
                 AbstractDao.closeEntityManager();
             }
         } else

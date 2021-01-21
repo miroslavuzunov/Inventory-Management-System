@@ -31,12 +31,13 @@ public class ReferencesController extends ReferencesControllerResources implemen
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         AbstractDao.newEntityManager();
-        initializeScenes();
+
         try {
             referencesService = new ReferencesService();
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
         }
+
         filterChoices = new HashMap<>();
 
         endDate.setValue(LocalDate.now());  //Default period
@@ -53,7 +54,8 @@ public class ReferencesController extends ReferencesControllerResources implemen
             ButtonType result = ConfirmationDialog.askForConfirmation("Are you sure you want to get back?");
 
             if (result == ButtonType.YES) {
-                SceneController.switchSceneByButton((Button) event.getSource());
+                //SceneController.switchSceneByButton((Button) event.getSource());
+                SceneController.getBack();
                 AbstractDao.closeEntityManager();
             }
         } else
@@ -157,7 +159,6 @@ public class ReferencesController extends ReferencesControllerResources implemen
                 ClientCardReviewController.setEgn(egn);
                 CustomDialog customDialog = new CustomDialog("ClientCardReview.fxml");
                 customDialog.setTitle("Client card review");
-                customDialog.setResizable(false);
 
                 customDialog.showAndWait();
 
@@ -195,5 +196,4 @@ public class ReferencesController extends ReferencesControllerResources implemen
         currentPriceColumn.setCellValueFactory(new PropertyValueFactory<>("currentPrice"));
         registrationDateColumn.setCellValueFactory(new PropertyValueFactory<>("registeredOn"));
     }
-
 }

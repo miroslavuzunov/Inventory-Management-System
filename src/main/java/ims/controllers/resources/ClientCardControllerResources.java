@@ -1,6 +1,6 @@
 package ims.controllers.resources;
 
-import ims.controllers.contracts.ControllerConfig;
+import ims.controllers.contracts.SceneControllerConfig;
 import ims.controllers.primary.SceneController;
 import ims.controllers.secondary.AbstractController;
 import ims.supporting.TableProduct;
@@ -11,7 +11,7 @@ import javafx.scene.layout.VBox;
 
 import java.util.HashMap;
 
-public abstract class ClientCardControllerResources extends AbstractController implements ControllerConfig {
+public abstract class ClientCardControllerResources extends AbstractController{
     public static final String EGN_FIELD_NAME = "Egn";
 
     @FXML
@@ -67,12 +67,4 @@ public abstract class ClientCardControllerResources extends AbstractController i
 
     @FXML
     protected DatePicker endDate;
-
-
-    @Override
-    public void initializeScenes() {
-        SceneController.loadScenes(new HashMap<>() {{
-            put(backBtn, "Admin");
-        }});
-    }
 }

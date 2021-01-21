@@ -16,20 +16,37 @@
     -fx-background-color:  rgb(79, 163, 211);
 }
 
+.glyph-icon{
+    -fx-fill: #637489;
+    -glyph-size: 35px;
+}
+
+.menu-btn:hover .glyph-icon{
+    -fx-fill: #fff;
+}
+
+.exit-btn:hover .glyph-icon{
+    -fx-fill: #fff;
+}
+
+.home-btn:hover .glyph-icon{
+    -fx-fill: #fff;
+}
+
 .menu-btn {
     -fx-border-width: 0 0 0 4px;
     -fx-border-color: transparent;
     -fx-background-color: transparent;
-    -fx-padding: 15px 10px 15px 30px;
+    /*-fx-padding: 15px 10px 15px 30px;*/
     -fx-text-fill: rgb(80, 98, 120);
+    -fx-background-position: center;
 }
 
-.menu-btn:hover,
-.menu-btn:focused{
-    -fx-border-width: 0 0 0 3px;
+.menu-btn:hover{
+    -fx-border-width: 0 0 0 4px;
     -fx-border-color: rgb(79, 163, 211);
     -fx-text-fill: rgba(255, 255, 255, 1);
-    -fx-padding: 15px 10px 15px 30px;
+    /*-fx-padding: 15px 10px 15px 30px;*/
     -fx-background-color: #3d526d;
 }
 
@@ -38,7 +55,7 @@
     -fx-text-fill: rgba(255, 255, 255, 0.5);
 }
 
-.exit-btn:hover {
+.exit-btn:hover{
     -fx-background-color: transparent;
     -fx-text-fill: rgba(255, 255, 255, 1);
 }
@@ -62,7 +79,7 @@
 }
 
 .welcome-pane{
-    -fx-background-color: rgb(54, 108, 141);
+    -fx-background-color: #3d526d;
 }
 
 .left-side-header{
@@ -79,6 +96,10 @@
 
 .home-btn:hover{
     -fx-text-fill: rgba(255, 255, 255, 1);
+}
+
+.footer{
+    -fx-background-color: linear-gradient(to top, rgba(66, 74, 85, 0.64), rgba(0, 0, 0, 0));
 }
 
 

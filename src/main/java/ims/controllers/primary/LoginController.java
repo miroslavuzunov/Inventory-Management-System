@@ -7,8 +7,10 @@ import ims.App;
 import ims.daos.AbstractDao;
 import ims.entities.*;
 import ims.services.UserService;
+import ims.supporting.CustomScene;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -33,13 +35,14 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        AbstractDao.newEntityManager();
         loginBtn.setDefaultButton(true); // ENTER key calls login
         userService = new UserService();
     }
 
     @FXML
     private void login() throws IOException, NoSuchFieldException {
+        AbstractDao.newEntityManager();
+
         String username = usernameField.getText();
         String password = passwordField.getText();
 
@@ -51,7 +54,7 @@ public class LoginController implements Initializable {
             if(loggedUser.getPassword().equals(password)) {
                 switch (loggedUser.getRole()) {
                     case ADMIN:
-                        App.setScene("/view/Admin");
+                        SceneController.setInitialScene(new CustomScene("Admin"));
                         break;
                     case MRT:
                         //TODO

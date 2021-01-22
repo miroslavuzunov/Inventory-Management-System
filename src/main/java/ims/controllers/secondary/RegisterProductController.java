@@ -155,7 +155,6 @@ public class RegisterProductController extends RegisterProductControllerResource
                 productRegistrationService.updateProductQuantity(productDetails, quantity);
 
                 InformationDialog.displayInformation("Done! New quantity added to the product!");
-                //App.setScene("/view/RegisterProduct"); //reloading same scene to clean the fields
             }
         }
     }

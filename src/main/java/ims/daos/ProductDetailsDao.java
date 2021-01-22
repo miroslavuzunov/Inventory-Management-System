@@ -3,6 +3,7 @@ package ims.daos;
 import ims.entities.DepreciationDegree;
 import ims.entities.ProductDetails;
 import ims.entities.User;
+import ims.enums.ProductType;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -24,6 +25,12 @@ public class ProductDetailsDao  extends AbstractDao<ProductDetails>{
         if(!getRecordsByAttribute(field, brandModel).isEmpty())
             return getRecordsByAttribute(field, brandModel).get(0);
         return new ProductDetails();
+    }
+
+    public List<ProductDetails> getAllInitiallyLtta() throws NoSuchFieldException {
+        Field initialProductType = ProductDetails.class.getDeclaredField("initialProductType");
+
+        return  getRecordsByAttribute(initialProductType, ProductType.LTTA);
     }
 
 }

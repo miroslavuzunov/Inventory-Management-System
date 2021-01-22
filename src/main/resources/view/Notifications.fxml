@@ -13,7 +13,7 @@
 
 <AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ims.controllers.secondary.NotificationsController">
    <children>
-      <VBox fx:id="cleanLeftPane" layoutX="-1.0" prefHeight="600.0" prefWidth="174.0" styleClass="left-side" stylesheets="@../css/styles.css">
+      <VBox fx:id="cleanLeftPane" layoutX="-1.0" prefHeight="600.0" prefWidth="71.0" styleClass="left-side" stylesheets="@../css/styles.css">
          <children>
             <Button fx:id="backBtn" mnemonicParsing="false" onAction="#handleClicks" styleClass="home-btn" stylesheets="@../css/styles.css" text="BACK" underline="true">
                <VBox.margin>
@@ -28,7 +28,7 @@
             </Button>
          </children>
       </VBox>
-      <AnchorPane fx:id="regPane" layoutX="173.0" prefHeight="600.0" prefWidth="727.0">
+      <AnchorPane fx:id="regPane" layoutX="70.0" prefHeight="600.0" prefWidth="830.0">
          <children>
             <Label alignment="CENTER" layoutX="228.0" layoutY="6.0" prefHeight="27.0" prefWidth="291.0" style="-fx-text-fill: rgb(79, 163, 211);" styleClass="left-side-header" stylesheets="@../css/styles.css" text="NOTIFICATIONS" textFill="WHITE">
                <font>
@@ -55,13 +55,13 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </DatePicker>
-            <TableView fx:id="notificationsTable" layoutX="6.0" layoutY="94.0" prefHeight="500.0" prefWidth="715.0" style="-fx-border-color: transparent;">
+            <TableView fx:id="notificationsTable" layoutX="6.0" layoutY="94.0" prefHeight="500.0" prefWidth="818.0" style="-fx-border-color: transparent;">
               <columns>
-                <TableColumn fx:id="messageColumn" prefWidth="512.0" text="Notification message" />
-                <TableColumn fx:id="dateAndTimeColumn" minWidth="0.0" prefWidth="201.0" text="Date and time" />
+                <TableColumn fx:id="messageColumn" prefWidth="689.0" text="Notification message" />
+                <TableColumn fx:id="dateAndTimeColumn" minWidth="0.0" prefWidth="126.0" text="Date and time" />
               </columns>
             </TableView>
-            <Button layoutX="665.0" layoutY="60.0" mnemonicParsing="false" onAction="#refreshNotifications" text="Refresh">
+            <Button layoutX="399.0" layoutY="60.0" mnemonicParsing="false" onAction="#refreshNotifications" text="Refresh">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>

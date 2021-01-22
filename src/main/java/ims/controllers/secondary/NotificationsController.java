@@ -4,21 +4,20 @@ import ims.controllers.primary.SceneController;
 import ims.controllers.resources.NotificationsControllerResources;
 import ims.daos.AbstractDao;
 import ims.dialogs.ConfirmationDialog;
-import ims.entities.Notifications;
 import ims.services.NotificationsService;
 import ims.supporting.TableNotification;
-import ims.supporting.TableProduct;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Control;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
-
+import javafx.scene.text.Text;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -43,7 +42,6 @@ public class NotificationsController extends NotificationsControllerResources im
 
     private void fillTable(List<TableNotification> tableNotifications) {
         notificationsTable.getItems().clear();
-
 
         for (TableNotification notification : tableNotifications) {
             if (isDateInPeriod(startDate.getValue(), endDate.getValue(), getDateFromDateTimeString(notification.getDateAndTime()))){
@@ -93,6 +91,16 @@ public class NotificationsController extends NotificationsControllerResources im
         notificationsTable.getColumns().forEach(tableNotificationTableColumn -> {
             tableNotificationTableColumn.setResizable(false);
             tableNotificationTableColumn.setStyle("-fx-alignment: CENTER;");
+        });
+
+        messageColumn.setCellFactory(tc -> { // Text wrap
+            TableCell<String, String> cell = new TableCell<>();
+            Text text = new Text();
+            cell.setGraphic(text);
+            cell.setPrefHeight(Control.USE_COMPUTED_SIZE);
+            text.wrappingWidthProperty().bind(messageColumn.widthProperty());
+            text.textProperty().bind(cell.itemProperty());
+            return cell ;
         });
     }
 

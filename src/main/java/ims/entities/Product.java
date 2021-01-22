@@ -10,6 +10,7 @@ import java.time.LocalDate;
 public class Product extends BaseEntity{
     private String inventoryNumber;
     private LocalDate registeredOn;
+    private LocalDate lastModifiedOn;
     private boolean available;
     private boolean existing;
     private ProductDetails productDetails;
@@ -36,6 +37,15 @@ public class Product extends BaseEntity{
         this.registeredOn = registeredOn;
     }
 
+    @Column(name = "last_modified_on")
+    public LocalDate getLastModifiedOn() {
+        return lastModifiedOn;
+    }
+
+    public void setLastModifiedOn(LocalDate lastModifiedOn) {
+        this.lastModifiedOn = lastModifiedOn;
+    }
+
     @Column(name = "available")
     public boolean isAvailable() {
         return available;
@@ -54,7 +64,7 @@ public class Product extends BaseEntity{
         this.existing = existing;
     }
 
-    @ManyToOne(targetEntity = ProductDetails.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = ProductDetails.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "product_details_id", referencedColumnName = "id")
     public ProductDetails getProductDetails() {
         return productDetails;

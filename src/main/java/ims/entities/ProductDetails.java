@@ -17,6 +17,7 @@ public class ProductDetails extends BaseEntity {
     private PriceCurrency priceCurrency;
     private Integer quantity;
     private String description;
+    private ProductType initialProductType;
     private ProductType productType;
     private DepreciationDegree depreciationDegree;
     private Set<Product> products;
@@ -79,6 +80,16 @@ public class ProductDetails extends BaseEntity {
         this.description = description;
     }
 
+    @Column(name = "initial_product_type")
+    @Enumerated(EnumType.STRING)
+    public ProductType getInitialProductType() {
+        return initialProductType;
+    }
+
+    public void setInitialProductType(ProductType initialProductType) {
+        this.initialProductType = initialProductType;
+    }
+
     @Column(name = "product_type")
     @Enumerated(EnumType.STRING)
     public ProductType getProductType() {
@@ -99,7 +110,7 @@ public class ProductDetails extends BaseEntity {
         this.depreciationDegree = depreciationDegree;
     }
 
-    @OneToMany(mappedBy = "productDetails", targetEntity = Product.class, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "productDetails", targetEntity = Product.class, fetch = FetchType.EAGER)
     public Set<Product> getProducts() {
         return products;
     }

@@ -3,13 +3,8 @@ package ims.controllers.primary;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
-import ims.controllers.contracts.Observer;
-import ims.controllers.contracts.Subject;
 import ims.controllers.resources.AdminControllerResources;
 import ims.controllers.secondary.RegisterUserController;
 import ims.daos.AbstractDao;
@@ -25,9 +20,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.util.Duration;
 
-public class AdminController extends AdminControllerResources implements Initializable, Observer {
-    private List<Notification> notifications;
-    private Subject notifier = new Notifier();
+
+public class AdminController extends AdminControllerResources implements Initializable{
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -41,9 +35,7 @@ public class AdminController extends AdminControllerResources implements Initial
     }
 
     public void startProductTracker() {
-        notifier.registerObserver(this);
-
-        Thread stateTrackerThread = new Thread(new ProductStateTracker(notifier));
+        Thread stateTrackerThread = new Thread(new ProductStateTracker());
 
         stateTrackerThread.start();
     }
@@ -147,10 +139,4 @@ public class AdminController extends AdminControllerResources implements Initial
             leftPane.setPrefWidth(value);
         }
     };
-
-    @Override
-    public void update(ArrayList updated) {
-        this.notifications = updated;
-        System.out.println(notifications.get(notifications.size()-1).getMessage() + "  " + notifications.get(notifications.size()-1).getDateTime());
-    }
 }

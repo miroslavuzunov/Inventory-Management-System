@@ -90,6 +90,7 @@ public class ProductRegistrationService {
             Product product = new Product();
             product.setProductDetails(productDetails);
             product.setRegisteredOn(LocalDate.now());
+            product.setLastModifiedOn(LocalDate.now());
             product.setAvailable(true);
             product.setExisting(true);
             product.setInventoryNumber(generateUniqueInventoryNumber(customFieldsByName,
@@ -167,10 +168,14 @@ public class ProductRegistrationService {
     }
 
     private void setProductType(Map<String, CustomField> customFieldsByName, ProductDetails productDetails) {
-        if (customFieldsByName.get(PRODUCT_TYPE_FIELD_NAME).getFieldValue().equals("LTTA"))
+        if (customFieldsByName.get(PRODUCT_TYPE_FIELD_NAME).getFieldValue().equals("LTTA")) {
+            productDetails.setInitialProductType(ProductType.LTTA);
             productDetails.setProductType(ProductType.LTTA);
-        else
+        }
+        else {
+            productDetails.setInitialProductType(ProductType.TA);
             productDetails.setProductType(ProductType.TA);
+        }
     }
 
     private void setProductPriceCurrency(Map<String, CustomField> customFieldsByName, ProductDetails productDetails) {

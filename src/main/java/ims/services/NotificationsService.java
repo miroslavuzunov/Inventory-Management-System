@@ -4,9 +4,9 @@ import ims.daos.NotificationsDao;
 import ims.entities.Notifications;
 import ims.supporting.TableNotification;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class NotificationsService {
@@ -22,6 +22,8 @@ public class NotificationsService {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
+        Collections.reverse(allNotificationsFromDb); //Because of getting the latest notification at the top
+
         for(Notifications notifications : allNotificationsFromDb){
             TableNotification tableNotification = new TableNotification();
 
@@ -34,7 +36,4 @@ public class NotificationsService {
         return tableNotifications;
     }
 
-    public void saveNotification(Notifications notifications){
-        notificationsDao.saveRecord(notifications);
-    }
 }

@@ -164,7 +164,6 @@ public class ReferencesController extends ReferencesControllerResources implemen
                 customDialog.setTitle("Client card review");
 
                 customDialog.showAndWait();
-
             } else
                 ErrorDialog.callError("The product you have selected is not occupied by anyone or it is not LTTA.");
     }

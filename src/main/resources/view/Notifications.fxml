@@ -30,7 +30,7 @@
       </VBox>
       <AnchorPane fx:id="regPane" layoutX="70.0" prefHeight="600.0" prefWidth="830.0">
          <children>
-            <Label alignment="CENTER" layoutX="228.0" layoutY="6.0" prefHeight="27.0" prefWidth="291.0" style="-fx-text-fill: rgb(79, 163, 211);" styleClass="left-side-header" stylesheets="@../css/styles.css" text="NOTIFICATIONS" textFill="WHITE">
+            <Label alignment="CENTER" layoutX="286.0" layoutY="4.0" prefHeight="27.0" prefWidth="291.0" style="-fx-text-fill: rgb(79, 163, 211);" styleClass="left-side-header" stylesheets="@../css/styles.css" text="NOTIFICATIONS" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>

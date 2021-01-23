@@ -188,7 +188,7 @@ public class ClientCardService {
             }
         });
 
-        if (!product.getProductDetails().getProductType().equals(ProductType.TA) && product.isExisting()) {
+        if (!product.getProductDetails().getProductType().equals(ProductType.TA)) {
             product.setStatus(RecordStatus.ENABLED);
             product.setAvailable(true);
         } else

@@ -2,7 +2,6 @@ package ims.controllers.primary;
 
 import ims.App;
 import ims.supporting.CustomScene;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 
 import java.io.IOException;

@@ -200,23 +200,6 @@
                   <Insets left="10.0" />
                </padding>
             </Button>
-            <Button fx:id="forcedScrapBtn" alignment="BASELINE_LEFT" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#handleClicks" prefHeight="63.0" prefWidth="264.0" styleClass="menu-btn" stylesheets="@../css/styles.css" text="    FORCED SCRAP">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-               <VBox.margin>
-                  <Insets top="7.0" />
-               </VBox.margin>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-               <graphic>
-                  <FontAwesomeIconView glyphName="TIMES" styleClass="glyph-icon" wrappingWidth="24.571428298950195" />
-               </graphic>
-               <padding>
-                  <Insets left="12.0" />
-               </padding>
-            </Button>
             <Button fx:id="regProductBtn" alignment="BASELINE_LEFT" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#handleClicks" prefHeight="63.0" prefWidth="264.0" styleClass="menu-btn" stylesheets="@../css/styles.css" text="   REGISTER PRODUCT">
                <font>
                   <Font name="System Bold" size="12.0" />
@@ -259,7 +242,7 @@
                   <Font name="System Bold" size="14.0" />
                </font>
                <VBox.margin>
-                  <Insets top="15.0" />
+                  <Insets top="50.0" />
                </VBox.margin>
                <graphic>
                   <FontAwesomeIconView glyphName="REPLY" styleClass="glyph-icon" />

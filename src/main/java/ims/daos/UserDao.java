@@ -15,7 +15,7 @@ public class UserDao extends AbstractDao<User> {
 
         if(!getRecordsByAttribute(field, username).isEmpty())
            return getRecordsByAttribute(field, username).get(0);
-        return new User();
+        return null;
     }
 
     public User getUserByEmail(String email) throws NoSuchFieldException {
@@ -23,6 +23,6 @@ public class UserDao extends AbstractDao<User> {
 
         if(!getRecordsByAttribute(field, email).isEmpty())
             return getRecordsByAttribute(field, email).get(0);
-        return new User();
+        return null;
     }
 }

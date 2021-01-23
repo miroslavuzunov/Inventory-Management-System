@@ -38,8 +38,6 @@ public class ProductStateTracker implements Runnable {
     }
 
     private void updateTheProducts() {
-        AbstractDao.newEntityManager();
-
         try {
             productDetailsFromDb = productDetailsDao.getAllInitiallyLtta();
         } catch (NoSuchFieldException e) {

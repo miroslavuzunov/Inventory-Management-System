@@ -24,9 +24,8 @@ public class ProductClientDao extends AbstractDao<ProductClient> {
         CriteriaQuery<Product> criteriaQuery = criteriaBuilder.createQuery(Product.class);
         Root<ProductClient> root = criteriaQuery.from(ProductClient.class);
         criteriaQuery.select(root.get("product")).where(criteriaBuilder.equal(root.get("client"), client));
-        List<Product> records = manager.createQuery(criteriaQuery).getResultList();
 
-        return records;
+        return manager.createQuery(criteriaQuery).getResultList();
     }
 
     public List<ProductClient> getTransactionsByClientAndStatus(User client, RecordStatus recordStatus) throws NoSuchFieldException {
@@ -37,8 +36,6 @@ public class ProductClientDao extends AbstractDao<ProductClient> {
         attributes.put(clientField, client);
         attributes.put(statusField, recordStatus);
 
-        List<ProductClient> transactions = getRecordsByMultipleAttributes(attributes);
-
-        return transactions;
+        return getRecordsByMultipleAttributes(attributes);
     }
 }

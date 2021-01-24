@@ -68,20 +68,20 @@ public abstract class AbstractDao<T> {
     public List<T> getAll() {
         CriteriaQuery<T> criteria = manager.getCriteriaBuilder().createQuery(classType);
         criteria.select(criteria.from(classType));
-        List<T> records = manager.createQuery(criteria).getResultList();
 
-        return records;
+        return manager.createQuery(criteria).getResultList();
     }
 
     protected List<T> getRecordsByAttribute(Field field, Object value){
-        if (Arrays.stream(classType.getDeclaredFields()).anyMatch(f -> f.getName().equals(field.getName()))) { //Checks if the field is in classType
+        boolean isFieldFound = Arrays.stream(classType.getDeclaredFields()).anyMatch(f -> f.getName().equals(field.getName()));
+
+        if (isFieldFound) { //Checks if the field is in classType
             CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
             CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(classType);
             Root<T> recordRoot = criteriaQuery.from(classType);
             criteriaQuery.where(criteriaBuilder.equal(recordRoot.get(field.getName()), value));
-            List<T> records = manager.createQuery(criteriaQuery).getResultList();
 
-            return records;
+            return manager.createQuery(criteriaQuery).getResultList();
         }
         return null;
     }
@@ -96,9 +96,8 @@ public abstract class AbstractDao<T> {
         valuesByColumns.forEach((key, value) -> predicates.add(criteriaBuilder.equal(recordRoot.get(key.getName()), value)));
 
         criteriaQuery.select(recordRoot).where(predicates.toArray(new Predicate[]{}));
-        List<T> records = manager.createQuery(criteriaQuery).getResultList();
 
-        return records;
+        return manager.createQuery(criteriaQuery).getResultList();
     }
 
     private boolean isEntity(Class<?> clazz) { //Checks if given class type is entity (ensures type safety)

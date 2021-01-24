@@ -33,7 +33,7 @@ public class ClientCardController extends ClientCardControllerResources implemen
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        //AbstractDao.newEntityManager();
+        AbstractDao.newEntityManager();
         clientCardService = new ClientCardService();
         tableProducts = new ArrayList<>();
 
@@ -51,7 +51,7 @@ public class ClientCardController extends ClientCardControllerResources implemen
 
             if (result == ButtonType.YES) {
                 SceneController.getBack();
-                //AbstractDao.closeEntityManager();
+                AbstractDao.closeEntityManager();
             }
         } else
             SceneController.switchSceneByButton((Button) event.getSource());

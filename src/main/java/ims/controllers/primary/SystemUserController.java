@@ -6,6 +6,7 @@ import ims.daos.AbstractDao;
 import ims.dialogs.ConfirmationDialog;
 import ims.enums.MenuType;
 import ims.supporting.ProductStateTracker;
+import ims.supporting.UserSession;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -55,6 +56,7 @@ public abstract class SystemUserController extends SystemUserControllerResources
 
             if (result == ButtonType.YES) {
                 SceneController.getBack();
+                UserSession.cleanUserSession();
                 AbstractDao.closeEntityManager();
             }
         } else

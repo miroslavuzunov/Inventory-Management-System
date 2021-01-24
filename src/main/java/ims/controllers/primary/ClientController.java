@@ -5,6 +5,7 @@ import ims.controllers.secondary.ClientCardReviewController;
 import ims.daos.AbstractDao;
 import ims.dialogs.ConfirmationDialog;
 import ims.dialogs.CustomDialog;
+import ims.supporting.UserSession;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -27,10 +28,11 @@ public class ClientController extends ClientControllerResources implements Initi
 
             if (result == ButtonType.YES) {
                 SceneController.getBack();
+                UserSession.cleanUserSession();
                 AbstractDao.closeEntityManager();
             }
         } else{
-            ClientCardReviewController.setEgn(LoginController.getLoggedUser().getPersonInfo().getEgn());
+            ClientCardReviewController.setEgn(UserSession.getLoggedUser().getPersonInfo().getEgn());
             CustomDialog customDialog = new CustomDialog("ClientCardReview.fxml");
             customDialog.setTitle("Client card review");
 

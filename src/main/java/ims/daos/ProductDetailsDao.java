@@ -14,17 +14,16 @@ public class ProductDetailsDao  extends AbstractDao<ProductDetails>{
     }
 
     public DepreciationDegree getDepreciationDegreeReference(Integer id){
-        DepreciationDegree reference = manager.getReference(DepreciationDegree.class, id);
-
-        return reference;
+        return manager.getReference(DepreciationDegree.class, id);
     }
 
     public ProductDetails getProductDetailsByBrandAndModel(String brandModel) throws NoSuchFieldException {
         Field field = ProductDetails.class.getDeclaredField("brandAndModel");
+        List<ProductDetails> foundDetails = getRecordsByAttribute(field, brandModel);
 
-        if(!getRecordsByAttribute(field, brandModel).isEmpty())
-            return getRecordsByAttribute(field, brandModel).get(0);
-        return new ProductDetails();
+        if(!foundDetails.isEmpty())
+            return foundDetails.get(0);
+        return null;
     }
 
     public List<ProductDetails> getAllInitiallyLtta() throws NoSuchFieldException {

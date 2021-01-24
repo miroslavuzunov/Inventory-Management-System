@@ -1,6 +1,6 @@
 package ims.controllers.resources;
 
-import ims.controllers.primary.CommonUserController;
+import ims.controllers.primary.BaseUserController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -8,7 +8,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-public abstract class SystemUserControllerResources extends CommonUserController{
+public abstract class SystemUserControllerResources extends BaseUserController {
     @FXML
     protected Pane fadeMain;
 

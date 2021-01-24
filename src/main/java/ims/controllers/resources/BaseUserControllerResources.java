@@ -7,7 +7,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-public abstract class CommonUserControllerResources{
+public abstract class BaseUserControllerResources {
     @FXML
     protected Pane fadeMain;
 

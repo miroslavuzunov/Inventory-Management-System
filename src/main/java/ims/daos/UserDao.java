@@ -3,6 +3,7 @@ package ims.daos;
 import ims.entities.User;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 public class UserDao extends AbstractDao<User> {
 
@@ -12,17 +13,19 @@ public class UserDao extends AbstractDao<User> {
 
     public User getUserByUsername(String username) throws NoSuchFieldException {
         Field field = User.class.getDeclaredField("nickname");
+        List<User> foundUsers = getRecordsByAttribute(field, username);
 
-        if(!getRecordsByAttribute(field, username).isEmpty())
-           return getRecordsByAttribute(field, username).get(0);
+        if (!foundUsers.isEmpty())
+            return foundUsers.get(0);
         return null;
     }
 
     public User getUserByEmail(String email) throws NoSuchFieldException {
         Field field = User.class.getDeclaredField("email");
+        List<User> foundUsers = getRecordsByAttribute(field, email);
 
-        if(!getRecordsByAttribute(field, email).isEmpty())
-            return getRecordsByAttribute(field, email).get(0);
+        if (!foundUsers.isEmpty())
+            return foundUsers.get(0);
         return null;
     }
 }

@@ -8,6 +8,7 @@ import ims.enums.RecordStatus;
 import ims.enums.Role;
 import ims.supporting.Cache;
 import ims.supporting.TableProduct;
+import ims.supporting.UserSession;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -128,7 +129,7 @@ public class ClientCardService {
 
     private void addFirstAvailableToClientCard(Product firstAvailable, User client) {
         ProductClient productClient = new ProductClient();
-        User mrt = LoginController.getLoggedUser();
+        User mrt = UserSession.getLoggedUser();
 
         if (areClientAndMrtValid(client, mrt)) {
             initializeProductClientTransaction(productClient, mrt, client, firstAvailable);

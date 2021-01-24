@@ -4,6 +4,7 @@ import ims.entities.DepreciationDegree;
 import ims.entities.User;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 public class DepreciationDegreeDao extends AbstractDao<DepreciationDegree> {
 
@@ -13,9 +14,10 @@ public class DepreciationDegreeDao extends AbstractDao<DepreciationDegree> {
 
     public DepreciationDegree getRecordByCategory(String category) throws NoSuchFieldException {
         Field field = DepreciationDegree.class.getDeclaredField("category");
+        List<DepreciationDegree> foundDegrees = getRecordsByAttribute(field, category);
 
-        if(!getRecordsByAttribute(field, category).isEmpty())
-            return getRecordsByAttribute(field, category).get(0);
-        return new DepreciationDegree();
+        if(!foundDegrees.isEmpty())
+            return foundDegrees.get(0);
+        return null;
     }
 }

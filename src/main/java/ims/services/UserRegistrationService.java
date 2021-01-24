@@ -104,7 +104,7 @@ public class UserRegistrationService {
         return users;
     }
 
-    public Integer getCityId(City city) {
+    public Integer getCityId(City city) throws NoSuchFieldException {
         City tempCity = cityDao.getRecordByNameAndRegion(city.getName(), city.getRegion());
 
         if (tempCity != null)
@@ -112,7 +112,7 @@ public class UserRegistrationService {
         return null;
     }
 
-    public void createUser(Map<String, CustomField> customFieldsByName, Role role) {
+    public void createUser(Map<String, CustomField> customFieldsByName, Role role) throws NoSuchFieldException {
         City city = new City();
         Address address = new Address();
         PersonInfo personInfo = new PersonInfo();
@@ -136,7 +136,7 @@ public class UserRegistrationService {
         city.setRegion(cityAndRegion[1]);
     }
 
-    private void setUserAddress(Map<String, CustomField> customFieldsByName, Address address, City city) {
+    private void setUserAddress(Map<String, CustomField> customFieldsByName, Address address, City city) throws NoSuchFieldException {
         address.setStreet(customFieldsByName.get(STREET_FIELD_NAME).getFieldValue());
         address.setDetails(customFieldsByName.get(ADDRESS_DETAILS_FIELD_NAME).getFieldValue());
         address.setCity(addressDao.getCityReference(getCityId(city)));

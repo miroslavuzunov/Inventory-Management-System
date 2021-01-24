@@ -1,18 +1,19 @@
 package ims.controllers.primary;
 
-import ims.controllers.resources.CommonUserControllerResources;
+import ims.controllers.resources.BaseUserControllerResources;
 import ims.enums.MenuType;
 import ims.supporting.TransitionAnimator;
+import ims.supporting.UserSession;
 import javafx.fxml.FXML;
 
 import java.time.LocalDate;
 
-public abstract class CommonUserController extends CommonUserControllerResources {
+public abstract class BaseUserController extends BaseUserControllerResources {
 
     protected void displayUserInfo() {
-        userStatus.setText("Status: " + LoginController.getLoggedUser().getRole());
+        userStatus.setText("Status: " + UserSession.getLoggedUser().getRole());
         todaysDate.setText("Today's date: " + LocalDate.now().toString());
-        nameLabel.setText("Hello, " + LoginController.getLoggedUser().getPersonInfo().getFirstName() + "!");
+        nameLabel.setText("Hello, " + UserSession.getLoggedUser().getPersonInfo().getFirstName() + "!");
     }
 
     @FXML

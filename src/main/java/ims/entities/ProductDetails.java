@@ -110,7 +110,7 @@ public class ProductDetails extends BaseEntity {
         this.depreciationDegree = depreciationDegree;
     }
 
-    @OneToMany(mappedBy = "productDetails", targetEntity = Product.class, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "productDetails", targetEntity = Product.class, fetch = FetchType.LAZY)
     public Set<Product> getProducts() {
         return products;
     }

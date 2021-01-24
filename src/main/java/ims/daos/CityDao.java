@@ -1,11 +1,13 @@
 package ims.daos;
 
 import ims.entities.City;
+import ims.entities.ProductClient;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,20 +19,18 @@ public class CityDao extends AbstractDao<City> {
         super(City.class);
     }
 
-    public City getRecordByNameAndRegion(String name, String region) {
-        CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
-        CriteriaQuery<City> criteriaQuery = criteriaBuilder.createQuery(City.class);
-        Root<City> recordRoot = criteriaQuery.from(City.class);
-        List<Predicate> predicates = new ArrayList<>();
+    public City getRecordByNameAndRegion(String name, String region) throws NoSuchFieldException {
+        Map<Field,Object> attributes = new HashMap<>();
+        Field nameField = City.class.getDeclaredField("name");
+        Field regionField = City.class.getDeclaredField("region");
 
-        predicates.add(criteriaBuilder.like(recordRoot.get("name"), name));
-        predicates.add(criteriaBuilder.like(recordRoot.get("region"), region));
+        attributes.put(nameField, name);
+        attributes.put(regionField, region);
 
-        criteriaQuery.select(recordRoot).where(predicates.toArray(new Predicate[]{}));
-        List<City> records = manager.createQuery(criteriaQuery).getResultList();
+        List<City> foundCities = getRecordsByMultipleAttributes(attributes);
 
-        if (!records.isEmpty())
-            return records.get(0);
-        return new City();
+        if(!foundCities.isEmpty())
+            return foundCities.get(0);
+        return null;
     }
 }

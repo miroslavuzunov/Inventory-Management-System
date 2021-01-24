@@ -19,6 +19,7 @@ public class Authenticator {
             infoMessage = "Invalid username! Try again!";
         } else {
             if (loggedUser.getPassword().equals(password)) {
+
                 return true;
             }
 
@@ -32,7 +33,7 @@ public class Authenticator {
         return infoMessage;
     }
 
-    public User getLoggedUser() {
+    public User getAuthenticatedUser() {
         return loggedUser;
     }
 }

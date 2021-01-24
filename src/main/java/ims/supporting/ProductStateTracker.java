@@ -34,22 +34,28 @@ public class ProductStateTracker implements Runnable {
 
     @Override
     public void run() {
-        updateTheProducts();
+        checkProductsState();
     }
 
-    private void updateTheProducts() {
+    private void checkProductsState() {
+        loadProductsDetailsFromDb();
+        List<Product> allLttaProducts = getAllLttaFromProductDetails();
+        updateProductsState(allLttaProducts);
+    }
+
+    private void loadProductsDetailsFromDb() {
         try {
             productDetailsFromDb = productDetailsDao.getAllInitiallyLtta();
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
         }
+    }
 
-        List<Product> allLttaProducts = new ArrayList<>();
+    private List<Product> getAllLttaFromProductDetails() {
+        return productDao.getAllProductsByMultipleProductDetails(productDetailsFromDb);
+    }
 
-        for (ProductDetails productDetails : productDetailsFromDb) {
-            allLttaProducts.addAll(productDetails.getProducts());
-        }
-
+    private void updateProductsState(List<Product> allLttaProducts) {
         Period interval;
 
         for (Product product : allLttaProducts) {
@@ -79,13 +85,11 @@ public class ProductStateTracker implements Runnable {
 
         scrappedProductsDao.saveRecord(scrappedProduct);
         generateScrapNotification(product);
-
-        //TODO remove the product from client's card
     }
 
     private void decreaseProductPrice(Product product) {
         ProductDetails productDetails = product.getProductDetails();
-        productDetails.setCurrentPrice(getPercentageOfThePrice(productDetails.getCurrentPrice(), productDetails.getDepreciationDegree().getPercentage()));
+        productDetails.setCurrentPrice(getTransformedPrice(productDetails.getCurrentPrice(), productDetails.getDepreciationDegree().getPercentage()));
         product.setProductDetails(productDetails);
 
         productDetails.getProducts().forEach(currentProduct -> {
@@ -96,13 +100,28 @@ public class ProductStateTracker implements Runnable {
     }
 
     private void checkForProductTypeChange(Product product) {
-        if (isCurrentPriceLimitPassed(product)) {
+        if (isCurrentPriceLimitPassed(product) && !product.getProductDetails().getProductType().equals(ProductType.TA)) {
             ProductDetails productDetails = product.getProductDetails();
             productDetails.setProductType(ProductType.TA);
             product.setProductDetails(productDetails);
 
             generateTypeChangeNotification(product);
         }
+    }
+
+    boolean isCurrentPriceLimitPassed(Product product) {
+        BigDecimal initialPrice = product.getProductDetails().getInitialPrice();
+        BigDecimal currentPrice = product.getProductDetails().getCurrentPrice();
+
+        return currentPrice.compareTo(getLttaCurrentPriceLimit(initialPrice)) <= 0;
+    }
+
+    private BigDecimal getLttaCurrentPriceLimit(BigDecimal initialPrice) {
+        return getTransformedPrice(initialPrice, new BigDecimal(10));
+    }
+
+    private BigDecimal getTransformedPrice(BigDecimal initialPrice, BigDecimal percentage) {
+        return initialPrice.multiply(percentage.divide(new BigDecimal(100))).setScale(2, RoundingMode.HALF_UP);
     }
 
     private void generateScrapNotification(Product product) {
@@ -113,7 +132,7 @@ public class ProductStateTracker implements Runnable {
         notificationMessage += " Scrapped on:";
         notificationMessage += product.getLastModifiedOn();
 
-        saveTheNotification(notificationMessage);
+        saveNotification(notificationMessage);
     }
 
     private void generatePriceDecreaseNotification(Product product) {
@@ -133,7 +152,7 @@ public class ProductStateTracker implements Runnable {
         notificationMessage += product.getProductDetails().getCurrentPrice();
         notificationMessage += product.getProductDetails().getPriceCurrency();
 
-        saveTheNotification(notificationMessage);
+        saveNotification(notificationMessage);
     }
 
     private void generateTypeChangeNotification(Product product) {
@@ -144,29 +163,15 @@ public class ProductStateTracker implements Runnable {
         notificationMessage += " Transformed on:";
         notificationMessage += product.getLastModifiedOn();
 
-        saveTheNotification(notificationMessage);
+        saveNotification(notificationMessage);
     }
 
-    private void saveTheNotification(String notificationMessage){
+    private void saveNotification(String notificationMessage){
         Notifications newNotification = new Notifications();
+
         newNotification.setMessage(notificationMessage);
         newNotification.setDateAndTime(LocalDateTime.now());
 
         notificationsDao.saveRecord(newNotification);
-    }
-
-    boolean isCurrentPriceLimitPassed(Product product) {
-        BigDecimal initialPrice = product.getProductDetails().getInitialPrice();
-        BigDecimal currentPrice = product.getProductDetails().getCurrentPrice();
-
-        return currentPrice.compareTo(getLttaCurrentPriceLimit(initialPrice)) <= 0;
-    }
-
-    private BigDecimal getLttaCurrentPriceLimit(BigDecimal initialPrice) {
-        return getPercentageOfThePrice(initialPrice, new BigDecimal(10));
-    }
-
-    private BigDecimal getPercentageOfThePrice(BigDecimal initialPrice, BigDecimal percentage) {
-        return initialPrice.multiply(percentage.divide(new BigDecimal(100))).setScale(2, RoundingMode.HALF_UP);
     }
 }

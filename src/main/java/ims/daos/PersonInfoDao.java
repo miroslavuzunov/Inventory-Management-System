@@ -4,6 +4,7 @@ import ims.entities.PersonInfo;
 import ims.entities.User;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 public class PersonInfoDao extends AbstractDao<PersonInfo> {
 
@@ -13,9 +14,10 @@ public class PersonInfoDao extends AbstractDao<PersonInfo> {
 
     public PersonInfo getRecordByEgn(String egn) throws NoSuchFieldException {
         Field field = PersonInfo.class.getDeclaredField("egn");
+        List<PersonInfo> foundInfo = getRecordsByAttribute(field, egn);
 
-        if(!getRecordsByAttribute(field, egn).isEmpty())
-            return getRecordsByAttribute(field, egn).get(0);
-        return new PersonInfo();
+        if(!foundInfo.isEmpty())
+            return foundInfo.get(0);
+        return null;
     }
 }

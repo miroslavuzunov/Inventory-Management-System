@@ -5,9 +5,9 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import ims.daos.AbstractDao;
-import ims.entities.*;
 import ims.supporting.Authenticator;
 import ims.supporting.CustomScene;
+import ims.supporting.UserSession;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -29,7 +29,6 @@ public class LoginController implements Initializable {
     private Button loginBtn;
 
     private Authenticator authenticator;
-    private static User loggedUser;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -48,10 +47,9 @@ public class LoginController implements Initializable {
         isUserValid = authenticator.authenticateUser(username, password);
 
         if (isUserValid) {
-            messageLabel.setText("");
-            loggedUser = authenticator.getLoggedUser();
+            UserSession.createInstance(authenticator.getAuthenticatedUser());
 
-            switch (loggedUser.getRole()) {
+            switch (UserSession.getLoggedUser().getRole()) {
                 case ADMIN:
                     SceneController.setInitialScene(new CustomScene("Admin"));
                     break;
@@ -62,12 +60,15 @@ public class LoginController implements Initializable {
                     SceneController.setInitialScene(new CustomScene("Client"));
                     break;
             }
+            clearTheFields();
         } else {
             messageLabel.setText(authenticator.getInfoMessage());
         }
     }
 
-    public static User getLoggedUser() {
-        return loggedUser;
+    private void clearTheFields() {
+        messageLabel.setText("");
+        usernameField.setText("");
+        passwordField.setText("");
     }
 }

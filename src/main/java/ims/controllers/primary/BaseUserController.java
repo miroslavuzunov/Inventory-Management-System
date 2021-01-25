@@ -5,10 +5,11 @@ import ims.enums.MenuType;
 import ims.supporting.TransitionAnimator;
 import ims.supporting.UserSession;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 
 import java.time.LocalDate;
 
-public abstract class BaseUserController extends BaseUserControllerResources {
+public abstract class BaseUserController extends BaseUserControllerResources implements Initializable {
 
     protected void displayUserInfo() {
         userStatus.setText("Status: " + UserSession.getLoggedUser().getRole());

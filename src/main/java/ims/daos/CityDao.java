@@ -1,6 +1,7 @@
 package ims.daos;
 
 import ims.entities.City;
+import ims.entities.Country;
 import ims.entities.ProductClient;
 
 import javax.persistence.criteria.CriteriaBuilder;

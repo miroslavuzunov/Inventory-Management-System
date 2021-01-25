@@ -1,16 +1,12 @@
 package ims.controllers.resources;
 
-import ims.controllers.primary.SceneController;
-import ims.controllers.contracts.SceneControllerConfig;
-import ims.controllers.secondary.AbstractController;
+import ims.controllers.secondary.InputFieldBasedController;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
-import java.util.HashMap;
-
-public abstract class RegisterUserControllerResources extends AbstractController{
+public abstract class RegisterUserControllerResources extends InputFieldBasedController {
     public static final String BUSY_USERNAME_MSG = "Username is already used!";
     public static final String PASSWORDS_DONT_MATCH_MSG = "Passwords don't match!";
     public static final String BUSY_EMAIL_MSG = "Email is already used!";

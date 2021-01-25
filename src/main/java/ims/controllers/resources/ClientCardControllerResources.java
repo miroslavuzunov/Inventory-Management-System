@@ -1,17 +1,13 @@
 package ims.controllers.resources;
 
-import ims.controllers.contracts.SceneControllerConfig;
-import ims.controllers.primary.SceneController;
-import ims.controllers.secondary.AbstractController;
+import ims.controllers.secondary.InputFieldBasedController;
 import ims.supporting.TableProduct;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
-import java.util.HashMap;
-
-public abstract class ClientCardControllerResources extends AbstractController{
+public abstract class ClientCardControllerResources extends InputFieldBasedController {
     public static final String EGN_FIELD_NAME = "Egn";
 
     @FXML

@@ -58,7 +58,7 @@ public class ClientCardController extends ClientCardControllerResources implemen
     }
 
     @Override
-    protected void initializeCustomFields() {
+    protected void initializeCustomFieldMap() {
         customFieldsByName.put(EGN_FIELD_NAME, new CustomField(egnField.getText()));
     }
 

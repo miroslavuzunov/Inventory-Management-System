@@ -8,14 +8,13 @@ import ims.dialogs.CustomDialog;
 import ims.supporting.UserSession;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.ButtonType;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ClientController extends ClientControllerResources implements Initializable {
+public class ClientController extends ClientControllerResources{
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         displayUserInfo();
@@ -32,12 +31,16 @@ public class ClientController extends ClientControllerResources implements Initi
                 AbstractDao.closeEntityManager();
             }
         } else{
-            ClientCardReviewController.setEgn(UserSession.getLoggedUser().getPersonInfo().getEgn());
-            CustomDialog customDialog = new CustomDialog("ClientCardReview.fxml");
-            customDialog.setTitle("Client card review");
-
-            customDialog.showAndWait();
+            openClientCardDialog();
         }
+    }
+
+    private void openClientCardDialog() throws IOException {
+        ClientCardReviewController.setEgn(UserSession.getLoggedUser().getPersonInfo().getEgn());
+        CustomDialog customDialog = new CustomDialog("ClientCardReview.fxml");
+        customDialog.setTitle("Client card review");
+
+        customDialog.showAndWait();
     }
 
 }

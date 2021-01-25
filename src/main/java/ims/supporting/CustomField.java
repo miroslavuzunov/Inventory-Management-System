@@ -11,6 +11,7 @@ public class CustomField{
 
     public CustomField(String fieldValue){
         this.fieldValue = fieldValue;
+
         this.state = State.VALID;
         this.message = "";
         this.nullable = false;

@@ -73,9 +73,9 @@ public abstract class AbstractDao<T> {
     }
 
     protected List<T> getRecordsByAttribute(Field field, Object value){
-        boolean isFieldFound = Arrays.stream(classType.getDeclaredFields()).anyMatch(f -> f.getName().equals(field.getName()));
+        boolean isFieldExisting = Arrays.stream(classType.getDeclaredFields()).anyMatch(f -> f.getName().equals(field.getName())); //Checks if the field is in classType
 
-        if (isFieldFound) { //Checks if the field is in classType
+        if (isFieldExisting) {
             CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
             CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(classType);
             Root<T> recordRoot = criteriaQuery.from(classType);

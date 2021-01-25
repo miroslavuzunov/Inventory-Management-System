@@ -23,7 +23,7 @@ public class MrtController extends SystemUserController {
     @Override
     protected void handleRegistrationType(ActionEvent event) {
         if (event.getSource() == regCardBtn)
-            RegisterUserController.passRole(Role.CLIENT);
+            RegisterUserController.passUserRegistrationRole(Role.CLIENT);
     }
 
 }

@@ -1,16 +1,12 @@
 package ims.controllers.resources;
 
-import ims.controllers.contracts.SceneControllerConfig;
-import ims.controllers.primary.SceneController;
-import ims.controllers.secondary.AbstractController;
+import ims.controllers.secondary.InputFieldBasedController;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
-import java.util.HashMap;
-
-public abstract class RegisterProductControllerResources extends AbstractController{
+public abstract class RegisterProductControllerResources extends InputFieldBasedController {
     public static final String MODEL_OF_BRAND_EXISTS = "Such model of this brand already figures in the system!";
     public static final String EMPTY_FIELD_MSG = "Empty field forbidden!";
     public static final String INVALID_INFO_MSG = "Invalid information entered!";

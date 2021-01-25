@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public abstract class SystemUserController extends SystemUserControllerResources implements Initializable, SceneControllerConfig {
+public abstract class SystemUserController extends SystemUserControllerResources implements SceneControllerConfig {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         displayUserInfo();

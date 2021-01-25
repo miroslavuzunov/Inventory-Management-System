@@ -65,7 +65,7 @@ public class RegisterProductController extends RegisterProductControllerResource
     }
 
     @Override
-    protected void initializeCustomFields() {
+    protected void initializeCustomFieldMap() {
         customFieldsByName.put(BRAND_FIELD_NAME, new CustomField(brandField.getText()));
         customFieldsByName.put(MODEL_FIELD_NAME, new CustomField(modelField.getText()));
         customFieldsByName.put(DESCRIPTION_FIELD_NAME, new CustomField(descriptionArea.getText(), true));
@@ -163,7 +163,7 @@ public class RegisterProductController extends RegisterProductControllerResource
         boolean handlingResult = productRegistrationService.validateData(fieldsByName);
 
         for (CustomField field : fieldsByName.values())
-            handleField(field, field.getState(), field.getMessage());
+            editField(field, field.getState(), field.getMessage());
 
         displayMessages(fieldsByName);
 

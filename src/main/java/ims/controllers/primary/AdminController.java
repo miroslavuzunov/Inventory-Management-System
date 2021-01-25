@@ -29,8 +29,8 @@ public class AdminController extends SystemUserController {
     @Override
     protected void handleRegistrationType(ActionEvent event) {
         if (event.getSource() == regMrtBtn)
-            RegisterUserController.passRole(Role.MRT);
+            RegisterUserController.passUserRegistrationRole(Role.MRT);
         if (event.getSource() == regCardBtn)
-            RegisterUserController.passRole(Role.CLIENT);
+            RegisterUserController.passUserRegistrationRole(Role.CLIENT);
     }
 }

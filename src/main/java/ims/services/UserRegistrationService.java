@@ -41,7 +41,7 @@ public class UserRegistrationService {
         return controllerCountries;
     }
 
-    public List<CustomField> initializeCitiesAccordingCountry(String selectedCountryName) {
+    public List<CustomField> initializeCitiesOfCurrentCountry(String selectedCountryName) throws NoSuchFieldException {
         List<CustomField> controllerCities = new ArrayList<>();
         List<City> dbCities = cityDao.getAll();
 
@@ -53,63 +53,60 @@ public class UserRegistrationService {
         return controllerCities;
     }
 
-    public boolean validateData(Map<String, CustomField> customFieldsByName) throws NoSuchFieldException {
-        boolean handlingResult = true;
+    public boolean checkIfPasswordsMatch(Map<String, CustomField> fieldsByName, String password, String repeatedPassword) {
+        if (!password.equals(repeatedPassword)) {
+            fieldsByName.get(PASSWORD_FIELD_NAME).setState(State.INVALID);
+            fieldsByName.get(REPEAT_PASSWORD_FIELD_NAME).setState(State.INVALID);
+
+            fieldsByName.get(REPEAT_PASSWORD_FIELD_NAME).setMessage(PASSWORDS_DONT_MATCH_MSG);
+            if (!fieldsByName.get(PASSWORD_FIELD_NAME).getFieldValue().isEmpty())
+                fieldsByName.get(PASSWORD_FIELD_NAME).setMessage(CLEAN_MSG);
+
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean isBusyDataFound(Map<String, CustomField> customFieldsByName) throws NoSuchFieldException {
         String inputUsername = customFieldsByName.get(USERNAME_FIELD_NAME).getFieldValue();
         String inputEmail = customFieldsByName.get(EMAIL_FIELD_NAME).getFieldValue();
         String inputEgn = customFieldsByName.get(EGN_FIELD_NAME).getFieldValue();
 
-        Map<String, User> existingUsersByFieldName = requestData(inputUsername, inputEmail, inputEgn);
+        if (isUsernameBusy(inputUsername)) {
+            editCurrentField(customFieldsByName.get(USERNAME_FIELD_NAME), BUSY_USERNAME_MSG);
 
-        if (inputUsername.equals(existingUsersByFieldName.get(USERNAME_FIELD_NAME).getNickname())) {
-            customFieldsByName.get(USERNAME_FIELD_NAME).setState(State.INVALID);
-            customFieldsByName.get(USERNAME_FIELD_NAME).setMessage(BUSY_USERNAME_MSG);
-            handlingResult = false;
+            return true;
         }
-        if (inputEmail.equals(existingUsersByFieldName.get(EMAIL_FIELD_NAME).getEmail())) {
-            customFieldsByName.get(EMAIL_FIELD_NAME).setState(State.INVALID);
-            customFieldsByName.get(EMAIL_FIELD_NAME).setMessage(BUSY_EMAIL_MSG);
-            handlingResult = false;
+        if (isEmailBusy(inputEmail)) {
+            editCurrentField(customFieldsByName.get(EMAIL_FIELD_NAME), BUSY_EMAIL_MSG);
+
+            return true;
         }
-        if (inputEgn.equals(existingUsersByFieldName.get(EGN_FIELD_NAME).getPersonInfo().getEgn())) {
-            customFieldsByName.get(EGN_FIELD_NAME).setState(State.INVALID);
-            customFieldsByName.get(EGN_FIELD_NAME).setMessage(BUSY_EGN_MSG);
-            handlingResult = false;
+        if (isEgnBusy(inputEgn)) {
+            editCurrentField(customFieldsByName.get(EGN_FIELD_NAME), BUSY_EGN_MSG);
+
+            return true;
         }
 
-        return handlingResult;
+        return false;
     }
 
-    public Map<String, User> requestData(String username, String email, String egn) throws NoSuchFieldException {
-        Map<String, User> users = new HashMap<>();
-
-        User userWithSameNick = new User();
-        if (userDao.getUserByUsername(username) != null)
-            userWithSameNick.setNickname(userDao.getUserByUsername(username).getNickname());
-
-        User userWithSameEmail = new User();
-        if (userDao.getUserByEmail(email) != null)
-            userWithSameEmail.setEmail(userDao.getUserByEmail(email).getEmail());
-
-        User userWithSameEgn = new User();
-        PersonInfo personInfo = new PersonInfo();
-        userWithSameEgn.setPersonInfo(personInfo);
-        if (personInfoDao.getRecordByEgn(egn) != null)
-            userWithSameEgn.setPersonInfo(personInfoDao.getRecordByEgn(egn));
-
-        users.put(USERNAME_FIELD_NAME, userWithSameNick);
-        users.put(EMAIL_FIELD_NAME, userWithSameEmail);
-        users.put(EGN_FIELD_NAME, userWithSameEgn);
-
-        return users;
+    private boolean isUsernameBusy(String inputUsername) throws NoSuchFieldException {
+        return userDao.getUserByUsername(inputUsername) != null;
     }
 
-    public Integer getCityId(City city) throws NoSuchFieldException {
-        City tempCity = cityDao.getRecordByNameAndRegion(city.getName(), city.getRegion());
+    private boolean isEmailBusy(String inputEmail) throws NoSuchFieldException {
+        return userDao.getUserByEmail(inputEmail) != null;
+    }
 
-        if (tempCity != null)
-            return tempCity.getId();
-        return null;
+    private boolean isEgnBusy(String inputEgn) throws NoSuchFieldException {
+        return personInfoDao.getRecordByEgn(inputEgn) != null;
+    }
+
+    private void editCurrentField(CustomField customField, String message) {
+        customField.setState(State.INVALID);
+        customField.setMessage(message);
     }
 
     public void createUser(Map<String, CustomField> customFieldsByName, Role role) throws NoSuchFieldException {
@@ -132,6 +129,7 @@ public class UserRegistrationService {
     private void setUserCity(Map<String, CustomField> customFieldsByName, City city) {
         String cityAndRegionTogether = customFieldsByName.get(CITY_FIELD_NAME).getFieldValue();
         String[] cityAndRegion = Pattern.compile("[\\(\\)]").split(cityAndRegionTogether); //separating 'City (Region)' string
+
         city.setName(cityAndRegion[0]);
         city.setRegion(cityAndRegion[1]);
     }
@@ -161,12 +159,21 @@ public class UserRegistrationService {
 
     private void setPhoneNumber(Map<String, CustomField> customFieldsByName, PhoneNumber phoneNumber, User user) {
         phoneNumber.setOwner(user);
+
         if (customFieldsByName.get(PHONE_TYPE_FIELD_NAME).getFieldValue().equals("PERSONAL"))
             phoneNumber.setPhoneType(PhoneType.PERSONAL);
         else
             phoneNumber.setPhoneType(PhoneType.OFFICE);
 
         phoneNumber.setNumber(customFieldsByName.get(PHONE_NUMBER_FIELD_NAME).getFieldValue());
+    }
+
+    public Integer getCityId(City city) throws NoSuchFieldException {
+        City tempCity = cityDao.getRecordByNameAndRegion(city.getName(), city.getRegion());
+
+        if (tempCity != null)
+            return tempCity.getId();
+        return null;
     }
 
 }

@@ -1,5 +1,6 @@
 package ims.controllers.primary;
 
+import ims.controllers.contracts.EventBasedController;
 import ims.controllers.resources.BaseUserControllerResources;
 import ims.enums.MenuType;
 import ims.supporting.TransitionAnimator;
@@ -9,7 +10,7 @@ import javafx.fxml.Initializable;
 
 import java.time.LocalDate;
 
-public abstract class BaseUserController extends BaseUserControllerResources implements Initializable {
+public abstract class BaseUserController extends BaseUserControllerResources implements Initializable, EventBasedController {
 
     protected void displayUserInfo() {
         userStatus.setText("Status: " + UserSession.getLoggedUser().getRole());

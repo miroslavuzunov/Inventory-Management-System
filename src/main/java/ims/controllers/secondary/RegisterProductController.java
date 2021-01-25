@@ -1,5 +1,6 @@
 package ims.controllers.secondary;
 
+import ims.controllers.contracts.EventBasedController;
 import ims.controllers.primary.SceneController;
 import ims.controllers.resources.RegisterProductControllerResources;
 import ims.daos.AbstractDao;
@@ -9,7 +10,6 @@ import ims.dialogs.InformationDialog;
 import ims.entities.ProductDetails;
 import ims.enums.PriceCurrency;
 import ims.services.ProductRegistrationService;
-import ims.supporting.Cache;
 import ims.supporting.CustomField;
 import ims.supporting.GroupToggler;
 import javafx.event.ActionEvent;
@@ -26,25 +26,23 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class RegisterProductController extends RegisterProductControllerResources implements Initializable {
+public class RegisterProductController extends RegisterProductControllerResources implements Initializable, EventBasedController {
     private ProductRegistrationService productRegistrationService;
     private ToggleGroup toggleGroup;
-    private static Cache cache = new Cache();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         AbstractDao.newEntityManager();
-        productRegistrationService = new ProductRegistrationService();
 
-        toggleGroup = GroupToggler.makeToggleGroup(List.of(lttaRadioBtn, taRadioBtn));
+        productRegistrationService = new ProductRegistrationService();
+        setInterfaceElements();
+        initializeCustomFieldMap();
         initializeCurrencies();
-        manipulateLttaPanel();
+        setLttaPanel();
     }
 
     @FXML
-    private void handleClicks(ActionEvent event) throws IOException, NoSuchFieldException {
-        if (event.getSource() == addProductBtn)
-            addProduct();
+    public void handleClicks(ActionEvent event) throws IOException{
         if (event.getSource() == backBtn) {
             ButtonType result = ConfirmationDialog.askForConfirmation("Input data will be lost. Are you sure you want to get back?");
 
@@ -57,44 +55,26 @@ public class RegisterProductController extends RegisterProductControllerResource
     }
 
     @FXML
-    private void manipulateLttaPanel() {
+    private void setLttaPanel() {
         if (toggleGroup.getSelectedToggle().equals(lttaRadioBtn))
             enableLttaOptions();
         if (toggleGroup.getSelectedToggle().equals(taRadioBtn))
             disableLttaOptions();
     }
 
-    @Override
-    protected void initializeCustomFieldMap() {
-        customFieldsByName.put(BRAND_FIELD_NAME, new CustomField(brandField.getText()));
-        customFieldsByName.put(MODEL_FIELD_NAME, new CustomField(modelField.getText()));
-        customFieldsByName.put(DESCRIPTION_FIELD_NAME, new CustomField(descriptionArea.getText(), true));
-        customFieldsByName.put(UNIT_PRICE_FIELD_NAME, new CustomField(priceValueField.getText()));
-        customFieldsByName.put(UNIT_PRICE_COMBO_NAME, new CustomField(priceUnitComboBox.getSelectionModel().getSelectedItem()));
-        customFieldsByName.put(QUANTITY_FIELD_NAME, new CustomField(quantityField.getText()));
-
-        if (toggleGroup.getSelectedToggle().equals(lttaRadioBtn)) {
-            customFieldsByName.put(PRODUCT_TYPE_FIELD_NAME, new CustomField("LTTA"));
-            customFieldsByName.put(DEPRECIATION_DEGREE_FIELD_NAME, new CustomField(depreciationDegreeComboBox.getSelectionModel().getSelectedItem()));
-        } else {
-            customFieldsByName.put(PRODUCT_TYPE_FIELD_NAME, new CustomField("TA"));
-            customFieldsByName.put(DEPRECIATION_DEGREE_FIELD_NAME, new CustomField(depreciationDegreeComboBox.getSelectionModel().getSelectedItem(), true));
-        }
+    private void enableLttaOptions() {
+        customFieldsByName.get(DEPRECIATION_DEGREE_FIELD_NAME).setNullable(false);
+        lttaPanel.setDisable(false);
+        initializeDepreciationDegree();
     }
 
-    private void initializeDepreciationDegree() {
-        depreciationDegreeComboBox.getItems().clear(); //Prevents data duplicating
+    private void disableLttaOptions() {
+        customFieldsByName.get(DEPRECIATION_DEGREE_FIELD_NAME).setNullable(true);
+        lttaPanel.setDisable(true);
+    }
 
-        List<CustomField> degreesFromDb = (List<CustomField>) cache.getCachedCollection(depreciationDegreeComboBox.getSelectionModel().getSelectedItem());
-
-        if (degreesFromDb == null) {
-            degreesFromDb = productRegistrationService.initializeDepreciationDegree();
-            cache.cacheCollection(depreciationDegreeComboBox.getSelectionModel().getSelectedItem(), degreesFromDb);
-        }
-
-        degreesFromDb.forEach(degree -> {
-            depreciationDegreeComboBox.getItems().add(degree.getFieldValue());
-        });
+    private void setInterfaceElements() {
+        toggleGroup = GroupToggler.makeToggleGroup(List.of(lttaRadioBtn, taRadioBtn));
     }
 
     private void initializeCurrencies() {
@@ -103,38 +83,57 @@ public class RegisterProductController extends RegisterProductControllerResource
         }
     }
 
-    private void enableLttaOptions() {
-        lttaPanel.setDisable(false);
-        initializeDepreciationDegree();
+    private void initializeDepreciationDegree() {
+        depreciationDegreeComboBox.getItems().clear(); //Prevents data duplicating
+
+        List<CustomField> degreesFromDb = productRegistrationService.getDepreciationDegrees();
+
+        degreesFromDb.forEach(degree -> {
+            depreciationDegreeComboBox.getItems().add(degree.getFieldValue());
+        });
     }
 
-    private void disableLttaOptions() {
-        lttaPanel.setDisable(true);
-    }
-
+    @FXML
     private void addProduct() throws IOException, NoSuchFieldException {
+        if (isInputDataValid()) {
+            ButtonType result = ConfirmationDialog.askForConfirmation("Are you sure you want to add new product to the system?");
+
+            if (result == ButtonType.YES) {
+                productRegistrationService.registerProduct(customFieldsByName);
+                InformationDialog.displayInformation("Done! New product added to the system!");
+            }
+        }
+    }
+
+    private boolean isInputDataValid() throws NoSuchFieldException, IOException {
         boolean noEmptyFields = true;
-        boolean noBusyData = true;
+        boolean isDataBusy = true;
         boolean noForbiddenChars = true;
 
         noEmptyFields = handleEmptyFields();
         //noForbiddenChars = handleForbiddenChars(inputFields);
 
-        if (noEmptyFields && noForbiddenChars)
-            noBusyData = handleBusyData(customFieldsByName);
+        boolean isInitialCheckValid = noEmptyFields && noForbiddenChars;
 
-        if (!noBusyData)
-            addProductQuantity();
+        if(isInitialCheckValid)
+            isDataBusy = isDataBusy(customFieldsByName);
 
-        if (noEmptyFields && noBusyData) {
-            ButtonType result = ConfirmationDialog.askForConfirmation("Are you sure you want to add new product to the system?");
+//        if(isDataBusy && noEmptyFields)
+//            addProductQuantity();
 
-            if (result == ButtonType.YES) {
-                productRegistrationService.createProduct(customFieldsByName);
-                InformationDialog.displayInformation("Done! New product added to the system!");
-                //App.setScene("/view/RegisterProduct"); //reloading same scene to clean the fields
-            }
+        return !isDataBusy;
+    }
+
+    private boolean isDataBusy(Map<String, CustomField> fieldsByName) throws NoSuchFieldException {
+        boolean isDataBusy = productRegistrationService.isDataBusy(fieldsByName);
+
+        for (CustomField field : fieldsByName.values()) {
+            editField(field, field.getState(), field.getMessage());
         }
+
+        displayMessages(fieldsByName);
+
+        return isDataBusy;
     }
 
     private void addProductQuantity() throws IOException, NoSuchFieldException {
@@ -159,15 +158,22 @@ public class RegisterProductController extends RegisterProductControllerResource
         }
     }
 
-    private boolean handleBusyData(Map<String, CustomField> fieldsByName) throws NoSuchFieldException {
-        boolean handlingResult = productRegistrationService.validateData(fieldsByName);
+    @Override
+    protected void initializeCustomFieldMap() {
+        customFieldsByName.put(BRAND_FIELD_NAME, new CustomField(brandField.getText()));
+        customFieldsByName.put(MODEL_FIELD_NAME, new CustomField(modelField.getText()));
+        customFieldsByName.put(DESCRIPTION_FIELD_NAME, new CustomField(descriptionArea.getText(), true));
+        customFieldsByName.put(UNIT_PRICE_FIELD_NAME, new CustomField(priceValueField.getText()));
+        customFieldsByName.put(UNIT_PRICE_COMBO_NAME, new CustomField(priceUnitComboBox.getSelectionModel().getSelectedItem()));
+        customFieldsByName.put(QUANTITY_FIELD_NAME, new CustomField(quantityField.getText()));
 
-        for (CustomField field : fieldsByName.values())
-            editField(field, field.getState(), field.getMessage());
-
-        displayMessages(fieldsByName);
-
-        return handlingResult;
+        if (toggleGroup.getSelectedToggle().equals(lttaRadioBtn)) {
+            customFieldsByName.put(PRODUCT_TYPE_FIELD_NAME, new CustomField("LTTA"));
+            customFieldsByName.put(DEPRECIATION_DEGREE_FIELD_NAME, new CustomField(depreciationDegreeComboBox.getSelectionModel().getSelectedItem()));
+        } else {
+            customFieldsByName.put(PRODUCT_TYPE_FIELD_NAME, new CustomField("TA"));
+            customFieldsByName.put(DEPRECIATION_DEGREE_FIELD_NAME, new CustomField(depreciationDegreeComboBox.getSelectionModel().getSelectedItem(), true));
+        }
     }
 
     @Override

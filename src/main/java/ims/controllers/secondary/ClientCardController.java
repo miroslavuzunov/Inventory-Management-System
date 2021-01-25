@@ -1,5 +1,6 @@
 package ims.controllers.secondary;
 
+import ims.controllers.contracts.EventBasedController;
 import ims.controllers.primary.SceneController;
 import ims.controllers.resources.ClientCardControllerResources;
 import ims.daos.AbstractDao;
@@ -26,10 +27,9 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class ClientCardController extends ClientCardControllerResources implements Initializable {
+public class ClientCardController extends ClientCardControllerResources implements Initializable, EventBasedController {
     protected ClientCardService clientCardService;
     protected List<TableProduct> tableProducts;
-    private static Cache cache = new Cache();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -45,7 +45,7 @@ public class ClientCardController extends ClientCardControllerResources implemen
     }
 
     @FXML
-    private void handleClicks(ActionEvent event) throws IOException {
+    public void handleClicks(ActionEvent event) throws IOException {
         if (event.getSource() == backBtn) {
             ButtonType result = ConfirmationDialog.askForConfirmation("Are you sure you want to get back?");
 
@@ -68,27 +68,13 @@ public class ClientCardController extends ClientCardControllerResources implemen
         boolean noForbiddenChars = true;
         StringBuilder clientName = new StringBuilder();
 
-        tableProducts = (List<TableProduct>) cache.getCachedCollection(egnField.getText());
-
         noEmptyFields = handleEmptyFields();
         //noForbiddenChars = handleForbiddenChars(inputFields);
 
-        if (tableProducts == null) {
-            if (noEmptyFields && noForbiddenChars)
-                tableProducts = clientCardService.getClientsProductsByEgn(
-                        egnField.getText(),
-                        clientName
-                );
-            else
-                tableProducts = new ArrayList<>();
+        if (noEmptyFields && noForbiddenChars)
+            tableProducts = clientCardService.getClientsProductsByEgn(egnField.getText(), clientName);
 
-            cache.cacheCollection(egnField.getText(), tableProducts);
-            cache.cacheObject(egnField.getText(), clientName);
-        } else {
-            clientName = (StringBuilder) cache.getCachedObject(egnField.getText());
-        }
-
-        this.clientNameLabel.setText(String.valueOf(clientName));
+        clientNameLabel.setText(String.valueOf(clientName));
 
         setTableColumns();
         fillTable(tableProducts);
@@ -105,7 +91,6 @@ public class ClientCardController extends ClientCardControllerResources implemen
         if (clickedButton.get() == ButtonType.OK) {
             if (AddProductController.getSelectedProduct() != null) {
                 clientCardService.addAnotherProductToCard(AddProductController.getSelectedProduct(), egnField.getText());
-                cache.clearCachedCollection(egnField.getText()); //Cache must be refreshed
                 searchByEgn(); //Refreshes the table
             } else
                 ErrorDialog.callError("There is no available quantity of this product!");

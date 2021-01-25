@@ -1,5 +1,6 @@
 package ims.controllers.secondary;
 
+import ims.controllers.contracts.EventBasedController;
 import ims.controllers.primary.SceneController;
 import ims.controllers.resources.NotificationsControllerResources;
 import ims.daos.AbstractDao;
@@ -22,7 +23,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-public class NotificationsController extends NotificationsControllerResources implements Initializable {
+public class NotificationsController extends NotificationsControllerResources implements Initializable, EventBasedController {
     private NotificationsService notificationsService;
 
     @Override
@@ -64,6 +65,7 @@ public class NotificationsController extends NotificationsControllerResources im
         startDate.setValue(endDate.getValue().minusWeeks(1));
     }
 
+    @FXML
     public void handleClicks(ActionEvent event) {
         if (event.getSource() == backBtn) {
             ButtonType result = ConfirmationDialog.askForConfirmation("Input data will be lost. Are you sure you want to get back?");

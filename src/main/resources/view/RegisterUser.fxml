@@ -191,6 +191,9 @@
                      <padding>
                         <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                      </padding>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
                   </ComboBox>
                   <Label fx:id="countryMsg" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="234.0" textFill="#ff3535">
                      <VBox.margin>
@@ -212,6 +215,9 @@
                      <VBox.margin>
                         <Insets left="50.0" right="50.0" />
                      </VBox.margin>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
                   </ComboBox>
                   <Label fx:id="cityMsg" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="234.0" textFill="#ff3535">
                      <VBox.margin>

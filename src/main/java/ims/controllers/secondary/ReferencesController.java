@@ -1,5 +1,6 @@
 package ims.controllers.secondary;
 
+import ims.controllers.contracts.EventBasedController;
 import ims.controllers.primary.SceneController;
 import ims.controllers.resources.ReferencesControllerResources;
 import ims.daos.AbstractDao;
@@ -24,7 +25,7 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ReferencesController extends ReferencesControllerResources implements Initializable {
+public class ReferencesController extends ReferencesControllerResources implements Initializable, EventBasedController {
     private ReferencesService referencesService;
     private Map<FilterChoice, Boolean> filterChoices;
 
@@ -52,7 +53,7 @@ public class ReferencesController extends ReferencesControllerResources implemen
     }
 
     @FXML
-    private void handleClicks(ActionEvent event) throws IOException {
+    public void handleClicks(ActionEvent event) throws IOException {
         if (event.getSource() == backBtn) {
             ButtonType result = ConfirmationDialog.askForConfirmation("Are you sure you want to get back?");
 

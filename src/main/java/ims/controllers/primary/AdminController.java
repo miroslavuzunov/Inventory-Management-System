@@ -1,5 +1,6 @@
 package ims.controllers.primary;
 
+import ims.controllers.contracts.EventBasedController;
 import ims.controllers.secondary.RegisterUserController;
 import ims.enums.Role;
 import ims.supporting.CustomScene;
@@ -9,7 +10,7 @@ import javafx.scene.control.Button;
 
 import java.util.HashMap;
 
-public class AdminController extends SystemUserController {
+public class AdminController extends SystemUserController{
     @FXML
     private Button regMrtBtn;
 

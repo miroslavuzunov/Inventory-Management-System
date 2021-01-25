@@ -1,5 +1,6 @@
 package ims.controllers.primary;
 
+import ims.controllers.contracts.EventBasedController;
 import ims.controllers.resources.ClientControllerResources;
 import ims.controllers.secondary.ClientCardReviewController;
 import ims.daos.AbstractDao;
@@ -14,7 +15,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ClientController extends ClientControllerResources{
+public class ClientController extends ClientControllerResources implements EventBasedController {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         displayUserInfo();

@@ -1,5 +1,6 @@
 package ims.controllers.secondary;
 
+import ims.dialogs.ErrorDialog;
 import ims.entities.ProductDetails;
 import ims.services.ProductRegistrationService;
 import javafx.event.ActionEvent;
@@ -40,15 +41,20 @@ public class AddProductQuantityController implements Initializable {
         selectedItem = brandModelComboBox.getSelectionModel().getSelectedItem();
     }
 
-    private void setQuantity() { //TODO validation
-        quantity = Integer.parseInt(productQuantity.getText());
+    private void setQuantity() {
+        try {
+            quantity = Integer.parseInt(productQuantity.getText());
+        }catch (Exception e){
+            e.printStackTrace();
+            ErrorDialog.callError("Quantity must be a number!");
+        }
     }
 
-    public static ProductDetails getSelectedProduct() throws NoSuchFieldException {   // TODO validation
-       return productRegistrationService.getProductDetailsByBrandAndModel(selectedItem);
+    public static ProductDetails getSelectedProduct() throws NoSuchFieldException {
+        return productRegistrationService.getProductDetailsByBrandAndModel(selectedItem);
     }
 
-    public static int getNewQuantity(){
-       return quantity;
+    public static int getNewQuantity() {
+        return quantity;
     }
 }

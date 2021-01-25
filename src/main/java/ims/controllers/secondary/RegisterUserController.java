@@ -1,5 +1,6 @@
 package ims.controllers.secondary;
 
+import ims.controllers.contracts.EventBasedController;
 import ims.controllers.primary.SceneController;
 import ims.controllers.resources.RegisterUserControllerResources;
 import ims.daos.AbstractDao;
@@ -18,7 +19,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
-public class RegisterUserController extends RegisterUserControllerResources implements Initializable {
+public class RegisterUserController extends RegisterUserControllerResources implements Initializable, EventBasedController {
     private UserRegistrationService userRegistrationService;
     private ToggleGroup toggleGroup;
     private static Role role;
@@ -26,13 +27,15 @@ public class RegisterUserController extends RegisterUserControllerResources impl
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         AbstractDao.newEntityManager();
+
         userRegistrationService = new UserRegistrationService();
         setInterfaceElements();
+        initializeCustomFieldMap();
         initializeCountries();
     }
 
     @FXML
-    private void handleClicks(ActionEvent event) throws IOException{
+    public void handleClicks(ActionEvent event) throws IOException{
         if (event.getSource() == backBtn) {
             ButtonType result = ConfirmationDialog.askForConfirmation("Input data will be lost. Are you sure you want to get back?");
 
@@ -51,7 +54,7 @@ public class RegisterUserController extends RegisterUserControllerResources impl
     }
 
     private void initializeCountries() {
-        List<CustomField> countriesFromDb = userRegistrationService.initializeCountries();
+        List<CustomField> countriesFromDb = userRegistrationService.getCountries();
 
         countriesFromDb.forEach(field -> {
             countryComboBox.getItems().add(field.getFieldValue());
@@ -63,7 +66,7 @@ public class RegisterUserController extends RegisterUserControllerResources impl
         cityComboBox.getItems().clear(); //Prevents data duplicating
 
         String chosenCountry = countryComboBox.getSelectionModel().getSelectedItem();
-        List<CustomField> citiesFromDb = userRegistrationService.initializeCitiesOfCurrentCountry(chosenCountry);
+        List<CustomField> citiesFromDb = userRegistrationService.getCitiesOfCurrentCountry(chosenCountry);
 
         citiesFromDb.forEach(field -> {
             cityComboBox.getItems().add(field.getFieldValue());
@@ -87,7 +90,7 @@ public class RegisterUserController extends RegisterUserControllerResources impl
         boolean passwordsMatch = false;
         boolean noForbiddenChars = true;
         boolean validEgn = true;
-        boolean noBusyData = false;
+        boolean isDataBusy = false;
 
         noEmptyFields = handleEmptyFields();
         passwordsMatch = handlePasswordsMatching(customFieldsByName);
@@ -96,9 +99,9 @@ public class RegisterUserController extends RegisterUserControllerResources impl
         boolean isInitialCheckValid = noEmptyFields && passwordsMatch && noForbiddenChars && validEgn;
 
         if (isInitialCheckValid)
-            noBusyData = isDataBusy(customFieldsByName);
+            isDataBusy = isDataBusy(customFieldsByName);
 
-        return !noBusyData;
+        return !isDataBusy;
     }
 
     private boolean handlePasswordsMatching(Map<String, CustomField> fieldsByName) {
@@ -121,8 +124,7 @@ public class RegisterUserController extends RegisterUserControllerResources impl
     }
 
     private boolean isDataBusy(Map<String, CustomField> fieldsByName) throws NoSuchFieldException {
-        boolean isDataBusy = true;
-        isDataBusy = userRegistrationService.isBusyDataFound(fieldsByName);
+        boolean isDataBusy = userRegistrationService.isDataFound(fieldsByName);
 
         for (CustomField field : fieldsByName.values()) {
             editField(field, field.getState(), field.getMessage());

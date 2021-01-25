@@ -30,7 +30,7 @@ public class UserRegistrationService {
         this.personInfoDao = new PersonInfoDao();
     }
 
-    public List<CustomField> initializeCountries() {
+    public List<CustomField> getCountries() {
         List<CustomField> controllerCountries = new ArrayList<>();
         List<Country> dbCountries = countryDao.getAll();
 
@@ -41,7 +41,7 @@ public class UserRegistrationService {
         return controllerCountries;
     }
 
-    public List<CustomField> initializeCitiesOfCurrentCountry(String selectedCountryName) throws NoSuchFieldException {
+    public List<CustomField> getCitiesOfCurrentCountry(String selectedCountryName) throws NoSuchFieldException {
         List<CustomField> controllerCities = new ArrayList<>();
         List<City> dbCities = cityDao.getAll();
 
@@ -68,7 +68,7 @@ public class UserRegistrationService {
         return true;
     }
 
-    public boolean isBusyDataFound(Map<String, CustomField> customFieldsByName) throws NoSuchFieldException {
+    public boolean isDataFound(Map<String, CustomField> customFieldsByName) throws NoSuchFieldException {
         String inputUsername = customFieldsByName.get(USERNAME_FIELD_NAME).getFieldValue();
         String inputEmail = customFieldsByName.get(EMAIL_FIELD_NAME).getFieldValue();
         String inputEgn = customFieldsByName.get(EGN_FIELD_NAME).getFieldValue();

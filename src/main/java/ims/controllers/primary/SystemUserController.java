@@ -36,7 +36,7 @@ public abstract class SystemUserController extends SystemUserControllerResources
     }
 
     @FXML
-    protected void handleClicks(ActionEvent event) throws IOException {
+    public void handleClicks(ActionEvent event) throws IOException {
         handleSubMenuOpened(event);
         handleRegistrationType(event);
         handleOtherEvents(event);

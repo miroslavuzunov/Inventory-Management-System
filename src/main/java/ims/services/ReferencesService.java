@@ -75,33 +75,33 @@ public class ReferencesService {
         List<Product> typeBasedProducts = new ArrayList<>();
 
         if (filterChoices.get(FilterChoice.TA))
-            typeBasedProducts = union(typeBasedProducts, getTaProducts());
+            typeBasedProducts = union(typeBasedProducts, getInitiallyTaProducts());
         if (filterChoices.get(FilterChoice.LTTA))
-            typeBasedProducts = union(typeBasedProducts, getLttaProducts());
+            typeBasedProducts = union(typeBasedProducts, getInitiallyLttaProducts());
 
         return typeBasedProducts;
     }
 
-    private List<Product> getTaProducts() {
+    private List<Product> getInitiallyTaProducts() {
         List<Product> taProducts = new ArrayList<>();
 
         for (Product product : allNonScrappedProducts) {
-            if (product.getProductDetails().getProductType().equals(ProductType.TA))
+            if (product.getProductDetails().getInitialProductType().equals(ProductType.TA))
                 taProducts.add(product);
         }
 
         return taProducts;
     }
 
-    private List<Product> getLttaProducts() {
+    private List<Product> getInitiallyLttaProducts() {
         List<Product> lttaProducts = new ArrayList<>();
 
         for (Product product : allNonScrappedProducts) {
-            if (product.getProductDetails().getProductType().equals(ProductType.LTTA))
+            if (product.getProductDetails().getInitialProductType().equals(ProductType.LTTA))
                 lttaProducts.add(product);
         }
 
-        for(ScrappedProduct scrappedProduct : allScrappedProducts){ // All scrapped products are LTTA
+        for(ScrappedProduct scrappedProduct : allScrappedProducts){
             lttaProducts.add(scrappedProduct.getProduct());
         }
 
@@ -127,7 +127,7 @@ public class ReferencesService {
         List<Product> busyProducts = new ArrayList<>();
 
         for (Product product : allNonScrappedProducts) {
-            if (!product.isAvailable() && product.isExisting())
+            if (!product.isAvailable() && product.isExisting() && !product.getStatus().equals(RecordStatus.DISABLED))
                 busyProducts.add(product);
         }
 
@@ -162,13 +162,17 @@ public class ReferencesService {
         for (ScrappedProduct scrappedProduct : allScrappedProducts) {
             Product product = scrappedProduct.getProduct();
 
-            if (!product.isAvailable() && product.isExisting()
-                    && product.getStatus().equals(RecordStatus.DISABLED)
-                    && product.getProductDetails().getProductType().equals(ProductType.LTTA))
+            if (isProductScrapped(product))
                 scrappedProducts.add(product);
         }
 
         return scrappedProducts;
+    }
+
+    private boolean isProductScrapped(Product product) {
+        return  !product.isAvailable() && product.isExisting()
+                && product.getStatus().equals(RecordStatus.DISABLED)
+                && product.getProductDetails().getInitialProductType().equals(ProductType.LTTA);
     }
 
     private List<Product> union(List<Product> list1, List<Product> list2) {
@@ -206,7 +210,7 @@ public class ReferencesService {
 
         if (!product.isAvailable() && product.isExisting()
                 && product.getStatus().equals(RecordStatus.DISABLED)
-                && product.getProductDetails().getProductType().equals(ProductType.LTTA))
+                && product.getProductDetails().getInitialProductType().equals(ProductType.LTTA))
             tableProduct.setStatus("Scrapped");
         else {
             if (!product.isExisting())

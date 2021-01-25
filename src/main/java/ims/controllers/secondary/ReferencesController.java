@@ -38,7 +38,6 @@ public class ReferencesController extends ReferencesControllerResources implemen
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
         }
-
         filterChoices = new HashMap<>();
 
         setDefaultPeriod();
@@ -58,7 +57,6 @@ public class ReferencesController extends ReferencesControllerResources implemen
             ButtonType result = ConfirmationDialog.askForConfirmation("Are you sure you want to get back?");
 
             if (result == ButtonType.YES) {
-                //SceneController.switchSceneByButton((Button) event.getSource());
                 SceneController.getBack();
                 AbstractDao.closeEntityManager();
             }

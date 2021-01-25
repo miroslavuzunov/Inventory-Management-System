@@ -38,13 +38,13 @@
             </Label>
             <TableView fx:id="productsTable" layoutX="9.0" layoutY="154.0" prefHeight="436.0" prefWidth="710.0">
                <columns>
-                  <TableColumn fx:id="productColumn" prefWidth="131.0" text="Product" />
-                  <TableColumn fx:id="invNumberColumn" prefWidth="129.0" text="Inv. number" />
-                  <TableColumn fx:id="productTypeColumn" prefWidth="89.0" text="Product type" />
-                  <TableColumn fx:id="statusColumn" prefWidth="67.0" text="Status" />
-                  <TableColumn fx:id="initialPriceColumn" prefWidth="87.0" text="Initial price" />
+                  <TableColumn fx:id="productColumn" prefWidth="118.0" text="Product" />
+                  <TableColumn fx:id="invNumberColumn" prefWidth="118.0" text="Inv. number" />
+                  <TableColumn fx:id="productTypeColumn" prefWidth="125.0" text="Current product type" />
+                  <TableColumn fx:id="statusColumn" prefWidth="73.0" text="Status" />
+                  <TableColumn fx:id="initialPriceColumn" prefWidth="84.0" text="Initial price" />
                   <TableColumn fx:id="currentPriceColumn" prefWidth="93.0" text="Current price" />
-                  <TableColumn fx:id="registrationDateColumn" prefWidth="113.0" text="Registered on" />
+                  <TableColumn fx:id="registrationDateColumn" prefWidth="98.0" text="Registered on" />
                </columns>
             </TableView>
             <DatePicker fx:id="startDate" layoutX="350.0" layoutY="87.0" onAction="#handleCheckedBoxes" prefHeight="35.0" prefWidth="174.0">
@@ -67,15 +67,15 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </DatePicker>
-            <CheckBox fx:id="taCheckBox" layoutX="11.0" layoutY="89.0" mnemonicParsing="false" onAction="#handleCheckedBoxes" prefHeight="17.0" prefWidth="64.0" text="TA">
+            <CheckBox fx:id="taCheckBox" layoutX="11.0" layoutY="89.0" mnemonicParsing="false" onAction="#handleCheckedBoxes" prefHeight="17.0" prefWidth="77.0" text="TA(initial)">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></CheckBox>
-            <CheckBox fx:id="lttaCheckBox" layoutX="97.0" layoutY="89.0" mnemonicParsing="false" onAction="#handleCheckedBoxes" prefHeight="17.0" prefWidth="52.0" text="LTTA">
+            <CheckBox fx:id="lttaCheckBox" layoutX="97.0" layoutY="89.0" mnemonicParsing="false" onAction="#handleCheckedBoxes" prefHeight="17.0" prefWidth="104.0" text="LTTA(initial)">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></CheckBox>
-            <CheckBox fx:id="scrappedCheckBox" layoutX="174.0" layoutY="89.0" mnemonicParsing="false" onAction="#handleCheckedBoxes" prefHeight="17.0" prefWidth="86.0" text="Scrapped">
+            <CheckBox fx:id="scrappedCheckBox" layoutX="186.0" layoutY="89.0" mnemonicParsing="false" onAction="#handleCheckedBoxes" prefHeight="17.0" prefWidth="86.0" text="Scrapped">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></CheckBox>
@@ -92,11 +92,11 @@
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></CheckBox>
-            <CheckBox fx:id="missingCheckBox" layoutX="174.0" layoutY="115.0" mnemonicParsing="false" onAction="#handleCheckedBoxes" prefHeight="17.0" prefWidth="86.0" text="Missing">
+            <CheckBox fx:id="missingCheckBox" layoutX="186.0" layoutY="115.0" mnemonicParsing="false" onAction="#handleCheckedBoxes" prefHeight="17.0" prefWidth="86.0" text="Missing">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></CheckBox>
-            <Button alignment="CENTER" ellipsisString="" layoutX="260.0" layoutY="89.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#clearFilter" prefHeight="17.0" prefWidth="17.0" text="X" textAlignment="CENTER">
+            <Button alignment="CENTER" ellipsisString="" layoutX="274.0" layoutY="88.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#clearFilter" prefHeight="17.0" prefWidth="17.0" text="X" textAlignment="CENTER">
                <font>
                   <Font size="8.0" />
                </font>
@@ -104,7 +104,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Label layoutX="283.0" layoutY="89.0" text="Clear" />
+            <Label layoutX="297.0" layoutY="88.0" text="Clear" />
          </children>
       </AnchorPane>
    </children>

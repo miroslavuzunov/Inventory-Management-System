@@ -90,7 +90,7 @@ public class RegisterUserController extends RegisterUserControllerResources impl
         boolean passwordsMatch = false;
         boolean noForbiddenChars = true;
         boolean validEgn = true;
-        boolean isDataBusy = false;
+        boolean isDataBusy = true;
 
         noEmptyFields = handleEmptyFields();
         passwordsMatch = handlePasswordsMatching(customFieldsByName);
@@ -101,7 +101,7 @@ public class RegisterUserController extends RegisterUserControllerResources impl
         if (isInitialCheckValid)
             isDataBusy = isDataBusy(customFieldsByName);
 
-        return !isDataBusy;
+        return !isDataBusy && noEmptyFields;
     }
 
     private boolean handlePasswordsMatching(Map<String, CustomField> fieldsByName) {

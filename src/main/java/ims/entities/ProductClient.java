@@ -18,7 +18,7 @@ public class ProductClient extends BaseEntity {
     public ProductClient() {
     }
 
-    @ManyToOne(targetEntity = Product.class, fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = Product.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     public Product getProduct() {
         return product;

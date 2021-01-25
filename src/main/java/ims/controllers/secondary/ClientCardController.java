@@ -9,7 +9,6 @@ import ims.dialogs.CustomDialog;
 import ims.dialogs.ErrorDialog;
 import ims.entities.Product;
 import ims.services.ClientCardService;
-import ims.supporting.Cache;
 import ims.supporting.CustomField;
 import ims.supporting.TableProduct;
 import javafx.event.ActionEvent;
@@ -99,26 +98,36 @@ public class ClientCardController extends ClientCardControllerResources implemen
 
     @FXML
     private void removeSelectedProductFromCard() throws NoSuchFieldException {
-        //TODO: MISSING PRODUCT RETURN SHOULD BE FORBIDDEN
+        if (clientsProductsTable.getSelectionModel().getSelectedItem() != null) {
+            Product selectedProduct = clientsProductsTable.getSelectionModel().getSelectedItem().getProduct();
 
-        Product selectedProduct = clientsProductsTable.getSelectionModel().getSelectedItem().getProduct();
+            if (selectedProduct.isExisting()) {
+                removeSelectedProductFromTable(selectedProduct);
+                removeSelectedProductFromListOfProducts(selectedProduct);
 
+                clientCardService.removeSelectedProduct(selectedProduct, egnField.getText());
+                removeSelectedBtn.setDisable(tableProducts.isEmpty());
+            } else
+                ErrorDialog.callError("Missing product can't be returned!");
+        }
+    }
+
+    private void removeSelectedProductFromTable(Product selectedProduct) {
         clientsProductsTable.getItems().removeIf(new Predicate<TableProduct>() {
             @Override
             public boolean test(TableProduct tableProduct) {
                 return tableProduct.getInvNum().equals(selectedProduct.getInventoryNumber());
             }
         });
+    }
 
+    private void removeSelectedProductFromListOfProducts(Product selectedProduct) {
         tableProducts.removeIf(new Predicate<TableProduct>() {
             @Override
             public boolean test(TableProduct tableProduct) {
                 return tableProduct.getProduct().equals(selectedProduct);
             }
         });
-
-        clientCardService.removeSelectedProduct(selectedProduct, egnField.getText());
-        removeSelectedBtn.setDisable(tableProducts.isEmpty());
     }
 
     protected void handleButtonsStatus(boolean status) {
@@ -130,41 +139,8 @@ public class ClientCardController extends ClientCardControllerResources implemen
         removeSelectedBtn.setDisable(clientsProductsTable.getItems().isEmpty());
     }
 
-    protected void setTableColumns() {  //Mapping with TableProduct fields
-        productColumn.setCellValueFactory(new PropertyValueFactory<>("brand"));
-        invNumberColumn.setCellValueFactory(new PropertyValueFactory<>("invNum"));
-        givenByColumn.setCellValueFactory(new PropertyValueFactory<>("givenBy"));
-        givenOnColumn.setCellValueFactory(new PropertyValueFactory<>("givenOn"));
-        statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
-        buttonColumn.setCellValueFactory(new PropertyValueFactory<>("button"));
-    }
-
-    private void fillTable(List<TableProduct> tableProducts) {
-        clientsProductsTable.getItems().clear();
-
-        for (TableProduct product : tableProducts) {
-            if (isDateInPeriod(startDate.getValue(), endDate.getValue(), LocalDate.parse(product.getGivenOn()))) {
-                product.setButton(getStatusButton());
-                clientsProductsTable.getItems().add(product);
-            }
-        }
-    }
-
     private boolean isDateInPeriod(LocalDate startDate, LocalDate endDate, LocalDate givenOn) {
         return startDate.datesUntil(endDate.plusDays(1)).collect(Collectors.toList()).contains(givenOn); // Checks if the transaction date is in the specified period (inclusive)
-    }
-
-    @Override
-    protected void displayMessages(Map<String, CustomField> fieldsByName) {
-        egnMsg.setText(fieldsByName.get(EGN_FIELD_NAME).getMessage());
-        egnField.setStyle(fieldsByName.get(EGN_FIELD_NAME).getStyle());
-    }
-
-    protected void customizeTable() {
-        clientsProductsTable.getColumns().forEach(tableProductTableColumn -> {
-            tableProductTableColumn.setResizable(false);
-            tableProductTableColumn.setStyle("-fx-alignment: CENTER;");
-        });
     }
 
     private Button getStatusButton() {
@@ -203,6 +179,40 @@ public class ClientCardController extends ClientCardControllerResources implemen
         }
 
         return null;
+    }
+
+    protected void customizeTable() {
+        clientsProductsTable.getColumns().forEach(tableProductTableColumn -> {
+            tableProductTableColumn.setResizable(false);
+            tableProductTableColumn.setStyle("-fx-alignment: CENTER;");
+        });
+    }
+
+
+    protected void setTableColumns() {  //Mapping with TableProduct fields
+        productColumn.setCellValueFactory(new PropertyValueFactory<>("brand"));
+        invNumberColumn.setCellValueFactory(new PropertyValueFactory<>("invNum"));
+        givenByColumn.setCellValueFactory(new PropertyValueFactory<>("givenBy"));
+        givenOnColumn.setCellValueFactory(new PropertyValueFactory<>("givenOn"));
+        statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+        buttonColumn.setCellValueFactory(new PropertyValueFactory<>("button"));
+    }
+
+    private void fillTable(List<TableProduct> tableProducts) {
+        clientsProductsTable.getItems().clear();
+
+        for (TableProduct product : tableProducts) {
+            if (isDateInPeriod(startDate.getValue(), endDate.getValue(), LocalDate.parse(product.getGivenOn()))) {
+                product.setButton(getStatusButton());
+                clientsProductsTable.getItems().add(product);
+            }
+        }
+    }
+
+    @Override
+    protected void displayMessages(Map<String, CustomField> fieldsByName) {
+        egnMsg.setText(fieldsByName.get(EGN_FIELD_NAME).getMessage());
+        egnField.setStyle(fieldsByName.get(EGN_FIELD_NAME).getStyle());
     }
 
 }

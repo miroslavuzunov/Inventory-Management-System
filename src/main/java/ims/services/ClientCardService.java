@@ -1,12 +1,10 @@
 package ims.services;
 
-import ims.controllers.primary.LoginController;
 import ims.daos.*;
 import ims.entities.*;
 import ims.enums.ProductType;
 import ims.enums.RecordStatus;
 import ims.enums.Role;
-import ims.supporting.Cache;
 import ims.supporting.TableProduct;
 import ims.supporting.UserSession;
 
@@ -18,16 +16,13 @@ import java.util.function.Predicate;
 public class ClientCardService {
     private final UserDao userDao;
     private final ProductClientDao productClientDao;
-    private final ProductDetailsDao productDetailsDao;
     private final ProductDao productDao;
     private final PersonInfoDao personInfoDao;
     private List<ProductClient> clientsAllTransactions;
-    private static Cache cache = new Cache();
 
     public ClientCardService() {
         userDao = new UserDao();
         productClientDao = new ProductClientDao();
-        productDetailsDao = new ProductDetailsDao();
         productDao = new ProductDao();
         personInfoDao = new PersonInfoDao();
         clientsAllTransactions = new ArrayList<>();
@@ -35,49 +30,65 @@ public class ClientCardService {
 
     public List<TableProduct> getClientsProductsByEgn(String egn, StringBuilder clientName) throws NoSuchFieldException { //StringBuilder used because of passing string by reference
         List<TableProduct> tableProducts = new ArrayList<>();
+        User client = null;
 
         PersonInfo personInfo = personInfoDao.getRecordByEgn(egn);
-        User client;
-
-        client = (User) cache.getCachedObject(egn);
-
-        if (client == null) {
-            client = getClientByEgn(egn);
-            cache.cacheObject(egn, client);
-        }
-
-        List<Product> clientsAllProducts = productClientDao.getClientsAllProducts(client); //Requests optimization
-        List<ProductDetails> clientsAllProductDetails = productDetailsDao.getAll(); //Requests optimization
+        if (personInfo != null)
+         client = personInfo.getUser();
 
         if (client != null && client.getRole().equals(Role.CLIENT)) {
-            clientName.delete(0, clientName.length());
-            clientName.append("client: " + personInfo.getFirstName() + " " + personInfo.getLastName());
-            String productStatus;
-
+            modifyClientName(clientName, personInfo, true);
             clientsAllTransactions = productClientDao.getTransactionsByClientAndStatus(client, RecordStatus.ENABLED);
-
-            for (ProductClient productClient : clientsAllTransactions) {
-                if (productClient.getProduct().isExisting())
-                    productStatus = "Existing";
-                else
-                    productStatus = "Missing";
-
-                TableProduct tableProduct = new TableProduct();
-
-                tableProduct.setBrand(productClient.getProduct().getProductDetails().getBrandAndModel());
-                tableProduct.setInvNum(productClient.getProduct().getInventoryNumber());
-                tableProduct.setGivenBy(productClient.getMrt().getPersonInfo().getFirstName() + " " + productClient.getMrt().getPersonInfo().getLastName());
-                tableProduct.setGivenOn(productClient.getGivenOn().toString());
-                tableProduct.setStatus(productStatus);
-                tableProduct.setProduct(productClient.getProduct());
-
-                tableProducts.add(tableProduct);
-            }
+            tableProducts = generateClientsCardTable(clientsAllTransactions, client);
         } else {
-            clientName.append("Client not found");
+            modifyClientName(clientName, personInfo, false);
         }
 
         return tableProducts;
+    }
+
+    private void modifyClientName(StringBuilder clientName, PersonInfo personInfo, boolean isFound) {
+        if(isFound) {
+            clientName.delete(0, clientName.length());
+            clientName.append("client: " + personInfo.getFirstName() + " " + personInfo.getLastName());
+        }else {
+            clientName.append("Client not found");
+        }
+    }
+
+    private List<TableProduct> generateClientsCardTable(List<ProductClient> clientsAllTransactions, User client) {
+        String productStatus;
+        List<TableProduct> tableProducts = new ArrayList<>();
+        List<Product> allClientsProducts = productClientDao.getClientsAllCurrentProducts(client); //For select optimization purposes
+
+        for (ProductClient productClient : clientsAllTransactions) {
+            if (productClient.getProduct().isExisting())
+                productStatus = "Existing";
+            else
+                productStatus = "Missing";
+
+            TableProduct tableProduct = new TableProduct();
+
+            tableProduct.setBrand(productClient.getProduct().getProductDetails().getBrandAndModel());
+            tableProduct.setInvNum(productClient.getProduct().getInventoryNumber());
+            tableProduct.setGivenBy(productClient.getMrt().getPersonInfo().getFirstName() + " " + productClient.getMrt().getPersonInfo().getLastName());
+            tableProduct.setGivenOn(productClient.getGivenOn().toString());
+            tableProduct.setStatus(productStatus);
+            tableProduct.setProduct(productClient.getProduct());
+
+            tableProducts.add(tableProduct);
+        }
+
+        return tableProducts;
+    }
+
+    public User getClientByEgn(String egn) throws NoSuchFieldException {
+        PersonInfo personInfo = personInfoDao.getRecordByEgn(egn);
+
+        if (personInfo != null)
+            return personInfo.getUser();
+
+        return null;
     }
 
     public void addAnotherProductToCard(TableProduct selectedProduct, String egn) throws NoSuchFieldException {
@@ -105,26 +116,13 @@ public class ClientCardService {
     }
 
     private boolean isProductFromDbEqualToSelected(Product product, TableProduct selectedProduct) {
-       return product.getProductDetails().getBrandAndModel().equals(selectedProduct.getBrand()); //Checking by brand and model because the field is always unique
+        return product.getProductDetails().getBrandAndModel().equals(selectedProduct.getBrand()); //Checking by brand and model because the field is always unique
     }
 
     private boolean isProductAvailable(Product product) {
-        return  product.isAvailable() &&
+        return product.isAvailable() &&
                 product.isExisting() &&
                 product.getStatus().equals(RecordStatus.ENABLED);
-    }
-
-
-    public User getClientByEgn(String egn) throws NoSuchFieldException {
-        User client = (User) cache.getCachedObject(egn);
-
-        if (client == null) {
-            PersonInfo personInfo = personInfoDao.getRecordByEgn(egn);
-            client = personInfo.getUser();
-            cache.cacheObject(egn, client);
-        }
-
-        return client;
     }
 
     private void addFirstAvailableToClientCard(Product firstAvailable, User client) {
@@ -165,44 +163,47 @@ public class ClientCardService {
     }
 
     public void removeSelectedProduct(Product product, String egn) throws NoSuchFieldException {
-        //TODO: HANDLE REMOVING MISSING PRODUCT! REFACTOR THE CODE!
-        User client;
+        User client = getClientByEgn(egn);
 
-        client = (User) cache.getCachedObject(egn);
+        removeTransactionFromDb(client, product);
+        removeTransactionFromClient(client, product);
+        updateProduct(product);
 
-        if (client == null) {
-            client = getClientByEgn(egn);
-            cache.cacheObject(egn, client);
-        }
+        productDao.updateRecord(product);
+        userDao.updateRecord(client);
+    }
 
+
+    private void removeTransactionFromDb(User client, Product product) {
         client.getProductClientTransactions().forEach(transaction -> {
             if (transaction.getProduct().getInventoryNumber().equals(product.getInventoryNumber())) {
                 transaction.setStatus(RecordStatus.DISABLED);
                 productClientDao.updateRecord(transaction);
             }
         });
+    }
 
+    private void removeTransactionFromClient(User client, Product product) {
         client.getProductClientTransactions().removeIf(new Predicate<ProductClient>() {
             @Override
             public boolean test(ProductClient productClient) {
                 return productClient.getProduct().getInventoryNumber().equals(product.getInventoryNumber());
             }
         });
+    }
 
+    private void updateProduct(Product product) {
         if (!product.getProductDetails().getProductType().equals(ProductType.TA)) {
             product.setStatus(RecordStatus.ENABLED);
             product.setAvailable(true);
         } else
             product.setStatus(RecordStatus.DISABLED); //TA should not be given anymore
-
-        productDao.updateRecord(product);
-        userDao.updateRecord(client);
     }
 
     public void changeProductStatus(Product product, boolean status) {
         product.setExisting(status);
 
-        if(status)
+        if (status)
             product.setStatus(RecordStatus.ENABLED);
         else
             product.setStatus(RecordStatus.DISABLED);

@@ -4,10 +4,7 @@ import ims.entities.*;
 import ims.enums.RecordStatus;
 
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import javax.persistence.criteria.Selection;
+import javax.persistence.criteria.*;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,11 +16,16 @@ public class ProductClientDao extends AbstractDao<ProductClient> {
         super(ProductClient.class);
     }
 
-    public List<Product> getClientsAllProducts(User client) {
+    public List<Product> getClientsAllCurrentProducts(User client) {
         CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
         CriteriaQuery<Product> criteriaQuery = criteriaBuilder.createQuery(Product.class);
         Root<ProductClient> root = criteriaQuery.from(ProductClient.class);
-        criteriaQuery.select(root.get("product")).where(criteriaBuilder.equal(root.get("client"), client));
+        List<Predicate> predicates = new ArrayList<>();
+
+        predicates.add(criteriaBuilder.equal(root.get("client"), client));
+        predicates.add(criteriaBuilder.equal(root.get("status"), RecordStatus.ENABLED));
+
+        criteriaQuery.select(root.get("product")).where(predicates.toArray(new Predicate[]{}));
 
         return manager.createQuery(criteriaQuery).getResultList();
     }
@@ -38,4 +40,5 @@ public class ProductClientDao extends AbstractDao<ProductClient> {
 
         return getRecordsByMultipleAttributes(attributes);
     }
+
 }

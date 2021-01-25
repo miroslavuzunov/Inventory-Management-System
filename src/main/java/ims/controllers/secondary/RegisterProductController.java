@@ -118,8 +118,8 @@ public class RegisterProductController extends RegisterProductControllerResource
         if(isInitialCheckValid)
             isDataBusy = isDataBusy(customFieldsByName);
 
-//        if(isDataBusy && noEmptyFields)
-//            addProductQuantity();
+        if(isDataBusy && noEmptyFields)
+            addProductQuantity();
 
         return !isDataBusy;
     }

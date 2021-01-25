@@ -1,7 +1,6 @@
 package ims.controllers.secondary;
 
 import ims.services.AddProductService;
-import ims.supporting.Cache;
 import ims.supporting.TableProduct;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
